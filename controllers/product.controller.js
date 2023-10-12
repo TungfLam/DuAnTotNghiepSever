@@ -17,9 +17,13 @@ const addproduct = async (req, res) => {
     const image = [];
     // Xử lý tất cả các tệp hình ảnh đã tải lên
     for (const file of req.files) {
+        //đọc file từ thư mục
         const imageBuffer = fs.readFileSync(file.path);
+        // mã hóa base64
         const base64Image = imageBuffer.toString('base64');
         image.push(base64Image);
+
+        console.log('imageeee',image[0]);
     }
 
     
