@@ -9,6 +9,7 @@ const userSchema = new db.mongoose.Schema(
         full_name : {type : String , require : true},
         address_id : {type : db.mongoose.Schema.Types.ObjectId , ref : 'addressModel'},
         phone_number : {type : String , require : false},
+        role : {type : String , require : true}
     },
     {
         collection : 'user'

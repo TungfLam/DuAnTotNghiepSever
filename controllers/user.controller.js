@@ -1,12 +1,26 @@
 const mUser = require('../models/user.model');
 
+
 exports.list = async (req , res , next) => {
 
-    let listUser = await mUser.userModel.find().populate('address_id');
+    let dieu_kien_loc = null;
+
+    let search = "";
+    search = req.query.search;
+    if(String(search) !== "undefined"){ 
+        if(isNaN(search)){
+            dieu_kien_loc = {username : {$regex : search}};
+        }else{
+            dieu_kien_loc = {phone_number : {$regex : search}};
+        }
+    }
+
+    let listUser = await mUser.userModel.find(dieu_kien_loc).populate('address_id');
     
     res.render('user/listUser',{
         title : "user",
-        listUser : listUser
+        listUser : listUser,
+        search : search
     });
 }
 

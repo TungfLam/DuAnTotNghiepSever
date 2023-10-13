@@ -1,9 +1,5 @@
 <%- include('../inc/top') %>
 
-<% 
-var id = "";
-%>
-
 <script>
     function onClickItem(va) {
         window.location = "users/" + va;
@@ -26,10 +22,10 @@ var id = "";
         <div class="col-md-6 col-sm-12 d-flex justify-content-end">
             <nav class="navbar">
                 <div class="container-fluid">
-                    <form class="d-flex" role="search" action="/product/search/">
-                        <input class="form-control me-2 boderBtn" type="search" placeholder="Search theo tên"
-                            aria-label="Search" style="width: 300px;" name="name">
-                        <button class="btnCustom" type="submit" style="width: 150px;">Tìm kiếm</button>
+                    <form class="d-flex" role="search" action="/users">
+                        <input class="form-control me-2 boderBtn" type="search" placeholder="Search"
+                            aria-label="Search" style="width: 300px;" name="search" value="<%= search %>">
+                        <button class="btnCustom" type="submit" style="width: 150px;" onc>Tìm kiếm</button>
                     </form>
                 </div>
             </nav>
@@ -41,12 +37,12 @@ var id = "";
         <thead class="borderTable bg-thead">
             <tr>
                 <th scope="col" class="text-center">STT</th>
-                <th scope="col" class="col-1 text-center">Avata</th>
+                <th scope="col" class="col-1 d-none d-sm-table-cell text-center">Avata</th>
                 <th scope="col" class="col-2 text-center">Username</th>
                 <th scope="col" class="col-1 d-none d-sm-table-cell text-center">Phone number</th>
-                <th scope="col" class="col-2 d-none d-md-table-cell text-center">Email</th>
+                <th scope="col" class="col-2 d-none d-md-table-cell text-center">Full name</th>
                 <th scope="col" class="col-3 d-none d-md-table-cell text-center">Address</th>
-                <th scope="col" class="col-1 text-center">Vai trò</th>
+                <th scope="col" class="col-1 text-center">Role</th>
                 <th scope="col" class="col-1 text-center">Sửa</th>
                 <th scope="col" class="col-1 text-center">Khóa</th>
             </tr>
@@ -58,7 +54,7 @@ var id = "";
                     <th onclick="onClickItem('<%= listUser[i]._id %>')" scope="row" class="text-center">
                         <%= i + 1 %>
                     </th>
-                    <td onclick="onClickItem('<%= listUser[i]._id %>')" class="text-center"><img src="" alt="" width="80px" height="80px">
+                    <td onclick="onClickItem('<%= listUser[i]._id %>')" class="text-center d-none d-sm-table-cell"><img src="" alt="" width="80px" height="80px">
                     </td>
                     <td onclick="onClickItem('<%= listUser[i]._id %>')" class="text-center">
                         <%= listUser[i].username %>
@@ -68,7 +64,7 @@ var id = "";
                     </th>
 
                     <th onclick="onClickItem('<%= listUser[i]._id %>')" class="text-center d-none d-md-table-cell">
-                        <%= listUser[i].email %>
+                        <%= listUser[i].full_name %>
                     </th>
                     <th onclick="onClickItem('<%= listUser[i]._id %>')" class="text-center d-none d-md-table-cell">
                         <% if(typeof(listUser[i].address_id) !='undefined' ) { %>
@@ -76,7 +72,7 @@ var id = "";
                                 <% } %>
                     </th>
                     <th onclick="onClickItem('<%= listUser[i]._id %>')" class="text-center">
-                        <%= listUser[i].full_name %>
+                        <%= listUser[i].role %>
                     </th>
                     <!-- Chức năng sửa -->
                     <td class="text-center">
