@@ -5,26 +5,41 @@ var path = require('path');
 const { DateTime } = require('luxon');
 
 const getlistproduct = async (req, res) => {
-    var title = 'List Products'
-    let listProducts = await model.ProductModel.find();
-    res.render('product/listproduct', { title: title, listProducts: listProducts })
-}
+    const title = 'List Products';
+    const itemsPerPage = 2; // Số sản phẩm trên mỗi trang
+    const page = parseInt(req.params.page) || 1; // Mặc định là trang 1
+    const startCount = (page - 1) * itemsPerPage + 1;
+    const skip = (page - 1) * itemsPerPage;
+    const limit = itemsPerPage;
+    const listProducts = await model.ProductModel.find().skip(skip).limit(limit);
+    const countProducts = await model.ProductModel.count(); // Tính tổng số sản phẩm
+    const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
+    res.render('product/listproduct', {
+        title: title,
+        listProducts: listProducts,
+        countProducts: countProducts,
+        countPages: countPages,
+        page: page,
+        startCount: startCount
+    });
+};
+
 
 const addproduct = async (req, res) => {
     const { name, description, price } = req.body;
-
-    // const image = req.file.filename; 
+    let countPages = parseInt(req.query.countPages);
+    let countProducts = parseInt(req.query.countProducts)
+    if (countProducts % 2 === 0) {
+       countPages += 1
+    }
     const image = [];
     // Xử lý tất cả các tệp hình ảnh đã tải lên
     for (const file of req.files) {
-        //đọc file từ thư mục
         const imageBuffer = fs.readFileSync(file.path);
         // mã hóa base64
         const base64Image = imageBuffer.toString('base64');
         image.push(base64Image);
     }
-
-
     const nowInVietnam = DateTime.now().setZone('Asia/Ho_Chi_Minh');
     if (req.method === 'POST') {
         let objProduct = new model.ProductModel({
@@ -36,8 +51,9 @@ const addproduct = async (req, res) => {
             updatedAt: nowInVietnam
         });
         try {
+
             await objProduct.save();
-            res.redirect('/product/listproduct');
+            res.redirect(`/product/listproduct/${countPages}`)
         } catch (error) {
             res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
         }
@@ -46,13 +62,18 @@ const addproduct = async (req, res) => {
 
 const deleteproduct = async (req, res) => {
     try {
+        let countPages = parseInt(req.query.countPages);
+        let countProducts = parseInt(req.query.countProducts)
+        if (countProducts % 2 !== 0) {
+           countPages -= 1
+        }
         let id = req.params.id;
         await model.ProductModel.findByIdAndDelete(id);
-        res.redirect('/product/listproduct')
-
+        res.redirect(`/product/listproduct/${countPages}`)
     } catch (error) {
         msg = 'Lỗi Ghi CSDL: ' + error.message;
         console.log(error);
+        
     }
 }
 const updateproduct = async (req, res) => {
@@ -61,8 +82,8 @@ const updateproduct = async (req, res) => {
     let itemedit = await model.ProductModel.findById(id);
     const { name, description, price } = req.body;
 
-    // const image = [];
-    // // Xử lý tất cả các tệp hình ảnh đã tải lên
+    const image = [];
+    // Xử lý tất cả các tệp hình ảnh đã tải lên
     // for (const file of req.files) {
     //     //đọc file từ thư mục
     //     const imageBuffer = fs.readFileSync(file.path);
@@ -74,6 +95,7 @@ const updateproduct = async (req, res) => {
     const nowInVietnam = DateTime.now().setZone('Asia/Ho_Chi_Minh');
     if (req.method === 'POST') {
         let objProduct = new model.ProductModel({
+            id: id,
             name: name,
             description: description,
             // image: image,
@@ -83,7 +105,7 @@ const updateproduct = async (req, res) => {
         });
         try {
             await model.ProductModel.findByIdAndUpdate(id, objProduct);
-                console.log('Thành công ');
+            res.redirect('/product/listproduct/1');
         } catch (error) {
             res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
         }
@@ -92,7 +114,19 @@ const updateproduct = async (req, res) => {
     res.render('product/updateproduct', { title: title, itemedit: itemedit })
 }
 
-
-
-
-module.exports = { getlistproduct, addproduct, deleteproduct, updateproduct }
+const searchProduct = async (req, res) => {
+    const searchQuery = req.query.search; // Lấy giá trị từ trường tìm kiếm
+    const title = 'timf kieesm thanh cong'
+    const searchQueryProduct = await model.ProductModel.find({
+        $or: [
+            { name: { $regex: searchQuery, $options: 'i' } },
+            { description: { $regex: searchQuery, $options: 'i' } },
+            { price: { $regex: searchQuery, $options: 'i' } },
+        ]
+    })
+    return res.status(200).json({
+        message: 'success',
+        searchQueryProduct
+    });
+};
+module.exports = { getlistproduct, addproduct, deleteproduct, updateproduct, searchProduct }

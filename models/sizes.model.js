@@ -6,7 +6,7 @@ const SizeSChema = new db.mongoose.Schema(
     },
     {
         // dinh nghia ten bang du lieu 
-        collection:'Sizes'
+        collection:'Size'
     }
 )
 let sizesModel = db.mongoose.model('sizesmMdel',SizeSChema);

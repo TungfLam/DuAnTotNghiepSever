@@ -6,7 +6,7 @@ const CategorySChema = new db.mongoose.Schema(
     },
     {
         // dinh nghia ten bang du lieu 
-        collection:'Categories'
+        collection:'Category'
     }
 )
 let categoryModel = db.mongoose.model('categoryModel',CategorySChema);
