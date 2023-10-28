@@ -5,10 +5,9 @@ const SizeSChema = new db.mongoose.Schema(
         name:{type:String,require:true},
     },
     {
-        // dinh nghia ten bang du lieu 
-        collection:'Size'
+        collection:'size'
     }
 )
-let sizesModel = db.mongoose.model('sizesmMdel',SizeSChema);
+let sizeModel = db.mongoose.model('sizeModel',SizeSChema);
 
-module.exports={sizesModel}
+module.exports={sizeModel}

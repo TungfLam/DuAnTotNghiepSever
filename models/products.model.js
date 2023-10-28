@@ -13,7 +13,7 @@ const ProductSChema = new db.mongoose.Schema(
     },
     {
         // dinh nghia ten bang du lieu 
-        collection: 'Products',
+        collection: 'product',
 
     }
 )

@@ -30,7 +30,7 @@ const addproduct = async (req, res) => {
     let countPages = parseInt(req.query.countPages);
     let countProducts = parseInt(req.query.countProducts)
     if (countProducts % 2 === 0) {
-       countPages += 1
+        countPages += 1
     }
     const image = [];
     // Xử lý tất cả các tệp hình ảnh đã tải lên
@@ -65,7 +65,7 @@ const deleteproduct = async (req, res) => {
         let countPages = parseInt(req.query.countPages);
         let countProducts = parseInt(req.query.countProducts)
         if (countProducts % 2 !== 0) {
-           countPages -= 1
+            countPages -= 1
         }
         let id = req.params.id;
         await model.ProductModel.findByIdAndDelete(id);
@@ -73,7 +73,7 @@ const deleteproduct = async (req, res) => {
     } catch (error) {
         msg = 'Lỗi Ghi CSDL: ' + error.message;
         console.log(error);
-        
+
     }
 }
 const updateproduct = async (req, res) => {
@@ -116,17 +116,21 @@ const updateproduct = async (req, res) => {
 
 const searchProduct = async (req, res) => {
     const searchQuery = req.query.search; // Lấy giá trị từ trường tìm kiếm
-    const title = 'timf kieesm thanh cong'
-    const searchQueryProduct = await model.ProductModel.find({
-        $or: [
-            { name: { $regex: searchQuery, $options: 'i' } },
-            { description: { $regex: searchQuery, $options: 'i' } },
-            { price: { $regex: searchQuery, $options: 'i' } },
-        ]
-    })
-    return res.status(200).json({
-        message: 'success',
-        searchQueryProduct
+    const title = 'timf kieesm thanh cong';
+    const countPages = 1;
+    const countProducts = 1;
+    const startCount = 1
+    const page = 1
+    const listProducts = await model.ProductModel.find({ name:searchQuery})
+
+    res.render('product/listproduct', {
+        title: title,
+        listProducts: listProducts,
+        countPages: countPages,
+        countProducts: countProducts,
+        listProducts: listProducts,
+        page: page,
+        startCount: startCount
     });
 };
 module.exports = { getlistproduct, addproduct, deleteproduct, updateproduct, searchProduct }
