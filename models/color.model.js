@@ -1,6 +1,6 @@
 var db = require('./db');
 
-const colorSChema = new db.mongoose.Schema(
+const ColorSChema = new db.mongoose.Schema(
     {    
         name:{type:String,require:true},
     },
@@ -9,6 +9,6 @@ const colorSChema = new db.mongoose.Schema(
         collection:'color'
     }
 )
-let colorModel = db.mongoose.model('colorModel',colorSChema);
+let colorModel = db.mongoose.model('colorModel',ColorSChema);
 
 module.exports={colorModel}

@@ -6,12 +6,12 @@ const { DateTime } = require('luxon');
 
 const getlistproduct = async (req, res) => {
     const title = 'List Products';
-    const itemsPerPage = 2; // Số sản phẩm trên mỗi trang
+    const itemsPerPage = 10; // Số sản phẩm trên mỗi trang
     const page = parseInt(req.params.page) || 1; // Mặc định là trang 1
     const startCount = (page - 1) * itemsPerPage + 1;
     const skip = (page - 1) * itemsPerPage;
     const limit = itemsPerPage;
-    const listProducts = await model.ProductModel.find().skip(skip).limit(limit);
+    const listProducts = await model.ProductModel.find().skip(skip).limit(limit).sort({ createdAt: -1 });
     const countProducts = await model.ProductModel.count(); // Tính tổng số sản phẩm
     const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
     res.render('product/listproduct', {
@@ -29,7 +29,7 @@ const addproduct = async (req, res) => {
     const { name, description, price } = req.body;
     let countPages = parseInt(req.query.countPages);
     let countProducts = parseInt(req.query.countProducts)
-    if (countProducts % 2 === 0) {
+    if (countProducts % 10 === 0) {
         countPages += 1
     }
     const image = [];

@@ -2,3 +2,5 @@ user.view.ejs
 user.edit.ejs
 ...
 ?
+
+http://localhost:6868/api/getListAll_deltail/id_product
