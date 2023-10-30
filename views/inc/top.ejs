@@ -3,27 +3,23 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>NONE</title>
+    <title><%= title ? title : 'null' %></title>
     <link rel="stylesheet" href="/stylesheets/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="/bootstrap-5.2.3-dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
-///trình
 
-<body onload="time()">
+<body >
     <div class="sidebar">
         <div class="logo-details">
-            <svg xmlns="http://www.w3.org/2000/svg" height="2em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#1f68e5}</style>
-                <path d="M211.8 0c7.8 0 14.3 5.7 16.7 13.2C240.8 51.9 277.1 80 320 80s79.2-28.1 91.5-66.8C413.9 5.7 420.4 0 428.2 0h12.6c22.5 0 44.2 7.9 61.5 22.3L628.5 127.4c6.6 5.5 10.7 13.5 11.4 22.1s-2.1 17.1-7.8 23.6l-56 64c-11.4 13.1-31.2 14.6-44.6 3.5L480 197.7V448c0 35.3-28.7 64-64 64H224c-35.3 0-64-28.7-64-64V197.7l-51.5 42.9c-13.3 11.1-33.1 9.6-44.6-3.5l-56-64c-5.7-6.5-8.5-15-7.8-23.6s4.8-16.6 11.4-22.1L137.7 22.3C155 7.9 176.7 0 199.2 0h12.6z"/></svg>
             <div class="logo_name">ADADAS</div>
             <i class='bx bx-menu' id="btn">
-                
             </i>
         </div>
         <ul class="nav-list" style="padding-left: 0rem;">
             <li>
-                <a href="/product">
+                <a href="/product/listproduct/1">
                     <i>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-box-seam" viewBox="0 0 16 16">
@@ -34,6 +30,15 @@
                     <span class="links_name">List Product</span>
                 </a>
                 <span class="tooltip">List Product</span>
+            </li>
+            <li>
+                <a href="/product_size_color/getListAll">
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M0 488V171.3c0-26.2 15.9-49.7 40.2-59.4L308.1 4.8c7.6-3.1 16.1-3.1 23.8 0L599.8 111.9c24.3 9.7 40.2 33.3 40.2 59.4V488c0 13.3-10.7 24-24 24H568c-13.3 0-24-10.7-24-24V224c0-17.7-14.3-32-32-32H128c-17.7 0-32 14.3-32 32V488c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24zm488 24l-336 0c-13.3 0-24-10.7-24-24V432H512l0 56c0 13.3-10.7 24-24 24zM128 400V336H512v64H128zm0-96V224H512l0 80H128z"/></svg>
+                    </i>
+                    <span class="links_name">Product warehouse</span>
+                </a>
+                <span class="tooltip">Product warehouse</span>
             </li>
 
             <li>
@@ -115,7 +120,6 @@
             </li>
         </ul>
     </div>
-    <div style="margin-top: 60px;">
-    </div>
 
-    
+    <div class="home-section"> 
+        <div style="margin-top: 20px;"></div>
