@@ -2,7 +2,7 @@ var db = require('./db');
 
 const product_size_color_SChema = new db.mongoose.Schema(
     {    
-        product_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'ProductModel'},
+        product_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'productModel'},
         category_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'categoryModel'},
         size_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'sizeModel'},
         color_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'colorModel'},

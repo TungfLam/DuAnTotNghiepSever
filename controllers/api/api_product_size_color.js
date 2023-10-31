@@ -1,5 +1,5 @@
 const model_product_size_color = require('../../models/product_size_color.model')
-const productModel = require('../../models/products.model');
+const productModel = require('../../models/product.model');
 const colorModel = require('../../models/color.model')
 const sizeModel = require('../../models/sizes.model')
 const categoriModel = require('../../models/category.model')
@@ -21,13 +21,14 @@ const getListAll_deltail = async (req, res) => {
     }
 }
 const add_product_size_color = async (req, res) => {
+    
     console.log('ádkjaskjfjaksfkj');
     if (req.method === 'POST') {
         try {
             const { name, categories, size, color, quantity } = req.body;
 
             // Truy vấn các ObjectId tương ứng từ cơ sở dữ liệu
-            const checkproduct = await productModel.ProductModel.findOne({ name: name });
+            const checkproduct = await productModel.productModel.findOne({ name: name });
             const checkcategories = await categoriModel.categoryModel.findOne({ name: categories });
             const checksizes = await sizeModel.sizeModel.findOne({ name: size });
             const checkcolors = await colorModel.colorModel.findOne({ name: color });

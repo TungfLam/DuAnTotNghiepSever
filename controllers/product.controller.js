@@ -1,4 +1,4 @@
-var model = require('../models/products.model');
+var model = require('../models/product.model');
 var base64 = require('base-64')
 var fs = require('fs');
 var path = require('path');
@@ -11,8 +11,8 @@ const getlistproduct = async (req, res) => {
     const startCount = (page - 1) * itemsPerPage + 1;
     const skip = (page - 1) * itemsPerPage;
     const limit = itemsPerPage;
-    const listProducts = await model.ProductModel.find().skip(skip).limit(limit).sort({ createdAt: -1 });
-    const countProducts = await model.ProductModel.count(); // Tính tổng số sản phẩm
+    const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 });
+    const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
     const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
     res.render('product/listproduct', {
         title: title,
@@ -42,7 +42,7 @@ const addproduct = async (req, res) => {
     }
     const nowInVietnam = DateTime.now().setZone('Asia/Ho_Chi_Minh');
     if (req.method === 'POST') {
-        let objProduct = new model.ProductModel({
+        let objProduct = new model.productModel({
             name: name,
             description: description,
             image: image,
@@ -68,7 +68,7 @@ const deleteproduct = async (req, res) => {
             countPages -= 1
         }
         let id = req.params.id;
-        await model.ProductModel.findByIdAndDelete(id);
+        await model.productModel.findByIdAndDelete(id);
         res.redirect(`/product/listproduct/${countPages}`)
     } catch (error) {
         msg = 'Lỗi Ghi CSDL: ' + error.message;
@@ -79,7 +79,7 @@ const deleteproduct = async (req, res) => {
 const updateproduct = async (req, res) => {
     let id = req.params.id;
     let title = 'Update Product'
-    let itemedit = await model.ProductModel.findById(id);
+    let itemedit = await model.productModel.findById(id);
     const { name, description, price } = req.body;
 
     const image = [];
@@ -94,7 +94,7 @@ const updateproduct = async (req, res) => {
 
     const nowInVietnam = DateTime.now().setZone('Asia/Ho_Chi_Minh');
     if (req.method === 'POST') {
-        let objProduct = new model.ProductModel({
+        let objProduct = new model.productModel({
             id: id,
             name: name,
             description: description,
@@ -104,7 +104,7 @@ const updateproduct = async (req, res) => {
             updatedAt: nowInVietnam
         });
         try {
-            await model.ProductModel.findByIdAndUpdate(id, objProduct);
+            await model.productModel.findByIdAndUpdate(id, objProduct);
             res.redirect('/product/listproduct/1');
         } catch (error) {
             res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
@@ -121,7 +121,7 @@ const searchProduct = async (req, res) => {
     const countProducts = 1;
     const startCount = 1
     const page = 1
-    const listProducts = await model.ProductModel.find({ name:searchQuery})
+    const listProducts = await model.productModel.find({ name:searchQuery})
 
     res.render('product/listproduct', {
         title: title,

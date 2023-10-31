@@ -1,5 +1,5 @@
 const model_product_size_color = require('../models/product_size_color.model')
-const productModel = require('../models/products.model');
+const productModel = require('../models/product.model');
 const colorModel = require('../models/color.model')
 const sizeModel = require('../models/sizes.model')
 const categoriModel = require('../models/category.model')
