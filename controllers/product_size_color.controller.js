@@ -4,6 +4,7 @@ const colorModel = require('../models/color.model')
 const sizeModel = require('../models/sizes.model')
 const categoriModel = require('../models/category.model')
 
+
 const getListAll = async (req, res) => {
     const title = 'Product warehouse'
 
