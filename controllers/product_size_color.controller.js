@@ -7,7 +7,7 @@ const categoriModel = require('../models/category.model')
 
 const getListAll = async (req, res) => {
     const title = 'Product warehouse'
-
+'fix'
     try {
         const productListSizeColor = await model_product_size_color.product_size_color_Model.find().sort({ createdAt: -1 })
             .populate('product_id', "name price")
