@@ -16,7 +16,10 @@
                         <option  value="1">Name</option>
                         <option value="2">Description</option>
                         <option value="3">Image </option>
-                        <option value="4">Price</option>
+                        <option value="4">Price
+                         
+
+                        </option>
                         <option value="5">Actions</option>
                     </select>
                 </div>
@@ -85,9 +88,15 @@
                     <tr>
                         <th>ID</th>
                         <th>Name Product</th>
-                        <th>Description</th>
+                        <th>Price
+                            <span class="sort-icon">
+                                <a href="/asc"><i class="fa-solid fa-caret-down"></i></i></a>
+                                <a href="/desc"><i class="fa-solid fa-caret-up"></i></a>                    
+                            </span>
+
+                        </th>
                         <th>Image</th>
-                        <th>Price</th>
+                        <th>Description</th>
                         <th>Actions</th>
                         
                     </tr>
@@ -102,7 +111,7 @@
                                 <%= row.name %>
                             </td>
                             <td>
-                                <%= row.description %>
+                                <%= row.price %>
                             </td>
                             <td>
                                 <img src="data:image/jpeg;base64,<%=row.image[0]%>" alt="Hình ảnh" width="70px"
@@ -110,7 +119,7 @@
 
                             </td>
                             <td>
-                                <%= row.price %>
+                                <%= row.description %>
                             </td>
 
                             <td style="width: 190px;">
