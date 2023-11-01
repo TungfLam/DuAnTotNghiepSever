@@ -7,12 +7,13 @@ const userSchema = new db.mongoose.Schema(
         password : {type : String , require : true},
         email : {type : String , require : false},
         full_name : {type : String , require : true},
-        address_id : {type : db.mongoose.Schema.Types.ObjectId , ref : 'addressModel'},
+        address : {type : String , require : false},
         phone_number : {type : String , require : false},
-        role : {type : String , require : true}
+        role : {type : String , require : true},
+        status : {type : Boolean , require : true}
     },
     {
-        collection : 'user'
+        collection : 'users'
     }
 )
 let userModel = db.mongoose.model('userModel' , userSchema);
