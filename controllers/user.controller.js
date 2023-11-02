@@ -1,3 +1,4 @@
+const { Console } = require('console');
 const mUser = require('../models/user.model');
 var fs = require('fs'); 
 
@@ -21,7 +22,7 @@ exports.list = async (req , res , next) => {
         title : "user",
         listUser : listUser,
         search : search,
-        role : req.session.userLogin.role
+        role : "Admin"
     });
 }
 
@@ -98,6 +99,62 @@ exports.add = async (req , res , next) => {
     });
 }
 
+exports.edit = async (req , res , next) => {
+    let msg = '';
+
+    if(req.method == 'POST'){
+        let idUser = req.params.id;
+        let objUser = await mUser.userModel.findById(idUser);
+
+        let fullname = req.body.fullname;
+        let phone = req.body.phone;
+        let email = req.body.email;
+        let address = req.body.address;
+
+        if(objUser){
+            if(req.file){
+                try {
+                    fs.renameSync(req.file.path, './public/avatas/' + objUser._id + '_' + req.file.originalname);
+                    objUser.avatar = '/avatas/' + objUser._id + '_' + req.file.originalname;
+                } catch (error) {
+                    console.log("Ảnh bị lỗi rồi: "+error);
+                    msg = "Update ảnh bị lỗi";
+                }
+            }
+
+            if(phone != objUser.phone_number){
+                let objUserPhone = await mUser.userModel.findOne({phone_number : phone});
+
+                if(objUserPhone){
+                    msg = "Số điện thoại đã được đăng ký";
+                }else{
+                    objUser.phone_number = phone;
+                }
+            }else if(email != objUser.email){
+
+            }
+
+            objUser.full_name = fullname;
+            objUser.address = address;
+
+            try {
+                await mUser.userModel.findByIdAndUpdate(idUser , objUser);
+                console.log("update thanh cong");
+                res.redirect('/users');
+                return;
+            } catch (error) {
+                console.log(error);
+                msg = "Update thất bại";
+            }
+            
+        }else {
+            msg = "Không tìm thấy user trong cơ sở dữ liệu";
+        }
+    }
+    
+    res.redirect('/users');
+}
+
 exports.lock = async (req , res , next) => {
     let idUser = req.params.idUser;
     let objUser = await mUser.userModel.findById(idUser);
@@ -107,10 +164,14 @@ exports.lock = async (req , res , next) => {
         try {
             await mUser.userModel.findByIdAndUpdate(idUser , objUser);
             res.redirect('/users');
+            return;
         } catch (error) {
             console.log(error);
         }
+    }else{
+        console.log("objUser null");
     }
+    res.redirect('/users');
 }
 
 exports.unLock = async (req , res , next) => {
@@ -122,8 +183,12 @@ exports.unLock = async (req , res , next) => {
         try {
             await mUser.userModel.findByIdAndUpdate(idUser , objUser);
             res.redirect('/users');
+            return;
         } catch (error) {
             console.log(error);
         }
+    }else{
+        console.log("objUser null");
     }
+    res.redirect('/users');
 }
