@@ -1,0 +1,93 @@
+<%- include('../inc/top') %>
+    <div class="container-fluid">
+        <p class="fw-bold fs-2 text-primary ">Product Warehouse</p>
+        <div class="d-flex  m-2">
+            <form method="get" action="/product/search" class="input-group m-4 d-flex">
+                <input placeholder="Search for your product ...." aria-label="Search for your product" type="text"
+                    class="form-control" id="floatingInput" name="search">
+                <div class="d-flex">
+                    <button type="submit" class="input-group-text bg-primary"
+                        style="margin-left: 10px; margin-right: 10px;" for="filterGroup1">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em"
+                            viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                            <path
+                                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                        </svg>
+                    </button>
+                    <select class="form-select" id="filterGroup1">
+                        <option value="1">Name</option>
+                        <option value="2">Description</option>
+                        <option value="3">Image </option>
+                        <option value="4">Price</option>
+                        <option value="5">Actions</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+            <button type="button" class="btn btn-danger">Left</button>
+            <button type="button" class="btn btn-warning">Middle</button>
+            <button type="button" class="btn btn-success">Right</button>
+        </div>
+        <div class="row p-3">
+            <table id="example" class="table table-striped table-bordered border-dark"
+                style="width:95%;margin-left: 25px;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name Product</th>
+                        <th>Price
+                          
+                            <span class="sort-icon">
+                                <a href="/asc"><i class="fa-solid fa-chevron-up"></i></a>
+                                <a href="/desc"><i class="fas fa-sort-down"></i></a>
+                                
+                            </span>
+                            
+                        </th>
+                        <th>Category</th>
+                        <th>Size</th>
+                        <th>Color</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <% for (let i=0; i < productListSizeColor.length; i++) { %>
+                    <% const row=productListSizeColor[i]; %>
+                        <tr style="height: 100px;">
+                            <td>
+                                <%= i+1 %>
+                            </td>
+
+                            <td>
+                                <%= row.product_id ? row.product_id.name : 'NULL' %>
+                            </td>
+                            <td>
+                                <%= row.product_id ? row.product_id.price : 'NULL' %>
+                            </td>
+                            <td>
+                                <%= row.category_id ? row.category_id.name : 'NULL' %>
+                            </td>
+                            <td>
+                                <%= row.size_id ? row.size_id.name :'NULL' %>
+                            </td>
+                            <td>
+                                <%= row.color_id ? row.color_id.name : 'NULL' %>
+                            </td>
+                            <td>
+                                <%= row.quantity ? row.quantity : 'NULL' %>
+                            </td>
+
+                            <td style="width: 190px;">
+                                <a href="/product_size_color/delete_product_color_size/<%=row.id %>"
+                                    class="btn btn-danger">Delete</a>
+
+                                <a href="" class="btn btn-primary">Update</a>
+                            </td>
+                        </tr>
+                        <% } %>
+            </table>
+        </div>
+    </div>s
+
+    <%- include('../inc/bottom') %>
