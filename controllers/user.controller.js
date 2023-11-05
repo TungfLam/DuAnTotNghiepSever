@@ -3,7 +3,9 @@ const mUser = require('../models/user.model');
 var fs = require('fs'); 
 
 exports.list = async (req , res , next) => {
-
+    const page = parseInt(req.query.page) || 1;
+    const limit = 2;
+    let skipItem = 0;
     let dieu_kien_loc = null;
 
     let search = "";
@@ -16,12 +18,23 @@ exports.list = async (req , res , next) => {
         }
     }
 
-    let listUser = await mUser.userModel.find(dieu_kien_loc);
-    
+    skipItem = (page - 1) * limit;
+
+    const listUser = await mUser.userModel.find(dieu_kien_loc).skip(skipItem).limit(limit);
+    const countUser = await mUser.userModel.count();
+
+    let countPage = parseInt(countUser / limit);
+
+    if(countUser % limit != 0){
+        countPage += 1;
+    }
+
     res.render('user/listUser',{
         title : "user",
         listUser : listUser,
         search : search,
+        page : page,
+        countPage : countPage,
         role : "Admin"
     });
 }
