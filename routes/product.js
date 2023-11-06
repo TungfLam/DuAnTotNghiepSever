@@ -23,6 +23,7 @@ router.get('/deleteproduct/:id', product_controller.deleteproduct);
 router.post('/updateproduct/:id',upload.array('image',5),product_controller.updateproduct);
 router.get('/updateproduct/:id',upload.array('image',5),product_controller.updateproduct);
 router.get('/search', product_controller.searchProduct);
-
+router.get('/sortUp',product_controller.sortUp)
+router.get('/sortDown',product_controller.sortDown)
 
 module.exports = router;

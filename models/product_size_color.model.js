@@ -2,11 +2,10 @@ var db = require('./db');
 
 const product_size_color_SChema = new db.mongoose.Schema(
     {    
-        product_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'ProductModel'},
-        category_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'categoryModel'},
+        product_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'productModel'},
         size_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'sizeModel'},
         color_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'colorModel'},
-        quantity:{type:String,require:true},
+        quantity:{type:Number,require:true},
         createdAt: { type: Date, default: Date.now },
         updatedAt: { type: Date, default: Date.now },
     },

@@ -3,8 +3,6 @@ const categoryModel = require('../../models/category.model')
 
 const listCategorys = async (req,res)=>{
         const listCategorys = await categoryModel.categoryModel.find();
-
-
     return res.status(200).json({ message: 'Succset',listCategorys:listCategorys });
    
 }
