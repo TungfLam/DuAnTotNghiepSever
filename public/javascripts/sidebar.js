@@ -53,4 +53,8 @@ function backPage(){
   history.back();
 }
 
+function locsanpham(){
+  console.log('12312312');
+}
+
 

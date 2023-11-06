@@ -10,14 +10,12 @@ const getListAll_deltail = async (req, res) => {
         let id_product = req.params.id_product;
         const productListSize = await model_product_size_color.product_size_color_Model.find({ product_id: id_product }).sort({ createdAt: -1 })
             .populate('product_id', "name price")
-            .populate('category_id', "name")
             .populate('size_id', "name")
             .populate('color_id', "name");
             console.log('ádasdasd',productListSize);
         res.status(200).json({ productListSize: productListSize });
     } catch (error) {
         res.status(500).json({ message: 'Lỗi truy vấn CSDL: ' + error.message });
-
     }
 }
 const add_product_size_color = async (req, res) => {

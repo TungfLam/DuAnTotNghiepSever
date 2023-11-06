@@ -1,0 +1,54 @@
+<%- include('../inc/top') %>
+    <div class="container-">
+        <p class="fw-bold fs-2 text-primary ">Add Warehouse</p>
+        <form method="POST" class="m-4">
+
+                <div class="fw-bolder fs-4 text-success"><%= message %></div>
+            <div class="input-group input-group-lg mb-3">
+                <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Name Product</span>
+                <select name="name" class="form-control form-select" aria-label="Sizing example input Default select example"
+                    aria-describedby="inputGroup-sizing-lg" name="productName">
+                    <option  selected>Open this select product</option>
+                    <% product.forEach((product)=> { %>
+                        <option  value="<%= product.name %>">
+                            <%= product.name %>
+                        </option>
+                        <% }); %>
+                </select>
+            </div>
+            <div class="input-group input-group-lg mb-3">
+                <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Size </span>
+                <select  name="color" class="form-control form-select " aria-label="Sizing example input Default select example"
+                    aria-describedby="inputGroup-sizing-lg" name="productName">
+                    <option selected>Open this select color</option>
+                    <% color.forEach((color)=> { %>
+                        <option value="<%= color.name %>">
+                            <%= color.name %>
+                        </option>
+                        <% }); %>
+                </select>
+            </div>
+            <div class="input-group input-group-lg mb-3">
+                <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Color</span>
+                <select name="size" class="form-control form-select" aria-label="Sizing example input Default select example"
+                    aria-describedby="inputGroup-sizing-lg" name="productName">
+                    <option  selected>Open this select size</option>
+                    <% size.forEach((size)=> { %>              
+                        <option value="<%= size.name %>">
+                            <%= size.name %>
+                        </option>
+                        <% }); %>
+                </select>
+            </div>
+            <div class="input-group input-group-lg mb-3">
+                <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Quantity</span>
+                <input name="quantity" type="text" class="form-control" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-lg">
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary " style="width: 250px; ">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <%- include('../inc/bottom') %>

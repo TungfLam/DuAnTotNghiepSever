@@ -1,4 +1,6 @@
 var model = require('../models/product.model');
+var modelCategories = require('../models/category.model')
+var model_product_size_color = require('../models/product_size_color.model')
 var base64 = require('base-64')
 var fs = require('fs');
 var path = require('path');
@@ -6,12 +8,14 @@ const { DateTime } = require('luxon');
 
 const getlistproduct = async (req, res) => {
     const title = 'List Products';
-    const itemsPerPage = 10; // Số sản phẩm trên mỗi trang
+    const itemsPerPage = 5; // Số sản phẩm trên mỗi trang
     const page = parseInt(req.params.page) || 1; // Mặc định là trang 1
     const startCount = (page - 1) * itemsPerPage + 1;
     const skip = (page - 1) * itemsPerPage;
     const limit = itemsPerPage;
-    const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 });
+    const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 })
+    .populate('category_id', "name");
+    const listCategories = await modelCategories.categoryModel.find()
     const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
     const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
     res.render('product/listproduct', {
@@ -19,6 +23,7 @@ const getlistproduct = async (req, res) => {
         listProducts: listProducts,
         countProducts: countProducts,
         countPages: countPages,
+        listCategories:listCategories,
         page: page,
         startCount: startCount
     });
@@ -26,7 +31,7 @@ const getlistproduct = async (req, res) => {
 
 
 const addproduct = async (req, res) => {
-    const { name, description, price } = req.body;
+    const { name, description, price,category } = req.body;
     let countPages = parseInt(req.query.countPages);
     let countProducts = parseInt(req.query.countProducts)
     if (countProducts % 10 === 0) {
@@ -45,6 +50,7 @@ const addproduct = async (req, res) => {
         let objProduct = new model.productModel({
             name: name,
             description: description,
+            category_id:category,
             image: image,
             price: price,
             createdAt: nowInVietnam,
@@ -69,6 +75,7 @@ const deleteproduct = async (req, res) => {
         }
         let id = req.params.id;
         await model.productModel.findByIdAndDelete(id);
+        await model_product_size_color.product_size_color_Model.deleteMany({ product_id: id });
         res.redirect(`/product/listproduct/${countPages}`)
     } catch (error) {
         msg = 'Lỗi Ghi CSDL: ' + error.message;
@@ -115,22 +122,88 @@ const updateproduct = async (req, res) => {
 }
 
 const searchProduct = async (req, res) => {
-    const searchQuery = req.query.search; // Lấy giá trị từ trường tìm kiếm
+    const searchQuery = req.query.search.toLowerCase(); // Chuyển đổi tìm kiếm thành chữ thường
     const title = 'timf kieesm thanh cong';
     const countPages = 1;
     const countProducts = 1;
-    const startCount = 1
-    const page = 1
-    const listProducts = await model.productModel.find({ name:searchQuery})
+    const startCount = 1;
+    const page = 1;
 
+    const listProducts = await model.productModel.find({
+        name: { $regex: new RegExp(searchQuery, 'i') }, // 'i' cho phép tìm kiếm không phân biệt chữ hoa chữ thường
+    });
+    const listCategories = await modelCategories.categoryModel.find()
     res.render('product/listproduct', {
         title: title,
         listProducts: listProducts,
         countPages: countPages,
         countProducts: countProducts,
-        listProducts: listProducts,
         page: page,
-        startCount: startCount
+        startCount: startCount,
+        listCategories:listCategories
     });
-};
-module.exports = { getlistproduct, addproduct, deleteproduct, updateproduct, searchProduct }
+}
+const sortUp = async (req, res) => {
+    const itemsPerPage = 10; // Số sản phẩm trên mỗi trang
+    const page = parseInt(req.params.page) || 1; // Mặc định là trang 1
+    const startCount = (page - 1) * itemsPerPage + 1;
+    const skip = (page - 1) * itemsPerPage;
+    const limit = itemsPerPage;
+    const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 })
+    .populate('category_id', "name");
+    const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
+    const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
+    const listCategories = await modelCategories.categoryModel.find()
+    try {
+        const title = 'Product'
+        const sortUpPrice = await model.productModel.find({}).sort({ price: 1 }).populate('category_id', "name");
+        res.render('product/listproduct', {
+            title: title,
+            title: title,
+            listProducts: sortUpPrice,
+            countProducts: countProducts,
+            countPages: countPages,
+            page: page,
+            startCount: startCount,
+            listCategories:listCategories
+        })
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+const sortDown = async (req, res) => {
+    try {
+
+        const itemsPerPage = 10; // Số sản phẩm trên mỗi trang
+        const page = parseInt(req.params.page) || 1; // Mặc định là trang 1
+        const startCount = (page - 1) * itemsPerPage + 1;
+        const skip = (page - 1) * itemsPerPage;
+        const limit = itemsPerPage;
+        const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 })
+        .populate('category_id', "name");
+        const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
+        const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
+        const listCategories = await modelCategories.categoryModel.find()
+
+        const title = 'Product'
+        const sortDownPrice = await model.productModel.find({}).sort({ price: -1 }).populate('category_id', "name");
+
+
+        res.render('product/listproduct', {
+            title: title,
+            title: title,
+            listProducts: sortDownPrice,
+            countProducts: countProducts,
+            countPages: countPages,
+            page: page,
+            startCount: startCount,
+            listCategories:listCategories
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+module.exports = { getlistproduct, addproduct, deleteproduct, updateproduct, searchProduct, sortUp, sortDown }
