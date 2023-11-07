@@ -15,7 +15,26 @@ http://localhost:6868/api/products/search?searchValues=BASKETBAL
 http://localhost:6868/api/products/sortUp?category=Popular
 http://localhost:6868/api/products/sortDown?category=Popular
 
+
 // yêu thích
 http://localhost:6868/api/getListFavorite/id_user 
 http://localhost:6868/api/addFavorite/iduser/id_product
 http://localhost:6868/api/deleteFavorite/id_favorite
+
+http://localhost:6868/api/products/:skip/:limit
+
+// bill
+http://localhost:3000/api/bill GET
+http://localhost:3000/api/bill POST
+http://localhost:3000/api/bill/id PUT
+http://localhost:3000/api/bill/id DELETE
+http://localhost:3000/api/bill/pagination?page=1 PAGINATION
+
+// users
+http://localhost:3000/api/users GET
+http://localhost:3000/api/users/pagination?page=1 PAGINATION
+http://localhost:3000/api/userslogin POSTLOGIN
+http://localhost:3000/api/users POST
+http://localhost:3000/api/users/idu PUT
+http://localhost:3000/api/users/idu DELETE
+
