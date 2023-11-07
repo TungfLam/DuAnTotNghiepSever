@@ -3,11 +3,19 @@ user.edit.ejs
 ...
 ?
 //123
+
+// api sản phẩm trang bắt đầu từ 0 
+http://localhost:6868/api/products/Popular/0
+// chi tiết sản phẩm 
 http://localhost:6868/api/getListAll_deltail/id_product
 
-http://localhost:6868/api/products/sortDown
-sortUp
+// tìm kiếm sản phẩm 
+http://localhost:6868/api/products/search?searchValues=BASKETBAL
+// sắp xếp sản phẩm theo giá 
+http://localhost:6868/api/products/sortUp?category=Popular
+http://localhost:6868/api/products/sortDown?category=Popular
 
-
-
-http://localhost:6868/api/products/:skip/:limit
+// yêu thích
+http://localhost:6868/api/getListFavorite/id_user 
+http://localhost:6868/api/addFavorite/iduser/id_product
+http://localhost:6868/api/deleteFavorite/id_favorite

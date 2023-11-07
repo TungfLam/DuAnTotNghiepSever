@@ -11,8 +11,10 @@ var userSchema = new db.mongoose.Schema(
         full_name: { type: String, required: false },
         phone_number: { type: Number, required: false }
     },
-    { collection: 'user' }
+    { collection: 'users' }
 );
+
+
 const addressChema = new db.mongoose.Schema(
     {
         address: { type: String, required: true },

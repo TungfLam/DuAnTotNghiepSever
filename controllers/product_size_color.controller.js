@@ -140,7 +140,6 @@ const update_product_size_color = async (req, res) => {
     let product_size_color = await model_product_size_color.product_size_color_Model
         .findById(id_product_color_size)
         .populate('product_id', "name price")
-        .populate('category_id', "name")
         .populate('size_id', "name")
         .populate('color_id', "name");
 

@@ -1,4 +1,5 @@
 var md = require('../../models/product.model');
+var mdcategory = require('../../models/category.model');
 const multer = require('multer');
 const upload = multer();
 var objReturn = {
@@ -9,11 +10,13 @@ var objReturn = {
 
 exports.getProducts = async (req, res) => {
     const skip = req.params.skip;
-    const limit = req.params.limit;
-    console.log(skip);
-    console.log(limit);
-    const products = await md.productModel.find()
-        .populate('category_id', "name").skip(skip).limit(limit).sort({ createdAt: -1 })
+    const category = req.params.category;
+    const checkcate = await mdcategory.categoryModel.findOne({ name: category })
+    const products = await md.productModel.find({ category_id: checkcate })
+        .populate('category_id', "name")
+        .skip(skip)
+        .limit(6)
+        .sort({ createdAt: -1 });
     res.json(products);
 };
 exports.createProduct = async (req, res) => {
@@ -38,7 +41,10 @@ exports.deleteProduct = async (req, res) => {
 
 exports.sortUp = async (req, res) => {
     try {
-        const sortUpPrice = await md.productModel.find({}).sort({ price: 1 }).populate('category_id', "name");
+        const category = req.query.category
+        console.log(category);
+        const findIdCate = await mdcategory.categoryModel.findOne({ name: category })
+        const sortUpPrice = await md.productModel.find({category_id:findIdCate}).sort({ price: - 1 }).populate('category_id', "name");
         res.json({ message: 'sort up by price success', sortUpPrice: sortUpPrice });
     } catch (error) {
         console.log('đã xảy ra lỗi ', error);
@@ -48,11 +54,27 @@ exports.sortUp = async (req, res) => {
 };
 exports.sortDown = async (req, res) => {
     try {
-        const sortDownPrice = await md.productModel.find({}).sort({ price: -1 }).populate('category_id', "name");
+        const category = req.query.category
+        console.log(category);
+        const findIdCate = await mdcategory.categoryModel.findOne({ name: category })
+
+        const sortDownPrice = await md.productModel.find({category_id:findIdCate}).sort({ price: 1 }).populate('category_id', "name");
         res.json({ message: 'sort down by price success', sortDownPrice: sortDownPrice });
     } catch (error) {
         console.log('đã xảy ra lỗi ', error);
     }
 };
+
+exports.searchProduct = async (req,res)=>{
+    try {
+        const searchValues = req.query.searchValues.toLowerCase();
+        const listProducts = await md.productModel.find({
+            name: { $regex: new RegExp(searchValues, 'i') }, 
+        });
+        res.json({ message: 'search for success', listProducts: listProducts });
+    } catch (error) {
+        console.log('đã xảy ra lỗi ', error);
+    }
+}
 
 
