@@ -26,6 +26,7 @@ exports.listBill = async (req, res, next) => {
     res.json(objReturn);
 }
 // get có phân trang
+//http://localhost:3000/api/bill/pagination?page=1
 exports.pagination = async (req, res, next) => {
     const PAGE_SIZE = 5;
 
