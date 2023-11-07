@@ -12,6 +12,7 @@ var api_product_size_color = require('../controllers/api/api_product_size_color'
 
 
 var api_product = require('../controllers/api/api-product')
+var api_bill = require('../controllers/api/api-bill')
 // api user
 
 
@@ -59,5 +60,16 @@ router.post('/addcategory', api_category.addCategory);
 router.get('/getListAll_deltail/:id_product', api_product_size_color.getListAll_deltail);
 router.post('/add_product_size_color', api_product_size_color.add_product_size_color);
 
+
+// api bill
+
+router.get('/bill', api_bill.listBill);
+router.get('/bill/pagination', api_bill.pagination);
+
+router.post('/bill', api_bill.addBill);
+router.put('/bill/:id', api_bill.updateBill);
+router.delete('/bill/:id', api_bill.deleteBill);
+
+//====
 
 module.exports = router;
