@@ -8,13 +8,14 @@ const { DateTime } = require('luxon');
 
 const getlistproduct = async (req, res) => {
     const title = 'List Products';
-    const itemsPerPage = 5; // Số sản phẩm trên mỗi trang
-    const page = parseInt(req.params.page) || 1; // Mặc định là trang 1
+    const itemsPerPage = 5; 
+    const page = parseInt(req.params.page) || 1; 
     const startCount = (page - 1) * itemsPerPage + 1;
     const skip = (page - 1) * itemsPerPage;
     const limit = itemsPerPage;
     const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 })
     .populate('category_id', "name");
+
     const listCategories = await modelCategories.categoryModel.find()
     const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
     const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
@@ -122,7 +123,7 @@ const updateproduct = async (req, res) => {
 }
 
 const searchProduct = async (req, res) => {
-    const searchQuery = req.query.search.toLowerCase(); // Chuyển đổi tìm kiếm thành chữ thường
+    const searchQuery = req.query.search.toLowerCase();
     const title = 'timf kieesm thanh cong';
     const countPages = 1;
     const countProducts = 1;
@@ -130,7 +131,7 @@ const searchProduct = async (req, res) => {
     const page = 1;
 
     const listProducts = await model.productModel.find({
-        name: { $regex: new RegExp(searchQuery, 'i') }, // 'i' cho phép tìm kiếm không phân biệt chữ hoa chữ thường
+        name: { $regex: new RegExp(searchQuery, 'i') }, 
     });
     const listCategories = await modelCategories.categoryModel.find()
     res.render('product/listproduct', {

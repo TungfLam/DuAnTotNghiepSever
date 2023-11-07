@@ -9,7 +9,7 @@ const getListAll_deltail = async (req, res) => {
     try {
         let id_product = req.params.id_product;
         const productListSize = await model_product_size_color.product_size_color_Model.find({ product_id: id_product }).sort({ createdAt: -1 })
-            .populate('product_id', "name price")
+        .populate('product_id', "name price description")
             .populate('size_id', "name")
             .populate('color_id', "name");
             console.log('ádasdasd',productListSize);
