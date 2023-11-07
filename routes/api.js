@@ -68,6 +68,7 @@ router.get('/bill/pagination', api_bill.pagination);
 
 router.post('/bill', api_bill.addBill);
 router.put('/bill/:id', api_bill.updateBill);
+
 router.delete('/bill/:id', api_bill.deleteBill);
 
 //====
