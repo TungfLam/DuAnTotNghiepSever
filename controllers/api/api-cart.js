@@ -1,16 +1,15 @@
-var md = require('../../models/bill.model');
+var md = require('../../models/cart.model');
 var objReturn = {
     status: 1,
     msg: 'OK'
 }
-const { DateTime } = require('luxon');
 
 // get
-exports.listBill = async (req, res, next) => {
+exports.listCart = async (req, res, next) => {
     let list = [];
 
     try {
-        list = await md.billModel.find();
+        list = await md.cartModel.find();
         if (list.length > 0)
             objReturn.data = list;
         else {
@@ -37,7 +36,7 @@ exports.pagination = async (req, res, next) => {
         }
         var soLuongBoQua = (page - 1) * PAGE_SIZE
 
-        md.billModel.find({})
+        md.cartModel.find({})
             .skip(soLuongBoQua)
             .limit(PAGE_SIZE)
             .then(data => {
@@ -52,24 +51,23 @@ exports.pagination = async (req, res, next) => {
                 catchError();
             })
     } else {
-        md.billModel.find({})
+        md.cartModel.find({})
             .then(data => {
                 res.json(data);
             })
     }
 }
-// validate bill
+// validate Cart
 const Joi = require('joi');
 
 const schema = Joi.object({
     user_id: Joi.string().required(),
-    cart_id: Joi.string().required(),
-    payments: Joi.number().integer().required(),
-    status: Joi.string().required(),
-    total_amount: Joi.number().integer().required()
+    product_id: Joi.string().required(),
+    quantity: Joi.number().integer().required(),
+    status: Joi.string().required()
 });
-// add bill 
-exports.addBill = async (req, res, next) => {
+// add Cart 
+exports.addCart = async (req, res, next) => {
     try {
         const validation = schema.validate(req.body);
         if (validation.error) {
@@ -77,11 +75,10 @@ exports.addBill = async (req, res, next) => {
         }
 
 
-        const bill = req.body;
-        bill.date = DateTime.now().setZone('Asia/Ho_Chi_Minh');
-        const newBill = md.billModel(bill);
-        await newBill.save();
-        console.log(newBill);
+        const cart = req.body;
+        const newCart = md.cartModel(cart);
+        await newCart.save();
+        console.log(newCart);
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ message: 'Server Error', error: err.toString() });
@@ -89,8 +86,8 @@ exports.addBill = async (req, res, next) => {
 
     res.json(objReturn);
 }
-// Update Bill
-exports.updateBill = async (req, res, next) => {
+// Update Cart
+exports.updateCart = async (req, res, next) => {
     try {
         const validation = schema.validate(req.body);
         if (validation.error) {
@@ -98,14 +95,13 @@ exports.updateBill = async (req, res, next) => {
         }
 
         const bill = req.body;
-        bill.date = DateTime.now().setZone('Asia/Ho_Chi_Minh').toISO(); // Add current date in Vietnam
-        const updatedBill = await md.billModel.findByIdAndUpdate(req.params.id, bill, { new: true });
-        if (!updatedBill) {
-            return res.status(404).json({ message: 'Bill not found' });
+        const updatedCart = await md.cartModel.findByIdAndUpdate(req.params.id, bill, { new: true });
+        if (!updatedCart) {
+            return res.status(404).json({ message: 'Cart not found' });
         }
 
-        console.log(updatedBill);
-        res.json(updatedBill);
+        console.log(updatedCart);
+        res.json(updatedCart);
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ message: 'Server Error', error: err.toString() });
@@ -113,16 +109,16 @@ exports.updateBill = async (req, res, next) => {
 }
 
 
-// Delete Bill
-exports.deleteBill = async (req, res, next) => {
+// Delete Cart
+exports.deleteCart = async (req, res, next) => {
     try {
-        const deletedBill = await md.billModel.findByIdAndDelete(req.params.id);
-        if (!deletedBill) {
-            return res.status(404).json({ message: 'Bill not found' });
+        const deletedCart = await md.cartModel.findByIdAndDelete(req.params.id);
+        if (!deletedCart) {
+            return res.status(404).json({ message: 'Cart not found' });
         }
 
-        console.log(deletedBill);
-        res.json({ message: 'Bill deleted', bill: deletedBill });
+        console.log(deletedCart);
+        res.json({ message: 'Cart deleted', cart: deletedCart });
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ message: 'Server Error', error: err.toString() });

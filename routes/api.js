@@ -12,6 +12,7 @@ var api_favorite = require('../controllers/api/api_favorite')
 
 var api_product = require('../controllers/api/api-product')
 var api_bill = require('../controllers/api/api-bill')
+var api_cart = require('../controllers/api/api-cart')
 // api user
 
 
@@ -77,4 +78,14 @@ router.delete('/bill/:id', api_bill.deleteBill);
 
 //====
 
+// api cart
+
+router.get('/cart', api_cart.listCart);
+router.get('/cart/pagination', api_cart.pagination);
+
+router.post('/cart', api_cart.addCart);
+router.put('/cart/:id', api_cart.updateCart);
+router.delete('/cart/:id', api_cart.deleteCart);
+
+//====
 module.exports = router;
