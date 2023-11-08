@@ -17,17 +17,16 @@
                         </svg>
                     </button>
                     <select class="form-select" id="filterGroup1">
-                        <a href="/123">
-                            <option value="">mâ,e</option>
-                        </a>
-                        <option value="2">Description</option>
-                        <option value="3">Image </option>
-                        <option value="4">Price
-
-
-                        </option>
-                        <option value="5">Actions</option>
+                        <% listCategories.forEach(category=> { %>
+                            <option id="123" onclick="locsanpham()" value="<%= category._id %>">
+                                <%= category.name %>
+                            </option>
+                            <% }); %>
                     </select>
+                    <script>
+                        let fruitSelect = document.getElementById('123');
+                        console.log(fruitSelect);
+                    </script>
                 </div>
             </form>
         </div>
@@ -151,12 +150,13 @@
                                     Delete
                                   </button>
                                 <!-- Modal -->
-                                <div class="modal fade"  id="staticBackdropp" data-bs-backdrop="false"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal fade"  id="staticBackdropp" data-bs-backdrop="false"  
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                       <div class="modal-content">
                                         <div class="modal-header">
                                           <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          <  type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             do you want to delete  <%= row.name %> ?

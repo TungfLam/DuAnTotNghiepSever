@@ -16,6 +16,8 @@ const getlistproduct = async (req, res) => {
     const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 })
     .populate('category_id', "name");
 
+    const listCategory = await modelCategories.categoryModel.find()
+
     const listCategories = await modelCategories.categoryModel.find()
     const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
     const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
@@ -26,7 +28,8 @@ const getlistproduct = async (req, res) => {
         countPages: countPages,
         listCategories:listCategories,
         page: page,
-        startCount: startCount
+        startCount: startCount,
+        listCategory:listCategory
     });
 };
 

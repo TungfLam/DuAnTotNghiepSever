@@ -15,15 +15,16 @@
                         </svg>
                     </button>
                     <select class="form-select" id="filterGroup1">
-                        <option value="1">Name</option>
-                        <option value="2">Description</option>
-                        <option value="3">Image </option>
-                        <option value="4">Price</option>
-                        <option value="5">Actions</option>
+                        <% productListSizeColor.forEach(product=> { %>
+                            <option id="" onclick="" onchange="locsanpham()" value="<%= product.product_id %>">
+                                <%= product.product_id.name %>
+                            </option>
+                            <% }); %>
                     </select>
                 </div>
             </form>
         </div>
+        
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
             <button type="button" class="btn btn-danger">Left</button>
             <button type="button" class="btn btn-warning">Middle</button>

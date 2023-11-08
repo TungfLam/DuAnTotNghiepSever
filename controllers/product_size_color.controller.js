@@ -12,10 +12,11 @@ const getListAll = async (req, res) => {
             .populate('product_id', "name price")
             .populate('size_id', "name")
             .populate('color_id', "name")
-        console.log(productListSizeColor);
+      const listproduct = await productModel.productModel.find()
         res.render('product_size_color/product_size_color', {
             title: title,
-            productListSizeColor: productListSizeColor
+            productListSizeColor: productListSizeColor,
+            listproduct:listproduct
         });
     } catch (error) {
         res.status(500).json({ message: 'Lỗi truy vấn CSDL: ' + error.message });
@@ -94,14 +95,14 @@ const sortUp = async (req, res) => {
             .populate('category_id', "name")
             .populate('size_id', "name")
             .populate('color_id', "name")
-        console.log('tăng');
-        sortUpPrice.forEach((product) => {
-            console.log('Price:', product.product_id.price);
-        });
-        res.render('product_size_color/product_size_color', {
-            title: title,
-            productListSizeColor: sortUpPrice
-        })
+        // console.log('tăng');
+        // sortUpPrice.forEach((product) => {
+        //     console.log('Price:', product.product_id.price);
+        // });
+        // res.render('product_size_color/product_size_color', {
+        //     title: title,
+        //     productListSizeColor: sortUpPrice
+        // })
     } catch (error) {
         console.log(error);
     }
