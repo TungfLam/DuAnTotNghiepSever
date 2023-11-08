@@ -79,7 +79,7 @@
                         </button>
 
                         <div class="modal fade" id="suaUser<%= listUser[i]._id %>" tabindex="-1"
-                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            aria-labelledby="exampleModalLabel" aria-hidden="false">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -132,7 +132,7 @@
                         </div>
                     </td>
                     <!-- Chức năng chặn -->
-                    
+                        
                     <% if(role == "Admin"){ %>
                         <% if(listUser[i].status){ %>
                             <td class="text-center">
