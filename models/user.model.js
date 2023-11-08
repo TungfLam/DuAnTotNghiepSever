@@ -1,15 +1,15 @@
 var db = require('./db');
 var userSchema = new db.mongoose.Schema(
     {
-        address_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'address' },
-
+        avata: { type: String, required: false },
         username: { type: String, required: true },
         password: { type: String, required: true },
         email: { type: String, required: false },
-        avata: { type: String, required: false },
+        address : {type : String , require : false},
         role: { type: String, required: true },
         full_name: { type: String, required: false },
-        phone_number: { type: Number, required: false }
+        phone_number: { type: String, required: false },
+        status : {type : Boolean , require : true}
     },
     { collection: 'users' }
 );

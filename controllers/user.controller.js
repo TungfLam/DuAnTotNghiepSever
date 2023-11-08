@@ -1,16 +1,15 @@
-const { Console } = require('console');
 const mUser = require('../models/user.model');
-var fs = require('fs'); 
+var fs = require('fs');
 
 exports.list = async (req , res , next) => {
     const page = parseInt(req.query.page) || 1;
-    const limit = 2;
+    const limit = 10;
     let skipItem = 0;
     let dieu_kien_loc = null;
 
     let search = "";
     search = req.query.search;
-    if(String(search) !== "undefined"){ 
+    if(String(search) !== "undefined" && String(search) != ""){ 
         if(isNaN(search)){
             dieu_kien_loc = {username : {$regex : search}};
         }else{
@@ -35,6 +34,7 @@ exports.list = async (req , res , next) => {
         search : search,
         page : page,
         countPage : countPage,
+        skipItem : skipItem,
         role : "Admin"
     });
 }
@@ -128,7 +128,7 @@ exports.edit = async (req , res , next) => {
             if(req.file){
                 try {
                     fs.renameSync(req.file.path, './public/avatas/' + objUser._id + '_' + req.file.originalname);
-                    objUser.avatar = '/avatas/' + objUser._id + '_' + req.file.originalname;
+                    objUser.avata = '/avatas/' + objUser._id + '_' + req.file.originalname;
                 } catch (error) {
                     console.log("Ảnh bị lỗi rồi: "+error);
                     msg = "Update ảnh bị lỗi";
