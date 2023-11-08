@@ -94,8 +94,8 @@ exports.updateCart = async (req, res, next) => {
             return res.status(400).json({ message: 'Validation Error', error: validation.error.details });
         }
 
-        const bill = req.body;
-        const updatedCart = await md.cartModel.findByIdAndUpdate(req.params.id, bill, { new: true });
+        const cart = req.body;
+        const updatedCart = await md.cartModel.findByIdAndUpdate(req.params.id, cart, { new: true });
         if (!updatedCart) {
             return res.status(404).json({ message: 'Cart not found' });
         }
