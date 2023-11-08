@@ -88,7 +88,7 @@ router.put('/cart/:id', api_cart.updateCart);
 router.delete('/cart/:id', api_cart.deleteCart);
 
 //====
-// api cart
+// api address
 
 router.get('/address', api_address.listAddress);
 router.post('/address', api_address.addAddress);
