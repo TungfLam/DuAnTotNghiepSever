@@ -254,21 +254,19 @@
   left: 78px;
   width: calc(100% - 78px);
   transition: all 0.5s ease;
-  z-index: 2;
+
 }
 
 .home-section .navbar {
   top: 0;
   width: calc(100% - 78px);
   transition: all 0.5s ease;
-  z-index: 2;
 }
 
 .home-section .content {
   top: 0;
   width: calc(100% - 78px);
   transition: all 0.5s ease;
-  z-index: 2;
 }
 
 .sidebar.open~.home-section {

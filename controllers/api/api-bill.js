@@ -97,9 +97,9 @@ exports.updateBill = async (req, res, next) => {
             return res.status(400).json({ message: 'Validation Error', error: validation.error.details });
         }
 
-        const user = req.body;
-        user.date = DateTime.now().setZone('Asia/Ho_Chi_Minh').toISO(); // Add current date in Vietnam
-        const updatedBill = await md.billModel.findByIdAndUpdate(req.params.id, user, { new: true });
+        const bill = req.body;
+        bill.date = DateTime.now().setZone('Asia/Ho_Chi_Minh').toISO(); // Add current date in Vietnam
+        const updatedBill = await md.billModel.findByIdAndUpdate(req.params.id, bill, { new: true });
         if (!updatedBill) {
             return res.status(404).json({ message: 'Bill not found' });
         }
