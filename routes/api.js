@@ -81,11 +81,12 @@ router.delete('/bill/:id', api_bill.deleteBill);
 
 // api cart
 
-router.get('/cart', api_cart.listCart);
+
 router.get('/cart/pagination', api_cart.pagination);
-router.post('/cart', api_cart.addCart);
-router.put('/cart/:id', api_cart.updateCart);
-router.delete('/cart/:id', api_cart.deleteCart);
+router.post('/updateCart/:idUser/:idCart', api_cart.updateCart);
+router.post('/addCart/:idUser/:idProduct', api_cart.addCart);
+router.get('/getListCart/:idUser', api_cart.listCart);
+router.delete('/deletecart/:id', api_cart.deleteCart);
 
 //====
 // api address

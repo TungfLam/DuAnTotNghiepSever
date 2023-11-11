@@ -51,3 +51,9 @@ http://localhost:3000/api/address POST
 http://localhost:3000/api/address/id PUT
 http://localhost:3000/api/address/id DELETE
 
+// cart 
+
+http://localhost:6868/api/getListCart/:idUser/:idProduct GET
+http://localhost:6868/api/updateCart/:idUser/:idCart POST         // truyền body tên là quantity
+/addCart/:idUser/:idProduct POST
+/deleteCart/:id    DELETE
