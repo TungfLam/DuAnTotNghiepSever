@@ -9,17 +9,17 @@ const getListAll_deltail = async (req, res) => {
     try {
         let id_product = req.params.id_product;
         const productListSize = await model_product_size_color.product_size_color_Model.find({ product_id: id_product }).sort({ createdAt: -1 })
-        .populate('product_id', "name price description")
+            .populate('product_id', "name price description")
             .populate('size_id', "name")
             .populate('color_id', "name");
-            console.log('ádasdasd',productListSize);
+        console.log('ádasdasd', productListSize);
         res.status(200).json({ productListSize: productListSize });
     } catch (error) {
         res.status(500).json({ message: 'Lỗi truy vấn CSDL: ' + error.message });
     }
 }
 const add_product_size_color = async (req, res) => {
-    
+
     console.log('ádkjaskjfjaksfkj');
     if (req.method === 'POST') {
         try {
@@ -52,7 +52,7 @@ const add_product_size_color = async (req, res) => {
                 size_id: checksizes._id,
                 color_id: checkcolors._id,
                 quantity: quantity,
-                
+
             });
 
             await obj_product_size_color.save();
@@ -65,4 +65,4 @@ const add_product_size_color = async (req, res) => {
 }
 
 
-module.exports ={getListAll_deltail,add_product_size_color}
+module.exports = { getListAll_deltail, add_product_size_color }

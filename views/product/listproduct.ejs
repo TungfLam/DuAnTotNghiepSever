@@ -16,18 +16,26 @@
                                 d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                         </svg>
                     </button>
-                    <select class="form-select" id="filterGroup1">
-                        <a href="/123">
-                            <option value="">mâ,e</option>
-                        </a>
-                        <option value="2">Description</option>
-                        <option value="3">Image </option>
-                        <option value="4">Price
-
-
-                        </option>
-                        <option value="5">Actions</option>
+                    <select class="form-select" id="filterGroup1" onchange="filterCategory()">
+                        <option value="all" <%= selectedCategoryId === 'all' ? 'selected' : '' %>>All</option>
+                        <% listCategory.forEach(category => { %>
+                            <option value="<%= category._id %>" <%= category._id == selectedCategoryId ? 'selected' : '' %>>
+                                <%= category.name %>
+                            </option>
+                        <% }); %>
                     </select>
+                    <script>
+                        function filterCategory() {
+                            var selectedCategoryId = document.getElementById("filterGroup1").value;
+                            
+                            // Kiểm tra nếu giá trị là "all", chuyển hướng đến /product/listproduct/1
+                            if (selectedCategoryId === 'all') {
+                                window.location.href = "/product/listproduct/1";
+                            } else {
+                                window.location.href = "/product/filterCategory/?category=" + selectedCategoryId;
+                            }
+                        }
+                    </script>
                 </div>
             </form>
         </div>
@@ -45,7 +53,7 @@
 
                 <div class="modal-content">
                     <form method="POST"
-                        action="/product/addproduct?countPages=<%= countPages %>&countProducts=<%= countProducts %>"
+                        action="/product/addproduct"
                         enctype="multipart/form-data" multiple>
 
                         <div class="modal-header">
@@ -61,15 +69,15 @@
                                     required name="name">
                                 <label for="floatingInput">Name Product</label>
                             </div>
-
-                            <select name="category" class="form-select mb-3" aria-label="Default select example">
-                                <% listCategories.forEach(category=> { %>
-                                    <option value="<%= category._id %>">
-                                        <%= category.name %>
-                                    </option>
+                            <div class="form-floating mb-2">
+                                <select name="category" class="form-select  " id="filterGroup1">
+                                    <% listCategory.forEach(category => { %>
+                                        <option value="<%= category._id %>" %>>
+                                            <%= category.name %>
+                                        </option>
                                     <% }); %>
-                            </select>
-
+                                </select>
+                            </div>
                             <div class="form-floating mb-2">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="Fullname"
                                     required name="description">
@@ -97,9 +105,15 @@
             </div>
         </div>
         <!--  -->
+        <style>
+            /* Thêm vào phần style của bạn hoặc tạo một tệp CSS riêng */
+            .table-hover tbody tr:hover {
+                background-color: #f5f5f5; /* Màu nền khi hover */
+            }
+        </style>
 
         <div class="row p-3">
-            <table id="example" class="table table-striped table-bordered border-dark"
+            <table id="example" class="table  table-bordered table-hover border-dark"
                 style="width:95%;margin-left: 25px;">
                 <thead>
                     <tr>
@@ -119,56 +133,65 @@
 
                     </tr>
                 </thead>
+                <script>
+                    function onClickItem(va) {
+                        window.location.href = "/product/detail/" + va;
+                    }
+                </script>
                 <% for (let i=0; i < listProducts.length; i++) { %>
                     <% const row=listProducts[i]; %>
-                        <tr style="height: 100px;">
-                            <td style="width: 60px;">
-                                <%= startCount + i %>
+                        <tr   style="height: 100px;">
+                            <td onclick="onClickItem('<%= row._id %>')" style="width: 60px;">
+                                    <%= startCount + i %> 
+                              
                             </td>
-                            <td style="width: 300px;">
+                            <td onclick="onClickItem('<%= row._id %>')"  style="width: 300px;">
                                 <%= row.name %>
                             </td>
 
-                            <td style="width: 150px;">
-                                <%= row.category_id.name %>
-
+                            <td  onclick="onClickItem('<%= row._id %>')" style="width: 150px;">
+                               <%= row?.category_id?.name ? row.category_id.name : 'null' %>
                             </td>
-                            <td style="width: 90px;">
+                            <td onclick="onClickItem('<%= row._id %>')" style="width: 90px;">
                                 <%= row.price %> $
                             </td>
-                            <td style="width: 100px;">
+                            <td onclick="onClickItem('<%= row._id %>')"  style="width: 100px;">
                                 <img src="data:image/jpeg;base64,<%=row.image[0]%>" alt="Hình ảnh" width="70px"
                                     height="70px">
                             </td>
-                            <td style="width: 300px;">
+                            <td onclick="onClickItem('<%= row._id %>')" style="width: 300px;">
                                 <%= row.description %>
                             </td>
 
                             <td style="width: 190px;">
 
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdropp">
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#staticBackdropp">
                                     Delete
-                                  </button>
+                                </button>
                                 <!-- Modal -->
-                                <div class="modal fade"  id="staticBackdropp" data-bs-backdrop="false"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal fade" id="staticBackdropp" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                    aria-hidden="true">
                                     <div class="modal-dialog">
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticBackdropLabel">Notification</h5>
+                                              
+                                            </div>
+                                            <div class="modal-body">
+                                                do you want to delete <%= row.name %> ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <a href="/product/deleteproduct/<%= row._id %>?countPages=<%= countPages %>&countProducts=<%= countProducts %>"
+                                                    class="btn btn-danger">Save changes</a>
+                                            </div>
                                         </div>
-                                        <div class="modal-body">
-                                            do you want to delete  <%= row.name %> ?
-                                        </div>
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                          <a href="/product/deleteproduct/<%= row._id %>?countPages=<%= countPages %>&countProducts=<%= countProducts %>"
-                                            class="btn btn-danger">Save changes</a>
-                                        </div>
-                                      </div>
                                     </div>
-                                  </div>
+                                </div>
 
                                 <a href="/product/updateproduct/<%= row._id %>" class="btn btn-primary">Update</a>
                             </td>
