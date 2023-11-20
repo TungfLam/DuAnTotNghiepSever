@@ -35,7 +35,7 @@ exports.list = async (req , res , next) => {
         page : page,
         countPage : countPage,
         skipItem : skipItem,
-        role : "Admin"
+        role : req.session.userLogin.role
     });
 }
 
