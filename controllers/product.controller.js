@@ -1,24 +1,27 @@
 var model = require('../models/product.model');
 var modelCategories = require('../models/category.model')
+var modelColor = require('../models/color.model')
+var modelSize = require('../models/sizes.model')
+
+
 var model_product_size_color = require('../models/product_size_color.model')
 var base64 = require('base-64')
 var fs = require('fs');
 var path = require('path');
 const { DateTime } = require('luxon');
 
+
 const getlistproduct = async (req, res) => {
+
     const title = 'List Products';
-    const itemsPerPage = 5; 
-    const page = parseInt(req.params.page) || 1; 
+    const itemsPerPage = 5;
+    const page = parseInt(req.params.page) || 1;
     const startCount = (page - 1) * itemsPerPage + 1;
     const skip = (page - 1) * itemsPerPage;
     const limit = itemsPerPage;
     const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 })
-    .populate('category_id', "name");
-
+        .populate('category_id', "name");
     const listCategory = await modelCategories.categoryModel.find()
-
-    const listCategories = await modelCategories.categoryModel.find()
     const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
     const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
     res.render('product/listproduct', {
@@ -26,21 +29,56 @@ const getlistproduct = async (req, res) => {
         listProducts: listProducts,
         countProducts: countProducts,
         countPages: countPages,
-        listCategories:listCategories,
         page: page,
         startCount: startCount,
-        listCategory:listCategory
+        listCategory: listCategory,
+        selectedCategoryId: 'all'
     });
 };
 
+const detailProduct = async (req, res) => {
+    try {
+        const title = 'title';
+        const idProduct = req.params.idProduct;
+
+        const ListProduct = await model.productModel.findById(idProduct)
+        const ListColor = await modelColor.colorModel.find();
+        const ListSize = await modelSize.sizeModel.find();
+        // console.log(ListCate);
+        const details = await model_product_size_color.product_size_color_Model.find({ product_id: idProduct })
+            .populate('product_id')
+            .populate('size_id', 'name')
+            .populate('color_id', 'name');
+
+        res.render('product/detail', {
+            title: title,
+            productListSizeColor: details,
+            ListProduct: ListProduct,
+            ListColor: ListColor,
+            ListSize: ListSize
+        });
+    } catch (error) {
+        // Xử lý lỗi và trả về một trang lỗi hoặc thông báo lỗi cho người dùng
+        res.status(500).json({ error: error });
+    }
+}
+const addDetail = async (req, res) => {
+    const { price, size, color, nameProduct,trinhh } = req.body;
+    console.log('nameProduct', nameProduct)
+    console.log(' req.body', req.body)
+
+    console.log('háhdhasdahsd');
+    if (req.method === 'POST') {
+        console.log('Trình')
+
+    }
+
+
+}
 
 const addproduct = async (req, res) => {
-    const { name, description, price,category } = req.body;
-    let countPages = parseInt(req.query.countPages);
-    let countProducts = parseInt(req.query.countProducts)
-    if (countProducts % 10 === 0) {
-        countPages += 1
-    }
+    let message = ''
+    const { name, description, price, category } = req.body;
     const image = [];
     // Xử lý tất cả các tệp hình ảnh đã tải lên
     for (const file of req.files) {
@@ -49,21 +87,18 @@ const addproduct = async (req, res) => {
         const base64Image = imageBuffer.toString('base64');
         image.push(base64Image);
     }
-    const nowInVietnam = DateTime.now().setZone('Asia/Ho_Chi_Minh');
     if (req.method === 'POST') {
         let objProduct = new model.productModel({
             name: name,
             description: description,
-            category_id:category,
+            category_id: category,
             image: image,
             price: price,
-            createdAt: nowInVietnam,
-            updatedAt: nowInVietnam
         });
         try {
 
             await objProduct.save();
-            res.redirect(`/product/listproduct/${countPages}`)
+            res.redirect(`/product/listproduct/1}`)
         } catch (error) {
             res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
         }
@@ -127,16 +162,17 @@ const updateproduct = async (req, res) => {
 
 const searchProduct = async (req, res) => {
     const searchQuery = req.query.search.toLowerCase();
-    const title = 'timf kieesm thanh cong';
+    const title = 'List Products';
     const countPages = 1;
     const countProducts = 1;
     const startCount = 1;
     const page = 1;
 
     const listProducts = await model.productModel.find({
-        name: { $regex: new RegExp(searchQuery, 'i') }, 
+        name: { $regex: new RegExp(searchQuery, 'i') },
     });
-    const listCategories = await modelCategories.categoryModel.find()
+    console.log(listProducts);
+    const listCategory = await modelCategories.categoryModel.find()
     res.render('product/listproduct', {
         title: title,
         listProducts: listProducts,
@@ -144,7 +180,9 @@ const searchProduct = async (req, res) => {
         countProducts: countProducts,
         page: page,
         startCount: startCount,
-        listCategories:listCategories
+        listCategory: listCategory,
+        selectedCategoryId: 'all',
+        message: 'ákdasdkasdk'
     });
 }
 const sortUp = async (req, res) => {
@@ -154,7 +192,7 @@ const sortUp = async (req, res) => {
     const skip = (page - 1) * itemsPerPage;
     const limit = itemsPerPage;
     const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 })
-    .populate('category_id', "name");
+        .populate('category_id', "name");
     const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
     const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
     const listCategories = await modelCategories.categoryModel.find()
@@ -169,7 +207,8 @@ const sortUp = async (req, res) => {
             countPages: countPages,
             page: page,
             startCount: startCount,
-            listCategories:listCategories
+            listCategory: listCategories,
+            selectedCategoryId: 'all'
         })
 
     } catch (error) {
@@ -185,7 +224,7 @@ const sortDown = async (req, res) => {
         const skip = (page - 1) * itemsPerPage;
         const limit = itemsPerPage;
         const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 })
-        .populate('category_id', "name");
+            .populate('category_id', "name");
         const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
         const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
         const listCategories = await modelCategories.categoryModel.find()
@@ -202,12 +241,37 @@ const sortDown = async (req, res) => {
             countPages: countPages,
             page: page,
             startCount: startCount,
-            listCategories:listCategories
+            listCategory: listCategories,
+            selectedCategoryId: 'all'
         })
     } catch (error) {
         console.log(error);
     }
 }
+const filterCategory = async (req, res) => {
+    let message = ''
+    const id_cate = req.query.category
+    const filterCategory = await model.productModel.find({ 'category_id': id_cate }).populate('category_id');
+    const listCategory = await modelCategories.categoryModel.find();
 
+    res.render('product/listproduct', {
+        title: 'List Products',
+        message: '123123123',
+        listProducts: filterCategory,
+        countProducts: 1,
+        countPages: 1,
+        page: 1,
+        startCount: 1,
+        listCategory: listCategory,
+        selectedCategoryId: id_cate,
+        message: 'tìm kiếm thành công'
+    });
+}
 
-module.exports = { getlistproduct, addproduct, deleteproduct, updateproduct, searchProduct, sortUp, sortDown }
+const statistical = (req, res) => {
+    res.render('product/statistical', {
+        title: 'title',
+    });
+}
+
+module.exports = { addDetail, getlistproduct, addproduct, deleteproduct, updateproduct, searchProduct, sortUp, sortDown, filterCategory, statistical, detailProduct }

@@ -1,0 +1,41 @@
+<%- include('../inc/top') %>
+<div class="container-fluid">
+    <div>
+        <canvas id="con me may"></canvas>
+      </div>
+      
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+      <script>
+        const ctx = document.getElementById('con me may');
+      
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['trình', 'trình', 'trình', 'trình', 'trình', 'trình'],
+            datasets: [{
+              label: '# of Votes',
+              data: [12, 19, 3, 5, 2, 3],
+              borderWidth: 1
+            }]
+          },
+          data2: {
+            labels: ['trình', 'trình', 'trình', 'trình', 'trình', 'trình'],
+            datasets: [{
+              label: '# of Votes',
+              data: [19, 19, 3, 5, 2, 3],
+              borderWidth: 1,
+            }]
+          },
+          options: {
+    onClick: (e) => {
+      const canvasPosition = getRelativePosition(e, chart);
+      // Substitute the appropriate scale IDs
+      const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
+      const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
+    }
+  }
+});
+      </script>
+</div>
+ <%- include('../inc/bottom') %>

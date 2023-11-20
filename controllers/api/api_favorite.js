@@ -7,7 +7,6 @@ const addFavorite = async (req, res) => {
         const idProduct = req.params.idProduct;
         const id_user = await mdUser.userModel.findById(idUser)
         const id_product = await mdProduct.productModel.findById(idProduct);
-        /// kiểm tra xem có trong db hay không 
         if (req.method === 'POST') {
             let objfavorite = new mdFavorite.favorite_Model({
                 user_id: id_user._id,
