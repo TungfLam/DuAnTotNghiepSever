@@ -1,41 +1,26 @@
 <%- include('../inc/top') %>
     <div class="container-fluid">
         <p class="fw-bold fs-2 text-primary ">Update Warehouse</p>
-        <div class="fw-bolder fs-4 text-success"><%= message %></div>
+        <div class="fw-bolder fs-4 text-success">
+            <%= message?message:'' %>
+        </div>
         <form method="POST" class="m-4">
             <div class="input-group input-group-lg mb-3">
-                <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Name
-                    Product</span>
-                <select name="name" class="form-control form-select"
-                    aria-label="Sizing example input Default select example" aria-describedby="inputGroup-sizing-lg"
-                    name="productName">
-                    <option value="   <%= product_size_color.product_id %>">   <%= product_size_color.product_id.name %></option>
-                </select>
+                <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Price</span>
+                <input name="productName" value="<%= product_size_color.product_id.name %>" type="text" class="form-control" readonly aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
             </div>
+          
             <div class="input-group input-group-lg mb-3">
                 <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Price</span>
-                <input name="price" value="<%=product_size_color.product_id.price %>" type="text" class="form-control" aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg">
+                <input name="price" value="<%= product_size_color.product_id.price %>" type="text" class="form-control" readonly aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
             </div>
-            <div class="input-group input-group-lg mb-3">
-                <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Category</span>
-                <select name="categories" class="form-control form-select"
-                    aria-label="Sizing example input Default select example" aria-describedby="inputGroup-sizing-lg"
-                    name="productName">   
-                        <% category.forEach((category)=> { %>
-                        <% let selected='' ; if (String(product_size_color.category_id.name)==String(category.name)) {
-                            selected='selected' ; } %>
-                            <option <%=selected %> value="<%=category._id%>"><%=category.name %>
-                            </option>
-                            <% }); %>
-                </select>
-            </div>
+        
             <div class="input-group input-group-lg mb-3">
                 <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Size </span>
                 <select name="size" class="form-control form-select "
                     aria-label="Sizing example input Default select example" aria-describedby="inputGroup-sizing-lg"
                     name="productName">
-                    <% size.forEach((size)=> { %>
+                    <% size?.forEach((size)=> { %>
                         <% let selected='' ; if (String(product_size_color.size_id.name)==String(size.name)) {
                             selected='selected' ; } %>
                             <option <%=selected %> value="<%=size._id%>"><%=size.name %>
@@ -48,7 +33,7 @@
                 <select name="color" class="form-control form-select"
                     aria-label="Sizing example input Default select example" aria-describedby="inputGroup-sizing-lg"
                     name="productName">
-                    <% color.forEach((color)=> { %>
+                    <% color?.forEach((color)=> { %>
                         <% let selected='' ; if (String(product_size_color.color_id.name)==String(color.name)) {
                             selected='selected' ; } %>
                             <option <%=selected %> value="<%=color._id%>"><%=color.name %>
@@ -58,15 +43,16 @@
             </div>
             <div class="input-group input-group-lg mb-3">
                 <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Quantity</span>
-                <input name="quantity" value="<%=product_size_color.quantity %>" type="text" class="form-control" aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg">
+                <input name="quantity" value="<%=product_size_color.quantity %>" type="text" class="form-control"
+                    aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
             </div>
             <div class="d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary " style="width: 250px; ">Submit</button>
             </div>
 
         </form>
-
+        
+        
     </div>
 
 

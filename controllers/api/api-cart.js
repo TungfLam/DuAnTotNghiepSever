@@ -1,29 +1,31 @@
 var md = require('../../models/cart.model');
+var mdUser = require('../../models/user.model');
+var mdProduct = require('../../models/product_size_color.model')
 var objReturn = {
     status: 1,
     msg: 'OK'
 }
 
-// get
-exports.listCart = async (req, res, next) => {
-    let list = [];
+// // get
+// exports.listCart = async (req, res, next) => {
+//     let list = [];
 
-    try {
-        list = await md.cartModel.find();
-        if (list.length > 0)
-            objReturn.data = list;
-        else {
-            objReturn.status = 0;
-            objReturn.msg = 'Không có dữ liệu phù hợp';
+//     try {
+//         list = await md.cartModel.find();
+//         if (list.length > 0)
+//             objReturn.data = list;
+//         else {
+//             objReturn.status = 0;
+//             objReturn.msg = 'Không có dữ liệu phù hợp';
 
-        }
-    } catch (error) {
-        objReturn.status = 0;
-        objReturn.msg = error.message;
-    }
+//         }
+//     } catch (error) {
+//         objReturn.status = 0;
+//         objReturn.msg = error.message;
+//     }
 
-    res.json(objReturn);
-}
+//     res.json(objReturn);
+// }
 // get có phân trang
 exports.pagination = async (req, res, next) => {
     const PAGE_SIZE = 5;
@@ -67,46 +69,26 @@ const schema = Joi.object({
     status: Joi.string().required()
 });
 // add Cart 
-exports.addCart = async (req, res, next) => {
-    try {
-        const validation = schema.validate(req.body);
-        if (validation.error) {
-            return res.status(400).json({ message: 'Validation Error', error: validation.error.details });
-        }
+// exports.addCart = async (req, res, next) => {
+//     try {
+//         const validation = schema.validate(req.body);
+//         if (validation.error) {
+//             return res.status(400).json({ message: 'Validation Error', error: validation.error.details });
+//         }
 
 
-        const cart = req.body;
-        const newCart = md.cartModel(cart);
-        await newCart.save();
-        console.log(newCart);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ message: 'Server Error', error: err.toString() });
-    }
+//         const cart = req.body;
+//         const newCart = md.cartModel(cart);
+//         await newCart.save();
+//         console.log(newCart);
+//     } catch (err) {
+//         console.error(err.message);
+//         res.status(500).json({ message: 'Server Error', error: err.toString() });
+//     }
 
-    res.json(objReturn);
-}
+//     res.json(objReturn);
+// }
 // Update Cart
-exports.updateCart = async (req, res, next) => {
-    try {
-        const validation = schema.validate(req.body);
-        if (validation.error) {
-            return res.status(400).json({ message: 'Validation Error', error: validation.error.details });
-        }
-
-        const cart = req.body;
-        const updatedCart = await md.cartModel.findByIdAndUpdate(req.params.id, cart, { new: true });
-        if (!updatedCart) {
-            return res.status(404).json({ message: 'Cart not found' });
-        }
-
-        console.log(updatedCart);
-        res.json(updatedCart);
-    } catch (err) {
-        console.error(err.message);
-        return res.status(500).json({ message: 'Server Error', error: err.toString() });
-    }
-}
 
 
 // Delete Cart
@@ -116,9 +98,85 @@ exports.deleteCart = async (req, res, next) => {
         if (!deletedCart) {
             return res.status(404).json({ message: 'Cart not found' });
         }
-
         console.log(deletedCart);
-        res.json({ message: 'Cart deleted', cart: deletedCart });
+        res.json({ message: 'Cart deleted'});
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).json({ message: 'Server Error', error: err.toString() });
+    }
+}
+
+exports.listCart = async (req, res) => {
+
+    try {
+        const id_User = req.params.idUser; 
+        const listCart = await md.cartModel.find({ user_id: id_User })
+            .populate({
+                path: 'product_id',
+                populate: {
+                    path: 'product_id size_id color_id',
+                    select: 'name image price quantity  '
+                }
+            }).sort({ createdAt: -1 })
+        if (!listCart || listCart.length === 0) {
+            return res.json({ message: 'Your cart does not have any products, please add products to your cart now!', listCart: [] });
+        }
+        // Your cart does not have any products, please add products to your cart now!
+        // // const checkProduct = await mdProduct.product_size_color_Model.findById(ListCart.product_id._id)
+        //   listCart.forEach(async element => {
+
+        //     const checkProduct = await mdProduct.product_size_color_Model.findById(element.product_id)
+        //     console.log(checkProduct);
+        //   });     
+       
+        res.json({ message: 'Get the list successfully', listCart: listCart });
+    } catch (error) {
+
+    }
+}
+
+exports.addCart = async (req, res) => {
+    const id_Product = req.params.idProduct;
+    const id_User = req.params.idUser;
+    const quantityCart = req.body.quantity;
+    try {
+        const user = await mdUser.userModel.findById(id_User);
+        const product = await mdProduct.product_size_color_Model.findById(id_Product)
+        if (quantityCart > product.quantity || quantityCart <= 0) {
+            return res.json({ message: 'action cannot be taken' });
+        }
+        const cartobj = new md.cartModel({
+            user_id: user._id,
+            product_id: product._id,
+            quantity: quantityCart,
+            status: 'successfully'
+        })
+        await cartobj.save();
+        res.json({ message: 'Add Cart successfully' });
+    } catch (error) {
+
+    }
+
+}
+
+exports.updateCart = async (req, res, next) => {
+    try {
+        if (req.method === 'POST') {
+            const id_Cart = req.params.idCart;
+            const id_User = req.params.idUser;
+            const quantityCart = req.body.quantity
+
+            const findCart = await md.cartModel.findById(id_Cart)
+            const findUser = await mdUser.userModel.findById(id_User)
+            const findproduct = await mdProduct.product_size_color_Model.findById(findCart.product_id)
+            if (quantityCart > findproduct.quantity || quantityCart <= 0) {
+                return res.json({ message: 'action cannot be taken' });
+            }
+
+            await md.cartModel.findByIdAndUpdate(id_Cart, { quantity: quantityCart });
+            res.json({ message: 'Update Sucsess ' });
+        }
+
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ message: 'Server Error', error: err.toString() });
