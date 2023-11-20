@@ -1,10 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var userCtrl = require('..//controllers/user.controller');
-var checkLogin = require('../meddlewares/check_login');
+const express = require('express');
+const router = express.Router();
+const userCtrl = require('..//controllers/user.controller');
+const checkLogin = require('../meddlewares/check_login');
 
 const multer = require('multer');
-var upLoader = multer({dest : './tmp'});
+const upLoader = multer({dest : './tmp'});
 
 router.get("/" ,userCtrl.list);
 router.get("/add" , userCtrl.add);

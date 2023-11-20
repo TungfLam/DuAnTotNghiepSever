@@ -9,7 +9,8 @@ var userSchema = new db.mongoose.Schema(
         role: { type: String, required: true },
         full_name: { type: String, required: false },
         phone_number: { type: String, required: false },
-        status : {type : Boolean , require : true}
+        status : {type : Boolean , require : true},
+        deviceId : {type : String , require : false},
     },
     { collection: 'users' }
 );

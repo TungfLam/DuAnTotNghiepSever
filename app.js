@@ -13,6 +13,7 @@ var usersRouter = require('./routes/users');
 var productRouter = require('./routes/product')
 var apiRouter = require('./routes/api');
 var product_size_color_router = require('./routes/product_size_color');
+const notificationRouter = require('./routes/notification');
 
 
 var app = express();
@@ -45,7 +46,7 @@ app.use('/users', usersRouter);
 app.use('/product',productRouter);
 app.use('/api', apiRouter);
 app.use('/product_size_color', product_size_color_router);
-
+app.use('/notification',notificationRouter);
 
 
 // catch 404 and forward to error handler

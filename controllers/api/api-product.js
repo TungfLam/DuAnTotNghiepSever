@@ -76,5 +76,3 @@ exports.searchProduct = async (req,res)=>{
         console.log('đã xảy ra lỗi ', error);
     }
 }
-
-

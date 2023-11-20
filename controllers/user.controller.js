@@ -82,12 +82,12 @@ exports.add = async (req , res , next) => {
             objNewUser.address = address;
             objNewUser.phone_number = phone_number;
             objNewUser.role = "Staff";
+            objNewUser.deviceId = "";
 
             if(req.file){
                 try {
                     fs.renameSync(req.file.path, './public/avatas/' + objNewUser._id + '_' + req.file.originalname);
                     objNewUser.avatar = '/avatas/' + objNewUser._id + '_' + req.file.originalname;
-                
                 } catch (error) {
                     console.log("Ảnh bị lỗi rồi: "+error);
                 }
@@ -101,9 +101,7 @@ exports.add = async (req , res , next) => {
             } catch (error) {
                 msg = "Lỗi lưu vào cơ sở dữ";
             }
-
         }
-
     }
   
     res.render("user/addStaff", {
@@ -159,12 +157,10 @@ exports.edit = async (req , res , next) => {
                 console.log(error);
                 msg = "Update thất bại";
             }
-            
         }else {
             msg = "Không tìm thấy user trong cơ sở dữ liệu";
         }
     }
-    
     res.redirect('/users');
 }
 

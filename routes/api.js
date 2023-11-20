@@ -3,7 +3,8 @@ var router = express.Router();
 const multer = require('multer');
 const upload = multer();
 
-var api_users = require('../controllers/api/api-users')
+const api_comment = require('../controllers/api/api_comment');
+const api_users = require('../controllers/api/api-users')
 var api_color = require('../controllers/api/api_color')
 var api_size = require('../controllers/api/api_size')
 var api_category = require('../controllers/api/api_category')
@@ -14,9 +15,8 @@ var api_product = require('../controllers/api/api-product')
 var api_bill = require('../controllers/api/api-bill')
 var api_cart = require('../controllers/api/api-cart')
 var api_address = require('../controllers/api/api-address')
+
 // api user
-
-
 
 router.get('/users', api_users.listUser);
 router.get('/users/pagination', api_users.pagination);
@@ -29,16 +29,17 @@ router.delete('/users/:idu', api_users.deleteUser);
 // api product
 
 router.get('/products/:category/:skip', api_product.getProducts);
-
 router.post('/products', upload.array('image'), api_product.createProduct);
-
 router.put('/products/:id', upload.array('image'), api_product.updateProduct);
-
 router.delete('/products/:id', api_product.deleteProduct);
-
 router.get('/products/sortUp', api_product.sortUp);
 router.get('/products/sortDown', api_product.sortDown);
 router.get('/products/search', api_product.searchProduct);
+
+//comment
+router.get('/comment/:ProductId', api_comment.getCommentByProduct);
+router.post('/comment' , api_comment.newComment);
+router.put('/comment/:CommentId' , api_comment.updateComment);
 
 
 //===
@@ -65,7 +66,6 @@ router.post('/add_product_size_color', api_product_size_color.add_product_size_c
 router.post('/addFavorite/:idUser/:idProduct', api_favorite.addFavorite);
 router.get('/getListFavorite/:idUser', api_favorite.getListFavorite);
 router.get('/deleteFavorite/:idFavorite', api_favorite.deleteFavorite);
-
 
 
 // api bill
@@ -96,4 +96,6 @@ router.put('/address/:id', api_address.updateAddress);
 router.delete('/address/:id', api_address.deleteAddress);
 
 //====
+// api socket
+
 module.exports = router;
