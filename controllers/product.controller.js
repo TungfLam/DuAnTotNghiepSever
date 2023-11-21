@@ -63,7 +63,7 @@ const detailProduct = async (req, res) => {
     }
 }
 const addDetail = async (req, res) => {
-    const { price, size, color, nameProduct,trinhh } = req.body;
+    const { price, size, color, nameProduct, trinhh } = req.body;
     console.log('nameProduct', nameProduct)
     console.log(' req.body', req.body)
 
@@ -80,6 +80,8 @@ const addproduct = async (req, res) => {
     let message = ''
     const { name, description, price, category } = req.body;
     const image = [];
+    const nowInVietnam = DateTime.now().setZone('Asia/Ho_Chi_Minh');
+
     // Xử lý tất cả các tệp hình ảnh đã tải lên
     for (const file of req.files) {
         const imageBuffer = fs.readFileSync(file.path);
@@ -92,6 +94,7 @@ const addproduct = async (req, res) => {
             name: name,
             description: description,
             category_id: category,
+            createdAt: nowInVietnam,
             image: image,
             price: price,
         });
@@ -122,35 +125,88 @@ const deleteproduct = async (req, res) => {
 
     }
 }
+// const updateproduct = async (req, res) => {
+//     let id = req.params.id;
+//     let title = 'Update Product'
+
+//     try {
+//         var itemedit = await model.productModel.findById(id);
+//     } catch (error) {
+//     }
+
+//     const nowInVietnam = DateTime.now().setZone('Asia/Ho_Chi_Minh');
+//     if (req.method == 'POST') {
+//         try {
+//             var image = [];
+//             for (const file of req.files) {
+//                 const imageBuffer = fs.readFileSync(file.path);
+//                 // mã hóa base64
+//                 const base64Image = imageBuffer.toString('base64');
+//                 image.push(base64Image);
+//             }
+
+//         } catch (error) {
+
+//         }
+//         let objProduct = new model.productModel();
+
+//         objProduct.name = req.body.name
+//         objProduct.description = req.body.description
+//         if (image.length === 0) {
+//             console.log("Mảng rỗng");
+//         } else {
+//             objProduct.image = image;
+//             console.log(image);
+//         }
+//         objProduct.price = req.body.price
+//         objProduct.updatedAt = nowInVietnam
+//         objProduct._id = id;
+
+//         try {
+//             await model.productModel.findByIdAndUpdate({ _id: id, objProduct }, objProduct);
+//             res.redirect('/product/listproduct/1');
+//         } catch (error) {
+//             res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
+//         }
+//     }
+
+//     res.render('product/updateproduct', { title: title, itemedit: itemedit })
+// }
 const updateproduct = async (req, res) => {
     let id = req.params.id;
     let title = 'Update Product'
-    let itemedit = await model.productModel.findById(id);
-    const { name, description, price } = req.body;
 
-    const image = [];
-    // Xử lý tất cả các tệp hình ảnh đã tải lên
-    // for (const file of req.files) {
-    //     //đọc file từ thư mục
-    //     const imageBuffer = fs.readFileSync(file.path);
-    //     // mã hóa base64
-    //     const base64Image = imageBuffer.toString('base64');
-    //     image.push(base64Image);
-    // }
+    try {
+        var itemedit = await model.productModel.findById(id);
+    } catch (error) {
+    }
 
     const nowInVietnam = DateTime.now().setZone('Asia/Ho_Chi_Minh');
-    if (req.method === 'POST') {
-        let objProduct = new model.productModel({
-            id: id,
-            name: name,
-            description: description,
-            // image: image,
-            price: price,
-            createdAt: nowInVietnam,
-            updatedAt: nowInVietnam
-        });
+    if (req.method == 'POST') {
         try {
-            await model.productModel.findByIdAndUpdate(id, objProduct);
+            var image = [];
+            for (const file of req.files) {
+                const imageBuffer = fs.readFileSync(file.path);
+                // mã hóa base64
+                const base64Image = imageBuffer.toString('base64');
+                image.push(base64Image);
+            }
+
+        } catch (error) {
+
+        }
+
+        itemedit.name = req.body.name
+        itemedit.description = req.body.description
+        if (image.length !== 0) {
+            itemedit.image = image;
+            console.log(image);
+        }
+        itemedit.price = req.body.price
+        itemedit.updatedAt = nowInVietnam
+
+        try {
+            await model.productModel.findByIdAndUpdate(id, itemedit);
             res.redirect('/product/listproduct/1');
         } catch (error) {
             res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
@@ -159,6 +215,7 @@ const updateproduct = async (req, res) => {
 
     res.render('product/updateproduct', { title: title, itemedit: itemedit })
 }
+
 
 const searchProduct = async (req, res) => {
     const searchQuery = req.query.search.toLowerCase();
