@@ -38,8 +38,8 @@ router.get('/products/search', api_product.searchProduct);
 
 //comment
 router.get('/comment/:ProductId', api_comment.getCommentByProduct);
-router.post('/comment' , api_comment.newComment);
-router.put('/comment/:CommentId' , api_comment.updateComment);
+router.post('/comment', api_comment.newComment);
+router.put('/comment/:CommentId', api_comment.updateComment);
 
 
 //===
@@ -71,6 +71,7 @@ router.get('/deleteFavorite/:idFavorite', api_favorite.deleteFavorite);
 // api bill
 
 router.get('/bill', api_bill.listBill);
+router.get('/bill/:userId', api_bill.listBillByUserId);
 router.get('/bill/pagination', api_bill.pagination);
 
 router.post('/bill', api_bill.addBill);
