@@ -6,8 +6,8 @@ var productSchema = new db.mongoose.Schema(
         description: { type: String, required: true },
         image: { type: [String], required: true },
         category_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'categoryModel'},
-        createdAt: { type: String, required: true },
-        updatedAt: { type: String, required: true },
+        createdAt: { type: Date, default: Date.now },
+        updatedAt: { type: Date, default: Date.now },
         price: { type: Number, required: true }
     },
     { collection: 'product' }

@@ -64,7 +64,6 @@ const detailProduct = async (req, res) => {
 }
 const addDetail = async (req, res) => {
     const { price, size, color, nameProduct,trinhh } = req.body;
-    console.log('nameProduct', nameProduct)
     console.log(' req.body', req.body)
 
     console.log('háhdhasdahsd');

@@ -1,0 +1,119 @@
+<%- include('../inc/top') %>
+    <div class="container-fluid">
+        <p class="fw-bold fs-2 text-primary ">Danh sách màu sắc</p>
+
+        <div class="d-flex justify-content-end ">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"> <i class="fa-solid fa-plus" style="color: #ffffff;"></i> Thêm sản phẩm</button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+                    <form method="POST" action="/product/addproduct" enctype="multipart/form-data" multiple>
+
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" style="color: rgb(32, 39, 226);" id="staticBackdropLabel">
+                                Add Product
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="Fullname"
+                                    required name="name">
+                                <label for="floatingInput">Name Product</label>
+                            </div>
+                           
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+       <div class="row p-3">
+        <table id="example" class="table  table-bordered table-hover border-dark"
+            style="width:95%;margin-left: 25px;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên kích thước</th>        
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <% if (listSize.length===0) { %>
+                <tr>
+                    <td colspan="7" style="text-align: center;justify-content: center;">
+                        <p>Dữ liệu không tồn tại.</p>
+                    </td>
+                </tr>
+                <% } else { %>
+                    <% for (let i=0; i < listSize.length; i++) { %>
+                        <% const row=listSize[i]; %>
+                            <tr style="height: 100px;">
+                                <td  style="width: 60px;">
+                                     <%=  i+1 %> 
+
+                                </td>
+                                <td style="width: 300px;">
+                                    <%= row.name %>
+                                </td>    
+                                 
+                                <td style="width: 190px;">
+
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdropp">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="staticBackdropp" data-bs-backdrop="static"
+                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticBackdropLabel">Notification
+                                                    </h5>
+
+                                                </div>
+                                                <div class="modal-body">
+                                                    do you want to delete <%= row.name %> ?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                    <a href="/product/deleteproduct/"
+                                                        class="btn btn-danger">Save changes</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <a href="/product/updateproduct/<%= row._id %>"
+                                        class="btn btn-primary">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <% } %>
+                                <% } %>
+
+
+        </table>
+    </div>
+
+
+
+
+
+    </div>
+
+    <%- include('../inc/bottom') %>
