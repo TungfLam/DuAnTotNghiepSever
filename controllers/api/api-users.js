@@ -92,6 +92,8 @@ async function catchError(err, req, res, next) {
 exports.addUser = async (req, res, next) => {
     try {
         const user = req.body;
+        user.role = 'Staff';
+        user.status = false;
         const newUser = md.userModel(user);
         await newUser.save();
         console.log(newUser);
