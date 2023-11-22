@@ -4,7 +4,7 @@ var indexContrl = require('../controllers/index.controller');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Thống kê',heading:'DASHBOARD' });
 });
 
 router.get('/login', indexContrl.login);

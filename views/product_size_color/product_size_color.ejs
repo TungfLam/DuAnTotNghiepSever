@@ -1,8 +1,7 @@
 <%- include('../inc/top') %>
     <div class="container-fluid">
-        <p class="fw-bold fs-2 text-primary ">Product Warehouse</p>
-        <div class="d-flex m-2">
-            <form method="get" action="/product_size_color/search" class="input-group m-4 d-flex">
+        <div class="d-flex m-1 mb-4" style=" background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);">
+            <form method="get" action="/product_size_color/search" class="input-group m-3 d-flex">
                 <input placeholder="Search for your product ...." aria-label="Search for your product" type="text"
                     class="form-control" id="floatingInput" name="search">
                 <div class="d-flex">
@@ -42,19 +41,21 @@
         <div class="fw-bolder fs-4 text-success">
             <%= message %>
         </div>
-        <!-- <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-            <button type="button" class="btn btn-danger">Left</button>
-            <button type="button" class="btn btn-warning">Middle</button>
-            <button type="button" class="btn btn-success">Right</button>
-        </div> -->
 
 
         <div class="" style="margin-left: 15px;">
-
-            <a class="btn btn-primary" href="/product_size_color/add_product_size_color">Add Product Size Color</a>
-            <div class="row"
-                style="width: 100%; background-color: white; border-radius: 13px; padding: 15px; box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); display: flex;">
-                <table id="example" class="table table-bordered border-dark">
+          
+            <div class="row p-4"
+                style="width: 100%; background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); display: flex;">
+                <div class="d-flex justify-content-end me-3 mb-2">
+                    <button type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
+                        Export</button>
+                    <a class="btn btn-primary" href="/product_size_color/add_product_size_color"><i class="fa-solid fa-plus"
+                            style="color: #ffffff;"></i> Thêm sản phẩm</a>
+                </div>
+                
+                
+                <table id="example" class="table ">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -91,10 +92,11 @@
                                                 <td>
                                                     <%= row.product_id ? row.product_id.name : 'NULL' %>
                                                 </td>
-                                                
-                                                <td class="" >
+
+                                                <td class="">
                                                     <i class="fa-regular fa-money-bill-1"></i>
-                                                    <%= (row.product_id.price ).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) %>
+                                                    <%= (row.product_id.price ).toLocaleString('vi-VN', {
+                                                        style: 'currency' , currency: 'VND' }) %>
                                                 </td>
                                                 <td>
                                                     <%= row.size_id ? row.size_id.name : 'NULL' %>
@@ -105,11 +107,11 @@
                                                 <td>
                                                     <%= row.quantity ? row.quantity : 'Out of stock' %>
                                                 </td>
-                                         
+
                                                 <td style="width: 190px;">
                                                     <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                                         data-bs-target="#staticBackdropp">
-                                                        Delete
+                                                        <i class="fa-solid fa-trash-can"></i> Xóa
                                                     </button>
                                                     <div class="modal fade" id="staticBackdropp"
                                                         data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -118,25 +120,25 @@
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
                                                                     <h5 class="modal-title" id="staticBackdropLabel">
-                                                                        Notification</h5>
-                                        
+                                                                        Thông báo</h5>
+
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    do you want to delete <%= row.product_id ?
+                                                                    Bạn có muốn xóa <%= row.product_id ?
                                                                         row.product_id.name : 'NULL' %>
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Close</button>
+                                                                        data-bs-dismiss="modal">Hủy</button>
                                                                     <a href="/product_size_color/delete_product_color_size/<%=row.id %>"
-                                                                        class="btn btn-danger">Save changes</a>
-                                        
+                                                                        class="btn btn-danger">Lưu thay đổi</a>
+
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <a href="/product_size_color/update_product_size_color/<%=row.id %>"
-                                                        class="btn btn-primary">Update</a>
+                                                        class="btn btn-primary">   <i class="fa-regular fa-pen-to-square"></i> Sửa</a>
                                                 </td>
 
                                             </tr>
@@ -147,7 +149,7 @@
             </div>
 
         </div>
-    
+
 
         <nav aria-label="Page navigation example" style="margin-top: 100px;">
             <ul class="pagination">
@@ -164,10 +166,21 @@
                         <% } %>
 
                             <% for (let i=1; i <=countPages; i++) { %>
-
+                                <style>
+                                    .active-page {
+                                        color: white;
+                                        background-color: rgba(13, 110, 253, 255);
+                                        width: 35px;
+                                        height: 38px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        text-decoration: none;
+                                    }
+                                </style>
                                 <li class="page-item">
-                                    <a style="<%= i === page ? 'color: white; background-color: rgba(13,110,253,255);' : '' %>"
-                                        href="/product_size_color/getListAll/<%= i %>" class="page-link">
+                                    <a class="<%= i === page ?' active-page' : 'page-link' %>"
+                                        href="/product_size_color/getListAll/<%= i %>">
                                         <%= i %>
                                     </a>
                                 </li>

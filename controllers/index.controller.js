@@ -1,9 +1,9 @@
 const mUser = require('../models/user.model');
-
+let title = 'Thống kê '
+let heading = 'Biểu đồ thống kê'
 exports.login = async (req , res , next) => {
     let msg = "";
     let typeErr = false;
-
     if(req.method == 'POST'){
         let Username = req.body.Username;
         let Password = req.body.Password;
@@ -38,7 +38,8 @@ exports.login = async (req , res , next) => {
 
     res.render('user/login',
         {
-            title : "Login",
+            title : title,
+            heading:heading,
             msg : msg,
             typeErr : typeErr
         }

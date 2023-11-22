@@ -21,6 +21,7 @@
 </head>
 
 <body>
+
     <div class="sidebar">
         <div class="logo-details">
             <div class="logo_name">ADADAS</div>
@@ -56,11 +57,17 @@
                 </a>
                 <span class="tooltip">Bảng con </span>
             </li>
-            <li>
-                <ul class="dropdown-menu dropdown-menu-dark">
-                    <a class="dropdown-item" href="/category">Thể loại</a>
-                    <a class="dropdown-item" href="/color">Màu sắc</a>
-                    <a class="dropdown-item" href="/size">Kích thước </a>
+            <style>
+                .ab {
+                    margin: 5px;
+
+                }
+            </style>
+            <li class="">
+                <ul class="dropdown-menu dropdown-menu-dark" style="width: 220px; padding: 10px;padding-right: 22px;">
+                    <a class="dropdown-item ab" href="/category">Thể loại</a>
+                    <a class="dropdown-item ab" href="/color">Màu sắc</a>
+                    <a class="dropdown-item ab" href="/size">Kích thước </a>
                 </ul>
             </li>
             <li>
@@ -126,7 +133,7 @@
                 </a>
                 <span class="tooltip">Thống kê</span>
             </li>
-           
+
 
             <li>
                 <a href="#">
@@ -162,5 +169,35 @@
         </ul>
     </div>
 
+    
+
     <div class="home-section">
-        <div style="margin-top: 20px;"></div>
+        <div style="margin-top: 100px;"></div>
+
+
+        <nav class="navbar fixed-top justify-content-between py-2"
+        style="background-color: rgb(188, 198, 200); z-index: 1;">
+
+        <div class="ms-2">
+            <div>
+                <p class="fw-bold fs-2 text-primary ">   <%= heading ? heading : heading %></p>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="d-flex mx-2 align-items-center">
+
+                <div id="clock" class="fw-bold  fs-6 me-5 d-none d-sm-block d-md-block d-lg-block d-xxl-block">
+                </div>
+                <div class="dropstart" id="personal">
+                    <button type="button"
+                        style="border-width: 0px; border-radius: 50%; width: 45px; height: 45px; padding: 0;"
+                        data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                        <img src="https://fptshop.com.vn/Uploads/images/image001(1265).jpg" alt=""
+                            width="45px" height="45px" style="object-fit: cover;
+                        border-radius: 50%;">
+                    </button>
+                   
+                </div>
+            </div>
+        </div>
+    </nav>
