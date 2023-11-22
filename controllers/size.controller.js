@@ -1,4 +1,4 @@
-const sizemd = require('../models/sizes.model')
+let sizemd = require('../models/sizes.model')
 
 
 let title = 'Kích thước'
@@ -13,4 +13,25 @@ const getAll = async (req, res) => {
   });
 }
 
-module.exports = { getAll }
+const addSize = async (req, res) => {
+  const sizeName = req.body.name;
+
+  try {
+    await sizemd.sizeModel.create({ name: sizeName });
+
+    res.redirect('/size');
+  } catch (error) {
+    res.status(500).json({ error: error, message: 'Có lỗi xảy ra khi thêm kích thước' });
+  }
+};
+const deleteSize = async (req, res) => {
+  const idSize = req.params.idSize;
+
+  try {
+    await sizemd.sizeModel.findByIdAndDelete(idSize);
+    res.redirect('/size');
+  } catch (error) {
+    res.status(500).json({ error: error, message: 'Có lỗi xảy ra khi xóa kích thước' });
+  }
+};
+module.exports = { getAll,addSize,deleteSize }

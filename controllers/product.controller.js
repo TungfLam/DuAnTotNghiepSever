@@ -58,7 +58,7 @@ const detailProduct = async (req, res) => {
             ListProduct: ListProduct,
             ListColor: ListColor,
             ListSize: ListSize,
-            heading: heading,
+            heading: 'Chi tiết sản phẩm',
             displayMessage: ''
         });
     } catch (error) {
@@ -69,14 +69,6 @@ const detailProduct = async (req, res) => {
 const addDetail = async (req, res) => {
     const { price, size, color, nameProduct, trinhh } = req.body;
     console.log(' req.body', req.body)
-
-    console.log('háhdhasdahsd');
-    if (req.method === 'POST') {
-        console.log('Trình')
-
-    }
-
-
 }
 
 const addproduct = async (req, res) => {
