@@ -25,6 +25,27 @@ exports.listBill = async (req, res, next) => {
 
     res.json(objReturn);
 }
+// get theo id
+exports.listBillByUserId = async (req, res, next) => {
+    let userId = req.params.userId;
+    let list = [];
+
+    try {
+        list = await md.billModel.find({ user_id: userId });
+        if (list.length > 0)
+            objReturn.data = list;
+        else {
+            objReturn.status = 0;
+            objReturn.msg = 'Không có dữ liệu phù hợp';
+        }
+    } catch (error) {
+        objReturn.status = 0;
+        objReturn.msg = error.message;
+    }
+
+    res.json(objReturn);
+}
+
 // get có phân trang
 exports.pagination = async (req, res, next) => {
     const PAGE_SIZE = 5;

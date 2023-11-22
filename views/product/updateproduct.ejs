@@ -1,42 +1,44 @@
 <%- include('../inc/top') %>
-<div class="container-fluid">
+    <div class="container-fluid">
+        <p class="fw-bold fs-2 text-primary">Edit Product</p>
 
+        <form method="POST" action="/product/updateproduct/<%= itemedit.id %>" enctype="multipart/form-data" multiple>
+            <div class="container-fluid border border-secondary">
+                <div class="modal-body m-2">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Fullname" required
+                            name="name" value="<%= itemedit.name %>">
+                        <label for="floatingInput">Name Product</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type text" class="form-control" id="floatingInput" placeholder="Fullname" required
+                            name="description" value="<%= itemedit.description %>">
+                        <label for="floatingInput">Description</label>
+                    </div>
 
-    <form method="POST" action="/product/updateproduct/<%= itemedit.id %>" enctype="multipart/form-data" multiple>
-        <div class="container-fluid border border-secondary">
-            <div class="modal-body m-2">
-                <div class="form-floating mb-2">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Fullname" required
-                        name="name" value="<%= itemedit.name %>">
-                    <label for="floatingInput">Name Product</label>
+                    <div class="input-group mb-3">
+
+                        <input type="file" class="form-control" id="inputGroupFile02" name="image" multiple
+                            value="<%= itemedit.image %>">
+                        <label class="input-group-text" for="inputGroupFile02">Upload</label>
+                    </div>
+
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Fullname" required
+                            name="price" value="<%= itemedit.price %>">
+                        <label for="floatingInput">Price</label>
+                    </div>
+
                 </div>
-                <div class="form-floating mb-2">
-                    <input type text" class="form-control" id="floatingInput" placeholder="Fullname" required
-                        name="description" value="<%= itemedit.description %>">
-                    <label for="floatingInput">Description</label>
-                </div>
 
-                <div class="input-group mb-3">
-                
-                    <input type="file" class="form-control" id="inputGroupFile02" name="image" multiple
-                        value="<%= itemedit.image %>">
-                    <label class="input-group-text" for="inputGroupFile02">Upload</label>
-                </div>
-
-                <div class="form-floating mb-2">
-                    <input type="text" class="form-control" id="floatingInput" placeholder="Fullname" required
-                        name="price" value="<%= itemedit.price %>">
-                    <label for="floatingInput">Price</label>
+                <div class="d-flex justify-content-end m-2">
+                    <button type="submit" class="btn btn-primary p-2 m-2 " style="width: 120px;">Submit</button>
+                    <button type="submit" class="btn btn-secondary p-2 m-2" style="width: 100px;">Cancel</button>
                 </div>
             </div>
+        </form>
 
-            <div class="d-flex justify-content-end m-2">
-                <button type="submit" class="btn btn-primary p-2 m-2 " style="width: 120px;">Submit</button>
-                <button type="submit" class="btn btn-secondary p-2 m-2" style="width: 100px;">Cancel</button>
-            </div>
-        </div>
-    </form>
-</div>
+    </div>
 
 
     <%- include('../inc/bottom') %>

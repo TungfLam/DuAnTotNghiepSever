@@ -17,6 +17,7 @@ var colorRouter = require('./routes/color')
 
 var apiRouter = require('./routes/api');
 var product_size_color_router = require('./routes/product_size_color');
+const notificationRouter = require('./routes/notification');
 
 
 var app = express();
@@ -52,10 +53,7 @@ app.use('/product_size_color', product_size_color_router);
 app.use('/category', categoryRouter);
 app.use('/color', colorRouter);
 app.use('/size', sizeRouter);
-
-
-
-
+app.use('/notification',notificationRouter);
 
 
 // catch 404 and forward to error handler

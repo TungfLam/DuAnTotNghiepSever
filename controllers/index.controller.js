@@ -16,7 +16,7 @@ exports.login = async (req , res , next) => {
                     if(objUser.status){
                         console.log("User " + objUser.username);
                         req.session.userLogin = objUser;
-                        res.redirect('/');
+                        res.redirect('/users');
                     }else{
                         msg = "Tài khoản của bạn đã bị khóa";
                         typeErr = true;
@@ -29,7 +29,6 @@ exports.login = async (req , res , next) => {
                 msg = "Mật khẩu không chính xác";
                 typeErr =  true;
             }
-
         }else{
             msg = "Tài khoản không tồn tại";
             typeErr =  true;
@@ -44,4 +43,16 @@ exports.login = async (req , res , next) => {
             typeErr : typeErr
         }
     )
+}
+
+exports.logout = async (req , res , next) => {
+    req.session.destroy((err) => {
+        if(err){
+            console.error(err);
+            return;
+        }else{
+            res.redirect('/login');
+            return;
+        }
+    })
 }
