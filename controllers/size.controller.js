@@ -34,4 +34,15 @@ const deleteSize = async (req, res) => {
     res.status(500).json({ error: error, message: 'Có lỗi xảy ra khi xóa kích thước' });
   }
 };
-module.exports = { getAll,addSize,deleteSize }
+
+const updateSize =async (req,res)=>{
+  const idSize = req.params.idSize;
+  const newName = req.body.nameSize;
+  try {
+      await sizemd.sizeModel.findByIdAndUpdate(idSize, { name: newName});
+      res.redirect('/size');
+  } catch (error) {
+      res.status(500).json({ error: error, message: 'Có lỗi xảy ra' });
+  }
+}
+module.exports = { getAll,addSize,deleteSize ,updateSize}

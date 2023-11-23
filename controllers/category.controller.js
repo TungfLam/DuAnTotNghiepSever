@@ -5,7 +5,7 @@ let heading = 'Danh sách thể loại'
 let message = ''
 const getAll = async (req, res) => {
   const listCate = await catemd.categoryModel.find()
-
+console.log(listCate);
   res.render('category/list', {
     title: title,
     heading: heading,
@@ -44,4 +44,15 @@ const addCate = async (req, res) => {
     }
   }
 
-  module.exports = { getAll, deleteCate, addCate }
+const updateCate = async (req, res) => {
+    const idCate = req.params.idCate;
+    const newName = req.body.nameCate;
+    try {
+        await catemd.categoryModel.findByIdAndUpdate(idCate, { name: newName });
+        res.redirect('/category');
+    } catch (error) {
+        res.status(500).json({ error: error, message: 'Có lỗi xảy ra' });
+    }
+};
+
+  module.exports = { getAll, deleteCate, addCate,updateCate }
