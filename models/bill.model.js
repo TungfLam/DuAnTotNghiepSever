@@ -6,7 +6,7 @@ const bill_SChema = new db.mongoose.Schema(
         cart_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'cartModel' },
         payments: { type: Number, require: true },
         total_amount: { type: Number, require: true },
-        status: { type: String, required: true },
+        status: { type: Number, required: false },
         date: { type: String, required: false }
     },
     {

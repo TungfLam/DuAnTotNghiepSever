@@ -24,8 +24,9 @@ http://localhost:6868/api/deleteFavorite/id_favorite
 http://localhost:6868/api/products/:skip/:limit
 
 // bill
-http://localhost:3000/api/bill GET
-http://localhost:3000/api/bill POST
+http://localhost:3000/api/bill GET ALL
+http://localhost:3000/api/bill/id GET by ID USER
+http://localhost:3000/api/addbill POST
 http://localhost:3000/api/bill/id PUT
 http://localhost:3000/api/bill/id DELETE
 http://localhost:3000/api/bill/pagination?page=1 PAGINATION
