@@ -4,6 +4,10 @@ user.edit.ejs
 ?
 //123
 
+status bill
+1 = COD
+2 = VNP
+
 // api sản phẩm trang bắt đầu từ 0 
 http://localhost:6868/api/products/Popular/0
 // chi tiết sản phẩm 
