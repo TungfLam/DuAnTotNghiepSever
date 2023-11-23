@@ -86,7 +86,6 @@ const schema = Joi.object({
     user_id: Joi.string().required(),
     cart_id: Joi.string().required(),
     payments: Joi.number().integer().required(),
-    status: Joi.string().required(),
     total_amount: Joi.number().integer().required()
 });
 // add bill 
@@ -99,6 +98,7 @@ exports.addBill = async (req, res, next) => {
 
 
         const bill = req.body;
+        bill.status = 1;
         bill.date = DateTime.now().setZone('Asia/Ho_Chi_Minh');
         const newBill = md.billModel(bill);
         await newBill.save();
