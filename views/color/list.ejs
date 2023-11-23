@@ -1,16 +1,13 @@
 <%- include('../inc/top') %>
     <div class="container-fluid">
-        <div class="d-flex justify-content-end ">
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                data-bs-target="#staticBackdrop"> <i class="fa-solid fa-plus" style="color: #ffffff;"></i> Thêm màu sắc</button>
-        </div>
+     
         <!-- Modal -->
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
 
                 <div class="modal-content">
-                    <form method="POST" action="/color/add"  >
+                    <form method="POST" action="/color/add">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" style="color: rgb(32, 39, 226);" id="staticBackdropLabel">
                                 Thêm màu sắc
@@ -29,7 +26,7 @@
                                     required name="codecolor" value="#">
                                 <label for="floatingInput">Mã màu</label>
                             </div>
-                           
+
                         </div>
 
                         <div class="modal-footer">
@@ -40,80 +37,99 @@
                 </div>
             </div>
         </div>
-       <div class="row p-3">
-        <table id="example" class="table  table-bordered table-hover border-dark"
-            style="width:95%;margin-left: 25px;">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tên màu sắc</th>
-                    <th>Mã màu </th>
-                    <th>Thao tác</th>
-                </tr>
-            </thead>
-            <% if (listColor.length===0) { %>
-                <tr>
-                    <td colspan="7" style="text-align: center;justify-content: center;">
-                        <p>Dữ liệu không tồn tại.</p>
-                    </td>
-                </tr>
-                <% } else { %>
-                    <% for (let i=0; i < listColor.length; i++) { %>
-                        <% const row=listColor[i]; %>
-                            <tr style="height: 100px;">
-                                <td  style="width: 60px;">
-                                     <%=  i+1 %> 
+        <div class="row p-4 m-5  shadowpro" >
+            <div class="d-flex justify-content-end ">
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"> <i class="fa-solid fa-plus" style="color: #ffffff;"></i> Thêm màu
+                    sắc</button>
+            </div>
+            <table id="example" class="table table-hover"
+                style="width:95%;margin-left: 25px;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên màu sắc</th>
+                        <th>Mã màu </th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <% if (listColor.length===0) { %>
+                    <tr>
+                        <td colspan="7" style="text-align: center;justify-content: center;">
+                            <p>Dữ liệu không tồn tại.</p>
+                        </td>
+                    </tr>
+                    <% } else { %>
+                        <% for (let i=0; i < listColor.length; i++) { %>
+                            <% const row=listColor[i]; %>
+                                <tr style="height: 100px;">
+                                    <td style="width: 60px;">
+                                        <%= i+1 %>
 
-                                </td>
-                                <td style="width: 300px;">
-                                    <%= row.name %>
-                                </td>    
-                                <td style="width: 300px;">
-                                    <%= row.colorcode %>
-                                </td>   
-                                <td style="width: 190px;">
+                                    </td>
+                                    <td style="width: 300px;">
+                                        <%= row.name %>
+                                    </td>
+                                    <style>
+                                        .codecolor {
+                                            width: 30px;
+                                            height: 30px;
+                                            border-radius: 100px;
+                                            background-color: black;
+                                            margin-right: 10px;
+                                            display: inline-block;
+                                        }
+                                    </style>
+                                    <td style="width: 300px;">
+                                        <div style=" display: flex; align-items: center;">
+                                            <div class="codecolor"></div>
+                                            <div>
+                                                     <%=row.colorcode %>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="width: 190px;">
 
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#staticBackdropp">
-                                        <i class="fa-solid fa-trash-can"></i> Xóa
-                                    </button>
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="staticBackdropp" data-bs-backdrop="static"
-                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="staticBackdropLabel">Thông báo
-                                                    </h5>
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#staticBackdropp">
+                                            <i class="fa-solid fa-trash-can"></i> Xóa
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="staticBackdropp" data-bs-backdrop="static"
+                                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="staticBackdropLabel">Thông báo
+                                                        </h5>
 
-                                                </div>
-                                                <div class="modal-body">
-                                                    Bạn có muốn xóa <%= row.name %> ?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Hủy</button>
-                                                    <a href="/color/delete/<%= row._id %>"
-                                                        class="btn btn-danger">Lưu thay đổi</a>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Bạn có muốn xóa <%= row.name %> ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Hủy</button>
+                                                        <a href="/color/delete/<%= row._id %>"
+                                                            class="btn btn-danger">Lưu thay đổi</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <a href="/product/updateproduct/<%= row._id %>"
-                                        class="btn btn-primary">
-                                        <i class="fa-regular fa-pen-to-square"></i> Sửa
-                                    </a>
-                                </td>
-                            </tr>
-                            <% } %>
+                                        <a href="/product/updateproduct/<%= row._id %>" class="btn btn-primary">
+                                            <i class="fa-regular fa-pen-to-square"></i> Sửa
+                                        </a>
+                                    </td>
+                                </tr>
                                 <% } %>
+                                    <% } %>
 
 
-        </table>
-    </div>
+            </table>
+        </div>
 
 
 

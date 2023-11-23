@@ -1,20 +1,20 @@
 <%- include('../inc/top') %>
     <div class="container-fluid">
-        <div class="d-flex m-1 mb-4" style=" background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);">
+        <div class="d-flex m-1 mb-4"
+            style=" background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);">
             <form method="get" action="/product_size_color/search" class="input-group m-3 d-flex">
-                <input placeholder="Search for your product ...." aria-label="Search for your product" type="text"
-                    class="form-control" id="floatingInput" name="search">
-                <div class="d-flex">
-                    <button type="submit" class="input-group-text bg-primary"
-                        style="margin-left: 10px; margin-right: 10px;" for="filterGroup1">
+                <div class="input-group" style="width: 80%;">
+                    <input placeholder="Tìm kiếm  ...." aria-label="Search for your product" type="text"
+                        class="form-control" id="floatingInput" name="search">
+                    <button style="margin-left:5px;margin-right:5px" type="submit" class="input-group-text bg-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
-                            <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
                             <path
                                 d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                         </svg>
                     </button>
-                    <select class="form-select" id="filterGroup2" onchange="filterNameProduct()">
-
+                </div>
+                <div class="d-flex" style="width: 20%;">
+                    <select class="form-select" id="filterGroup2" onchange="filterNameProduct()" style="width: 100%;">
                         <option value="all" <%=selectedroductName==='all' ? 'selected' : '' %>>All</option>
                         <% listproduct?.forEach(product=> { %>
                             <option value="<%= product._id %>" <%=product._id==selectedroductName ? 'selected' : '' %>>
@@ -22,20 +22,22 @@
                             </option>
                             <% }); %>
                     </select>
-                    <script>
-                        function filterNameProduct() {
-                            var selectedroductName = document.getElementById("filterGroup2").value;
-                            if (selectedroductName === 'all') {
-                                window.location.href = "/product_size_color/getListAll/1";
-                            } else {
-                                window.location.href = "/product_size_color/filterNameProduct/?productName=" + selectedroductName;
-                            }
-
-
-                        }
-                    </script>
                 </div>
             </form>
+
+
+            <script>
+                function filterNameProduct() {
+                    var selectedroductName = document.getElementById("filterGroup2").value;
+                    if (selectedroductName === 'all') {
+                        window.location.href = "/product_size_color/getListAll/1";
+                    } else {
+                        window.location.href = "/product_size_color/filterNameProduct/?productName=" + selectedroductName;
+                    }
+
+
+                }
+            </script>
         </div>
 
         <div class="fw-bolder fs-4 text-success">
@@ -44,17 +46,17 @@
 
 
         <div class="" style="margin-left: 15px;">
-          
+
             <div class="row p-4"
                 style="width: 100%; background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); display: flex;">
                 <div class="d-flex justify-content-end me-3 mb-2">
                     <button type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
                         Export</button>
-                    <a class="btn btn-primary" href="/product_size_color/add_product_size_color"><i class="fa-solid fa-plus"
-                            style="color: #ffffff;"></i> Thêm sản phẩm</a>
+                    <a class="btn btn-primary" href="/product_size_color/add_product_size_color"><i
+                            class="fa-solid fa-plus" style="color: #ffffff;"></i> Thêm sản phẩm</a>
                 </div>
-                
-                
+
+
                 <table id="example" class="table ">
                     <thead>
                         <tr>
@@ -138,7 +140,8 @@
                                                         </div>
                                                     </div>
                                                     <a href="/product_size_color/update_product_size_color/<%=row.id %>"
-                                                        class="btn btn-primary">   <i class="fa-regular fa-pen-to-square"></i> Sửa</a>
+                                                        class="btn btn-primary"> <i
+                                                            class="fa-regular fa-pen-to-square"></i> Sửa</a>
                                                 </td>
 
                                             </tr>
