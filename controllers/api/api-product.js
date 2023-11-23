@@ -11,10 +11,9 @@ var objReturn = {
 exports.getProducts = async (req, res) => {
     const skip = parseInt(req.params.skip) || 1
     const category = req.params.category;
-    // const checkcate = await mdcategory.categoryModel.findById(  category )
     const products = await md.productModel.find({ category_id: category })
         .populate('category_id', "name")
-        .skip(skip)
+        .skip(skip - 1 )
         .limit(6)
         .sort({ createdAt: -1 });
     res.json(products);

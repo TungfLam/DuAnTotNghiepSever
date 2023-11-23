@@ -119,7 +119,7 @@ exports.listCart = async (req, res) => {
                 }
             }).sort({ createdAt: -1 })
         if (!listCart || listCart.length === 0) {
-            return res.json({ message: 'Your cart does not have any products, please add products to your cart now!', listCart: [] });
+            return res.json({ message: 'Giỏ hàng của bạn chưa có sản phẩm nào, thêm sản phẩm vào giỏ hàng ngay!', listCart: [] });
         }
         // Your cart does not have any products, please add products to your cart now!
         // // const checkProduct = await mdProduct.product_size_color_Model.findById(ListCart.product_id._id)

@@ -22,7 +22,7 @@ const getListAll = async (req, res) => {
         console.log(countProducts);
         res.render('product_size_color/product_size_color', {
             title: title,
-            heading:heading,
+            heading: heading,
             message: '',
             productListSizeColor: productListSizeColor,
             listproduct: listproduct,
@@ -85,7 +85,7 @@ const add_product_size_color = async (req, res) => {
     }
     res.render('product_size_color/add_product_size_color', {
         title: title,
-        heading:heading,
+        heading: heading,
         product: product,
         category: category,
         size: size,
@@ -117,7 +117,7 @@ const sortUp = async (req, res) => {
         const listproduct = await productModel.productModel.find()
         res.render('product_size_color/product_size_color', {
             title: title,
-            heading:heading,
+            heading: heading,
             title: 'Product warehouse',
             listproduct: listproduct,
             productListSizeColor: sortUpPrice,
@@ -128,7 +128,7 @@ const sortUp = async (req, res) => {
             listCategory: listCategory,
             selectedroductName: 'all',
             message: 'Filter products successfully',
-          
+
         })
     } catch (error) {
         console.log(error);
@@ -150,7 +150,7 @@ const sortDown = async (req, res) => {
         const listproduct = await productModel.productModel.find()
 
         res.render('product_size_color/product_size_color', {
-            heading:heading,
+            heading: heading,
             title: title,
             title: 'Product warehouse',
             listproduct: listproduct,
@@ -182,14 +182,14 @@ const update_product_size_color = async (req, res) => {
 
     let productupdate = await productModel.productModel.findById(product_size_color.product_id)
 
-    console.log();
     if (req.method == 'POST') {
         const { name, categories, size, color, quantity, price } = req.body;
-
+        console.log(size, color, quantity);
         const existingProduct = await model_product_size_color.product_size_color_Model.findOne({
             product_id: productupdate._id,
             size_id: size,
-            color_id: color
+            color_id: color,
+            quantity: quantity
         });
         if (existingProduct) {
             existingProduct.quantity += parseInt(quantity);
@@ -205,7 +205,7 @@ const update_product_size_color = async (req, res) => {
     }
     res.render('product_size_color/update_product_size_color', {
         title: title,
-        heading:heading,
+        heading: heading,
         message: message,
         size: size,
         color: color,
@@ -233,7 +233,7 @@ const filterNameProduct = async (req, res) => {
     }
     res.render('product_size_color/product_size_color', {
         title: title,
-        heading:heading,
+        heading: heading,
         listproduct: listproduct,
         productListSizeColor: filterProductName,
         countProducts: 1,
@@ -282,8 +282,8 @@ const search = async (req, res) => {
             listCategory: listCate,
             selectedroductName: 'all',
             message: message,
-            title:title,
-            heading:heading
+            title: title,
+            heading: heading
         });
     } catch (error) {
         console.error(error);
