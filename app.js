@@ -11,6 +11,10 @@ var cors = require('cors')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var productRouter = require('./routes/product')
+var categoryRouter = require('./routes/category')
+var sizeRouter = require('./routes/size')
+var colorRouter = require('./routes/color')
+
 var apiRouter = require('./routes/api');
 var product_size_color_router = require('./routes/product_size_color');
 const notificationRouter = require('./routes/notification');
@@ -46,6 +50,9 @@ app.use('/users', usersRouter);
 app.use('/product',productRouter);
 app.use('/api', apiRouter);
 app.use('/product_size_color', product_size_color_router);
+app.use('/category', categoryRouter);
+app.use('/color', colorRouter);
+app.use('/size', sizeRouter);
 app.use('/notification',notificationRouter);
 
 

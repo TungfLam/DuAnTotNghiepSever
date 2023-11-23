@@ -3,17 +3,14 @@ const productModel = require('../models/product.model');
 const colorModel = require('../models/color.model')
 const sizeModel = require('../models/sizes.model')
 const categoriModel = require('../models/category.model')
-
-
+let heading = 'Danh sách kho hàng'
+let title = 'Kho hàng'
 const getListAll = async (req, res) => {
-    const title = 'Product warehouse'
     let message = ''
     try {
         const page = parseInt(req.params.page) || 1;;
         const limit = 10;
         const startCount = (page - 1) * limit + 1;
-        console.log(startCount);
-        console.log(page);
         const productListSizeColor = await model_product_size_color.product_size_color_Model.find()
             .populate('product_id', "name price")
             .populate('size_id', "name")
@@ -25,6 +22,7 @@ const getListAll = async (req, res) => {
         console.log(countProducts);
         res.render('product_size_color/product_size_color', {
             title: title,
+            heading:heading,
             message: '',
             productListSizeColor: productListSizeColor,
             listproduct: listproduct,
@@ -39,7 +37,6 @@ const getListAll = async (req, res) => {
     }
 }
 const add_product_size_color = async (req, res) => {
-    const title = 'Product warehouse'
     const product = await productModel.productModel.find();
     const category = await categoriModel.categoryModel.find();
     const size = await sizeModel.sizeModel.find();
@@ -88,6 +85,7 @@ const add_product_size_color = async (req, res) => {
     }
     res.render('product_size_color/add_product_size_color', {
         title: title,
+        heading:heading,
         product: product,
         category: category,
         size: size,
@@ -107,7 +105,6 @@ const delete_product_color_size = async (req, res) => {
 
 const sortUp = async (req, res) => {
     try {
-        const title = 'Product warehouse'
         const sortUpPrice = await model_product_size_color.product_size_color_Model.find({}).sort({ price: 1 })
             .populate('product_id', "name price")
             .populate('size_id', "name")
@@ -120,6 +117,7 @@ const sortUp = async (req, res) => {
         const listproduct = await productModel.productModel.find()
         res.render('product_size_color/product_size_color', {
             title: title,
+            heading:heading,
             title: 'Product warehouse',
             listproduct: listproduct,
             productListSizeColor: sortUpPrice,
@@ -129,7 +127,8 @@ const sortUp = async (req, res) => {
             startCount: 1,
             listCategory: listCategory,
             selectedroductName: 'all',
-            message: 'Filter products successfully'
+            message: 'Filter products successfully',
+          
         })
     } catch (error) {
         console.log(error);
@@ -137,7 +136,6 @@ const sortUp = async (req, res) => {
 }
 const sortDown = async (req, res) => {
     try {
-        const title = 'Product warehouse'
         const sortDownPrice = await model_product_size_color.product_size_color_Model.find({})
             .populate('product_id', "name price as product_price")
             .populate('size_id', "name")
@@ -152,6 +150,7 @@ const sortDown = async (req, res) => {
         const listproduct = await productModel.productModel.find()
 
         res.render('product_size_color/product_size_color', {
+            heading:heading,
             title: title,
             title: 'Product warehouse',
             listproduct: listproduct,
@@ -170,7 +169,6 @@ const sortDown = async (req, res) => {
 
 }
 const update_product_size_color = async (req, res) => {
-    const title = 'Update Wearehouse'
     let message = '';
     const id_product_color_size = req.params.id_product_color_size
 
@@ -207,6 +205,7 @@ const update_product_size_color = async (req, res) => {
     }
     res.render('product_size_color/update_product_size_color', {
         title: title,
+        heading:heading,
         message: message,
         size: size,
         color: color,
@@ -233,7 +232,8 @@ const filterNameProduct = async (req, res) => {
         message = 'Filter products successfully'
     }
     res.render('product_size_color/product_size_color', {
-        title: 'Product warehouse',
+        title: title,
+        heading:heading,
         listproduct: listproduct,
         productListSizeColor: filterProductName,
         countProducts: 1,
@@ -273,7 +273,6 @@ const search = async (req, res) => {
         const listCate = await categoriModel.categoryModel.find()
         const listProduct = await productModel.productModel.find()
         res.render('product_size_color/product_size_color', {
-            title: 'Product warehouse',
             listproduct: listProduct,
             productListSizeColor: filteredList,
             countProducts: 1,
@@ -282,7 +281,9 @@ const search = async (req, res) => {
             startCount: 1,
             listCategory: listCate,
             selectedroductName: 'all',
-            message: message
+            message: message,
+            title:title,
+            heading:heading
         });
     } catch (error) {
         console.error(error);

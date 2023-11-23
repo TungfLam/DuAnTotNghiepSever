@@ -9,12 +9,11 @@ var base64 = require('base-64')
 var fs = require('fs');
 var path = require('path');
 const { DateTime } = require('luxon');
-
+let heading = 'Danh sách sản phẩm'
+let title = 'Sản phẩm'
 
 const getlistproduct = async (req, res) => {
-
-    const title = 'List Products';
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
     const page = parseInt(req.params.page) || 1;
     const startCount = (page - 1) * itemsPerPage + 1;
     const skip = (page - 1) * itemsPerPage;
@@ -24,6 +23,7 @@ const getlistproduct = async (req, res) => {
     const listCategory = await modelCategories.categoryModel.find()
     const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
     const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
+    const displayMessage = `Hiển thị từ ${startCount}-${startCount + itemsPerPage - 1} trong tổng số ${countProducts} kết quả`;
     res.render('product/listproduct', {
         title: title,
         listProducts: listProducts,
@@ -32,13 +32,15 @@ const getlistproduct = async (req, res) => {
         page: page,
         startCount: startCount,
         listCategory: listCategory,
-        selectedCategoryId: 'all'
+        heading: heading,
+        displayMessage: displayMessage,
+        selectedCategoryId: 'all',
+
     });
 };
 
 const detailProduct = async (req, res) => {
     try {
-        const title = 'title';
         const idProduct = req.params.idProduct;
 
         const ListProduct = await model.productModel.findById(idProduct)
@@ -55,7 +57,9 @@ const detailProduct = async (req, res) => {
             productListSizeColor: details,
             ListProduct: ListProduct,
             ListColor: ListColor,
-            ListSize: ListSize
+            ListSize: ListSize,
+            heading: 'Chi tiết sản phẩm',
+            displayMessage: ''
         });
     } catch (error) {
         // Xử lý lỗi và trả về một trang lỗi hoặc thông báo lỗi cho người dùng
@@ -64,16 +68,8 @@ const detailProduct = async (req, res) => {
 }
 const addDetail = async (req, res) => {
     const { price, size, color, nameProduct, trinhh } = req.body;
-    console.log('nameProduct', nameProduct)
-    console.log(' req.body', req.body)
-
-    console.log('háhdhasdahsd');
-    if (req.method === 'POST') {
-        console.log('Trình')
-
-    }
-
-
+    // console.log('nameProduct', nameProduct)
+    // console.log(' req.body', req.body)
 }
 
 const addproduct = async (req, res) => {
@@ -97,6 +93,8 @@ const addproduct = async (req, res) => {
             createdAt: nowInVietnam,
             image: image,
             price: price,
+            heading: heading,
+            title: title,
         });
         try {
 
@@ -181,7 +179,7 @@ const updateproduct = async (req, res) => {
     } catch (error) {
     }
 
-    const nowInVietnam = DateTime.now().setZone('Asia/Ho_Chi_Minh');
+    const nowInVietnam = DateTime.now();
     if (req.method == 'POST') {
         try {
             var image = [];
@@ -213,13 +211,17 @@ const updateproduct = async (req, res) => {
         }
     }
 
-    res.render('product/updateproduct', { title: title, itemedit: itemedit })
+    res.render('product/updateproduct',
+        {
+            title: title,
+            itemedit: itemedit,
+            heading: heading
+        })
 }
 
 
 const searchProduct = async (req, res) => {
     const searchQuery = req.query.search.toLowerCase();
-    const title = 'List Products';
     const countPages = 1;
     const countProducts = 1;
     const startCount = 1;
@@ -228,7 +230,6 @@ const searchProduct = async (req, res) => {
     const listProducts = await model.productModel.find({
         name: { $regex: new RegExp(searchQuery, 'i') },
     });
-    console.log(listProducts);
     const listCategory = await modelCategories.categoryModel.find()
     res.render('product/listproduct', {
         title: title,
@@ -239,7 +240,9 @@ const searchProduct = async (req, res) => {
         startCount: startCount,
         listCategory: listCategory,
         selectedCategoryId: 'all',
-        message: 'ákdasdkasdk'
+        displayMessage: '',
+        message: 'Tìm kiếm thành công',
+        heading: heading,
     });
 }
 const sortUp = async (req, res) => {
@@ -254,10 +257,9 @@ const sortUp = async (req, res) => {
     const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
     const listCategories = await modelCategories.categoryModel.find()
     try {
-        const title = 'Product'
+
         const sortUpPrice = await model.productModel.find({}).sort({ price: 1 }).populate('category_id', "name");
         res.render('product/listproduct', {
-            title: title,
             title: title,
             listProducts: sortUpPrice,
             countProducts: countProducts,
@@ -265,6 +267,8 @@ const sortUp = async (req, res) => {
             page: page,
             startCount: startCount,
             listCategory: listCategories,
+            heading: heading,
+            displayMessage: '',
             selectedCategoryId: 'all'
         })
 
@@ -285,13 +289,10 @@ const sortDown = async (req, res) => {
         const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
         const countPages = Math.ceil(countProducts / itemsPerPage); // Tính tổng số trang
         const listCategories = await modelCategories.categoryModel.find()
-
-        const title = 'Product'
         const sortDownPrice = await model.productModel.find({}).sort({ price: -1 }).populate('category_id', "name");
 
 
         res.render('product/listproduct', {
-            title: title,
             title: title,
             listProducts: sortDownPrice,
             countProducts: countProducts,
@@ -299,6 +300,8 @@ const sortDown = async (req, res) => {
             page: page,
             startCount: startCount,
             listCategory: listCategories,
+            heading: heading,
+            displayMessage: '',
             selectedCategoryId: 'all'
         })
     } catch (error) {
@@ -312,7 +315,7 @@ const filterCategory = async (req, res) => {
     const listCategory = await modelCategories.categoryModel.find();
 
     res.render('product/listproduct', {
-        title: 'List Products',
+        title: title,
         message: '123123123',
         listProducts: filterCategory,
         countProducts: 1,
@@ -321,13 +324,16 @@ const filterCategory = async (req, res) => {
         startCount: 1,
         listCategory: listCategory,
         selectedCategoryId: id_cate,
+        heading: heading,
+        displayMessage: '',
         message: 'tìm kiếm thành công'
     });
 }
 
 const statistical = (req, res) => {
     res.render('product/statistical', {
-        title: 'title',
+        title: title,
+        heading: heading,
     });
 }
 

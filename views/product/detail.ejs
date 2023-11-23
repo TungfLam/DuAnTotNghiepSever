@@ -1,69 +1,75 @@
 <%- include('../inc/top') %>
     <div class="container-fluid">
-        <p class="fw-bold fs-2 text-primary ">Detail</p>
+        
         <div class="" style="margin-left: 15px;">
             <div class="d-flex justify-content-end ">
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop">Add Product</button>
             </div>
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form method="POST"
-                        action="/product/addDetail"
-                        enctype="multipart/form-data" >
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form method="POST" action="/product/addDetail">
 
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" style="color: rgb(32, 39, 226);" id="staticBackdropLabel">
-                                Add Product
-                            </h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        
-                        <div class="modal-body">
-                            <div class="form-floating mb-2">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="Fullname"
-                                    required name="nameProduct" value="<%= ListProduct.name %>" >
-                                <label for="floatingInput">Name Product</label>
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" style="color: rgb(32, 39, 226);" id="staticBackdropLabel">
+                                    Add Product
+                                </h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
-                            <div class="form-floating mb-2">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="Fullname"
-                                    required name="price"  value="<%= ListProduct.price %>" >
-                                <label for="floatingInput">Price</label>
-                            </div>
-                            <div class="form-floating mb-2">
-                                <select name="size" class="form-select" id="filterGroup1">
-                                    <% for (let i = 0; i < ListSize.length; i++) { %>
-                                        <option value="<%= ListSize[i]._id %>"><%= ListSize[i].name %></option>
-                                    <% } %>
-                                </select>
-                            </div>
-                            <div class="form-floating mb-2">
-                                <select name="color" class="form-select" id="filterGroup1">
-                                    <% for (let i = 0; i < ListColor.length; i++) { %>
-                                        <option value="<%= ListColor[i]._id %>"><%= ListColor[i].name %></option>
-                                    <% } %>
-                                </select>
-                            </div>
-                            <div class="form-floating mb-2">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="Fullname"
-                                    required name="quantity"  >
-                                <label for="floatingInput">Quantity</label>
-                            </div>
-                           
-                           
-                        </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
-                    </form>
+                            <div class="modal-body">
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control" id="floatingInput" placeholder="Fullname"
+                                        required name="nameProduct" value="<%= ListProduct.name %>">
+                                    <label for="floatingInput">Name Product</label>
+                                </div>
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control" id="floatingInput" placeholder="Fullname"
+                                        required name="price" value="<%= ListProduct.price %>">
+                                    <label for="floatingInput">Price</label>
+                                </div>
+                                <div class="form-floating mb-2">
+                                    <select name="size" class="form-select" id="filterGroup1">
+                                        <% for (let i=0; i < ListSize.length; i++) { %>
+                                            <option value="<%= ListSize[i]._id %>">
+                                                <%= ListSize[i].name %>
+                                            </option>
+                                            <% } %>
+                                    </select>
+                                </div>
+                                <div class="form-floating mb-2">
+                                    <select name="color" class="form-select" id="filterGroup1">
+                                        <% for (let i=0; i < ListColor.length; i++) { %>
+                                            <option value="<%= ListColor[i]._id %>">
+                                                <%= ListColor[i].name %>
+                                            </option>
+                                            <% } %>
+                                    </select>
+                                </div>
+                                <div class="form-floating mb-2">
+                                    <input type="text" class="form-control" id="floatingInput" placeholder="Fullname"
+                                        required name="quantity">
+                                    <label for="floatingInput">Quantity</label>
+                                </div>
+
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+
                 </div>
-            
             </div>
-        </div>
+
+
+
             <div class="row"
                 style="width: 100%; background-color: white; border-radius: 13px; padding: 15px; box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); display: flex;">
                 <table id="example" class="table table-bordered border-dark">
@@ -83,70 +89,82 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    
-                    <% for (let i=0; i < productListSizeColor.length; i++) { %>
-                        <% const row=productListSizeColor[i]; %>
-                       
-                            <tr style="height: 70px;">
-                               
-                                <td>
-                                    <%= i+1 %>
-                                </td>
-                                <td>
-                                    <%= row.product_id ? row.product_id.name : 'NULL' %>
-                                </td>
-                                <td>
-                                    <%= row.product_id ? row.product_id.price : 'NULL' %>
-                                </td>
-                                <td>
-                                    <%= row.size_id ? row.size_id.name : 'NULL' %>
-                                </td>
-                                <td>
-                                    <%= row.color_id ? row.color_id.name : 'NULL' %>
-                                </td>
-                                <td>
-                                    <%= row.quantity ? row.quantity : 'Out of stock' %>
-                                </td>
-                                <td style="width: 190px;">
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdropp">
-                                    Delete
-                                </button>
-                                <div class="modal fade" id="staticBackdropp" data-bs-backdrop="static"
-                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="staticBackdropLabel">Notification</h5>
-                                          
-                                        </div>
-                                        <div class="modal-body">
-                                            do you want to delete    <%= row.product_id ? row.product_id.name : 'NULL' %>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                                <a href="/product_size_color/delete_product_color_size/<%=row.id %>"
-                                                    class="btn btn-danger">Save changes</a>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                                    <a href="/product_size_color/update_product_size_color/<%=row.id %>"
-                                        class="btn btn-primary">Update</a>
-                                </td>
-                            </a>
-                            </tr>
 
-                           
-                      
-                            <% } %>
-                       
+                    <% if (productListSizeColor.length===0) { %>
+                        <tr>
+                            <td colspan="7" style="text-align: center;justify-content: center;">
+                                <p>Dữ liệu không tồn tại.</p>
+                            </td>
+                        </tr>
+                        <% } else { %>
+                            <% for (let i=0; i < productListSizeColor.length; i++) { %>
+                                <% const row=productListSizeColor[i]; %>
+
+                                    <tr style="height: 70px;">
+
+                                        <td>
+                                            <%= i+1 %>
+                                        </td>
+                                        <td>
+                                            <%= row.product_id ? row.product_id.name : 'NULL' %>
+                                        </td>
+                                        <td>
+                                            <%= row.product_id ? row.product_id.price : 'NULL' %>
+                                        </td>
+                                        <td>
+                                            <%= row.size_id ? row.size_id.name : 'NULL' %>
+                                        </td>
+                                        <td>
+                                            <%= row.color_id ? row.color_id.name : 'NULL' %>
+                                        </td>
+                                        <td>
+                                            <%= row.quantity ? row.quantity : 'Out of stock' %>
+                                        </td>
+                                        <td style="width: 190px;">
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                data-bs-target="#staticBackdropp">
+                                                Delete
+                                            </button>
+                                            <div class="modal fade" id="staticBackdropp" data-bs-backdrop="static"
+                                                data-bs-keyboard="false" tabindex="-1"
+                                                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="staticBackdropLabel">
+                                                                Notification</h5>
+
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            do you want to delete <%= row.product_id ?
+                                                                row.product_id.name : 'NULL' %>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                            <a href="/product_size_color/delete_product_color_size/<%=row.id %>"
+                                                                class="btn btn-danger">Save changes</a>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <a href="/product_size_color/update_product_size_color/<%=row.id %>"
+                                                class="btn btn-primary">Update</a>
+                                        </td>
+                                        </a>
+                                    </tr>
+
+
+
+                                    <% } %>
+
+                                        <% } %>
+
+
                 </table>
             </div>
-        
+
         </div>
 
 

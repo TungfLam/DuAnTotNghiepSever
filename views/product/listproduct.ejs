@@ -1,11 +1,11 @@
 <%- include('../inc/top') %>
     <div class="container-fluid">
-        <p class="fw-bold fs-2 text-primary ">List Product</p>
 
         <!-- tìm kiếm và lọc -->
-        <div class="d-flex  m-2">
-            <form method="get" action="/product/search" class="input-group m-4 d-flex">
-                <input placeholder="Search for your product ...." aria-label="Search for your product" type="text"
+        <div class="d-flex  m-4"
+            style=" background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); margin: 20px; ">
+            <form method="get" action="/product/search" class="input-group m-3 d-flex">
+                <input placeholder="Nhập tên để tìm kiếm sản phẩm ...." aria-label="Search for your product" type="text"
                     class="form-control" id="floatingInput" name="search">
                 <div class="d-flex">
                     <button type="submit" class="input-group-text bg-primary"
@@ -17,17 +17,18 @@
                         </svg>
                     </button>
                     <select class="form-select" id="filterGroup1" onchange="filterCategory()">
-                        <option value="all" <%= selectedCategoryId === 'all' ? 'selected' : '' %>>All</option>
-                        <% listCategory.forEach(category => { %>
-                            <option value="<%= category._id %>" <%= category._id == selectedCategoryId ? 'selected' : '' %>>
+                        <option value="all" <%=selectedCategoryId==='all' ? 'selected' : '' %>>Tất cả</option>
+                        <% listCategory.forEach(category=> { %>
+                            <option value="<%= category._id %>" <%=category._id==selectedCategoryId ? 'selected' : '' %>
+                                >
                                 <%= category.name %>
                             </option>
-                        <% }); %>
+                            <% }); %>
                     </select>
                     <script>
                         function filterCategory() {
                             var selectedCategoryId = document.getElementById("filterGroup1").value;
-                            
+
                             // Kiểm tra nếu giá trị là "all", chuyển hướng đến /product/listproduct/1
                             if (selectedCategoryId === 'all') {
                                 window.location.href = "/product/listproduct/1";
@@ -42,23 +43,17 @@
 
         <!-- model -->
 
-        <div class="d-flex justify-content-end ">
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                data-bs-target="#staticBackdrop">Add Product</button>
-        </div>
+
         <!-- Modal -->
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1"
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
-
                 <div class="modal-content">
-                    <form method="POST"
-                        action="/product/addproduct"
-                        enctype="multipart/form-data" multiple>
+                    <form method="POST" action="/product/addproduct" enctype="multipart/form-data" multiple>
 
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" style="color: rgb(32, 39, 226);" id="staticBackdropLabel">
-                                Add Product
+                                Thêm sản phẩm
                             </h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -67,21 +62,21 @@
                             <div class="form-floating mb-2">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="Fullname"
                                     required name="name">
-                                <label for="floatingInput">Name Product</label>
+                                <label for="floatingInput">Tên sản phẩm</label>
                             </div>
                             <div class="form-floating mb-2">
                                 <select name="category" class="form-select  " id="filterGroup1">
-                                    <% listCategory.forEach(category => { %>
+                                    <% listCategory.forEach(category=> { %>
                                         <option value="<%= category._id %>" %>>
                                             <%= category.name %>
                                         </option>
-                                    <% }); %>
+                                        <% }); %>
                                 </select>
                             </div>
                             <div class="form-floating mb-2">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="Fullname"
                                     required name="description">
-                                <label for="floatingInput">Description</label>
+                                <label for="floatingInput">Mô tả</label>
                             </div>
 
                             <div class="input-group mb-3">
@@ -92,13 +87,15 @@
                             <div class="form-floating mb-2">
                                 <input type="text" class="form-control" id="floatingInput" placeholder="Fullname"
                                     required name="price">
-                                <label for="floatingInput">Price</label>
+                                <label for="floatingInput">Giá</label>
                             </div>
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> <i
+                                    class="fa-regular fa-circle-xmark"></i> Hủy bỏ</button>
+                            <button type="submit" class="btn btn-primary"> <i class="fa-regular fa-floppy-disk"></i> Lưu
+                                thông tin</button>
                         </div>
                     </form>
                 </div>
@@ -108,101 +105,125 @@
         <style>
             /* Thêm vào phần style của bạn hoặc tạo một tệp CSS riêng */
             .table-hover tbody tr:hover {
-                background-color: #f5f5f5; /* Màu nền khi hover */
+                background-color: #f5f5f5;
+                /* Màu nền khi hover */
             }
         </style>
 
-        <div class="row p-3">
-            <table id="example" class="table  table-bordered table-hover border-dark"
-                style="width:95%;margin-left: 25px;">
+        <div class="row p-3"
+            style=" background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); margin: 20px; ">
+            <div class="d-flex justify-content-end me-5 m-2 mb-6">
+                <button type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
+                    Export</button>
+
+                <button type="button" class="btn btn-primary btn-sm " data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"> <i class="fa-solid fa-plus" style="color: #ffffff;"></i> Thêm sản
+                    phẩm</button>
+            </div>
+
+            <table id="example" class="table  table-hover " style="width:95%;margin-left: 25px;">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name Product</th>
-                        <th>Categories</th>
-                        <th>Price
+                        <th>Tên sản phẩm</th>
+                        <th>Thể loại</th>
+                        <th>Giá
                             <span class="sort-icon">
                                 <a href="/product/sortDown"><i class="fa-solid fa-caret-down"></i></i></a>
                                 <a href="/product/sortUp"><i class="fa-solid fa-caret-up"></i></a>
                             </span>
 
                         </th>
-                        <th>Image</th>
-                        <th>Description</th>
-                        <th>Actions</th>
+                        <th>Ảnh</th>
+                        <th>Mô tả</th>
+                        <th>Thao tác</th>
 
                     </tr>
                 </thead>
-                <script>
-                    function onClickItem(va) {
-                        window.location.href = "/product/detail/" + va;
-                    }
-                </script>
-                <% for (let i=0; i < listProducts.length; i++) { %>
-                    <% const row=listProducts[i]; %>
-                        <tr   style="height: 100px;">
-                            <td onclick="onClickItem('<%= row._id %>')" style="width: 60px;">
-                                    <%= startCount + i %> 
-                              
-                            </td>
-                            <td onclick="onClickItem('<%= row._id %>')"  style="width: 300px;">
-                                <%= row.name %>
-                            </td>
+               
+                <% if (listProducts.length===0) { %>
+                    <tr>
+                        <td colspan="7" style="text-align: center;justify-content: center;">
+                            <p>Dữ liệu không tồn tại.</p>
+                        </td>
+                    </tr>
+                    <% } else { %>
+                        <% for (let i=0; i < listProducts.length; i++) { %>
+                            <% const row=listProducts[i]; %>
+                                <tr style="height: 100px;">
+                                    <td  style="width: 60px;">
+                                        <%= startCount + i %>
 
-                            <td  onclick="onClickItem('<%= row._id %>')" style="width: 150px;">
-                               <%= row?.category_id?.name ? row.category_id.name : 'null' %>
-                            </td>
-                            <td onclick="onClickItem('<%= row._id %>')" style="width: 90px;">
-                                <%= row.price %> $
-                            </td>
-                            <td onclick="onClickItem('<%= row._id %>')"  style="width: 100px;">
-                                <img src="data:image/jpeg;base64,<%=row.image[0]%>" alt="Hình ảnh" width="70px"
-                                    height="70px">
-                            </td>
-                            <td onclick="onClickItem('<%= row._id %>')" style="width: 300px;">
-                                <%= row.description %>
-                            </td>
+                                    </td>
+                                    <td  style="width: 300px;">
+                                        <%= row.name %>
+                                    </td>
 
-                            <td style="width: 190px;">
+                                    <td  style="width: 150px;">
+                                        <%= row?.category_id?.name ? row.category_id.name : 'null' %>
+                                    </td>
+                                    <td class=""  style="width: 90px;">
+                                        <i class="fa-regular fa-money-bill-1"></i>
+                                        <%= (row.price ).toLocaleString('vi-VN', { style: 'currency' , currency: 'VND'
+                                            }) %>
+                                    </td>
 
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdropp">
-                                    Delete
-                                </button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="staticBackdropp" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="staticBackdropLabel">Notification</h5>
-                                              
-                                            </div>
-                                            <div class="modal-body">
-                                                do you want to delete <%= row.name %> ?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <a href="/product/deleteproduct/<%= row._id %>?countPages=<%= countPages %>&countProducts=<%= countProducts %>"
-                                                    class="btn btn-danger">Save changes</a>
+                                    <td class="" style="width: 100px;">
+                                        <img src="data:image/jpeg;base64,<%=row.image[0]%>" alt="Hình ảnh" width="100px"
+                                            height="100px">
+                                    </td>
+                                    <td  style="width: 300px;">
+                                        <%= row.description %>
+                                    </td>
+
+                                    <td style="width: 190px;">
+                                        <a href="/product/detail/<%= row._id %>" type="button" class="btn btn-warning m3-1">
+                                            <i class="fa-solid fa-eye"></i></a >
+                                       
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#staticBackdropp">
+                                            <i class="fa-solid fa-trash-can"></i> Xóa
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="staticBackdropp" data-bs-backdrop="static"
+                                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                            aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="staticBackdropLabel">Thông báo 
+                                                        </h5>
+
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Bạn có muốn xóa <%= row.name %> ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Hủy</button>
+                                                        <a href="/product/deleteproduct/<%= row._id %>?countPages=<%= countPages %>&countProducts=<%= countProducts %>"
+                                                            class="btn btn-danger">Lưu thay đổi</a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <a href="/product/updateproduct/<%= row._id %>" class="btn btn-primary">Update</a>
-                            </td>
-                        </tr>
-                        <% } %>
+                                        <a href="/product/updateproduct/<%= row._id %>" class="btn btn-primary">
+                                            <i class="fa-regular fa-pen-to-square"></i> Sửa
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% } %>
+                                    <% } %>
+
 
             </table>
         </div>
         <!-- Modal -->
+        <nav class="m-4" aria-label="Page navigation example">
+        <p><%= displayMessage %></p>
 
-        <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <% if (page==1 || countProducts===0) { %>
                     <!-- nếu trang hiện tại bằng 1 thì không cho giảm -->
@@ -218,9 +239,21 @@
 
                             <% for (let i=1; i <=countPages; i++) { %>
 
+                                <style>
+                                    .active-page {
+                                        color: white;
+                                        background-color: rgba(13, 110, 253, 255);
+                                        width: 35px;
+                                        height: 38px;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        text-decoration: none;
+                                    }
+                                </style>
                                 <li class="page-item">
-                                    <a style="<%= i === page ? 'color: white; background-color: rgba(13,110,253,255);' : '' %>"
-                                        href="/product/listproduct/<%= i %>" class="page-link">
+                                    <a class="<%= i === page ?' active-page' : 'page-link' %>"
+                                        href="/product/listproduct/<%= i %>">
                                         <%= i %>
                                     </a>
                                 </li>

@@ -3,13 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><%= title ? title : 'null' %></title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
+    <title>
+        <%= title ? title : '' %>
+    </title>
+    <link rel="stylesheet"  href="/stylesheets/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <link rel="icon" type="image/jpg+png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvQQUWGc8Yh40A63eZSMRTCqU9MDK5GLti1xuhfYakUg&s" />
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <script src="/bootstrap/js/bootstrap.bundle.js"></script>
     <link rel="stylesheet" href="/bootstrap-icons-1.10.5/font/bootstrap-icons.css">
@@ -17,7 +20,8 @@
 
 </head>
 
-<body >
+<body>
+
     <div class="sidebar">
         <div class="logo-details">
             <div class="logo_name">ADADAS</div>
@@ -34,18 +38,55 @@
                                 d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z" />
                         </svg>
                     </i>
-                    <span class="links_name">List Product</span>
+                    <span class="links_name">Sản phẩm</span>
                 </a>
-                <span class="tooltip">List Product</span>
+                <span class="tooltip">Sản phẩm</span>
+            </li>
+            <li class="" data-bs-toggle="dropdown" data-bs-target="#" aria-expanded="false">
+                <a>
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-file-bar-graph" viewBox="0 0 16 16">
+                            <path
+                                d="M4.5 12a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm3 0a.5.5 0 0 1-.5-.5v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1z" />
+                            <path
+                                d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
+                        </svg>
+                    </i>
+                    <span class="links_name">Bảng con</span>
+                </a>
+                <span class="tooltip">Bảng con </span>
+            </li>
+            <style>
+                .ab {
+                    margin: 5px;
+
+                }
+            </style>
+            <li class="">
+                <ul class="dropdown-menu dropdown-menu-dark" style="width: 220px; padding: 10px;padding-right: 22px;">
+                    <a class="dropdown-item ab" href="/category">Thể loại</a>
+                    <a class="dropdown-item ab" href="/color">Màu sắc</a>
+                    <a class="dropdown-item ab" href="/size">Kích thước </a>
+                </ul>
             </li>
             <li>
                 <a href="/product_size_color/getListAll/1">
                     <i>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ffffff}</style><path d="M0 488V171.3c0-26.2 15.9-49.7 40.2-59.4L308.1 4.8c7.6-3.1 16.1-3.1 23.8 0L599.8 111.9c24.3 9.7 40.2 33.3 40.2 59.4V488c0 13.3-10.7 24-24 24H568c-13.3 0-24-10.7-24-24V224c0-17.7-14.3-32-32-32H128c-17.7 0-32 14.3-32 32V488c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24zm488 24l-336 0c-13.3 0-24-10.7-24-24V432H512l0 56c0 13.3-10.7 24-24 24zM128 400V336H512v64H128zm0-96V224H512l0 80H128z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em"
+                            viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                            <style>
+                                svg {
+                                    fill: #ffffff
+                                }
+                            </style>
+                            <path
+                                d="M0 488V171.3c0-26.2 15.9-49.7 40.2-59.4L308.1 4.8c7.6-3.1 16.1-3.1 23.8 0L599.8 111.9c24.3 9.7 40.2 33.3 40.2 59.4V488c0 13.3-10.7 24-24 24H568c-13.3 0-24-10.7-24-24V224c0-17.7-14.3-32-32-32H128c-17.7 0-32 14.3-32 32V488c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24zm488 24l-336 0c-13.3 0-24-10.7-24-24V432H512l0 56c0 13.3-10.7 24-24 24zM128 400V336H512v64H128zm0-96V224H512l0 80H128z" />
+                        </svg>
                     </i>
-                    <span class="links_name">Product warehouse</span>
+                    <span class="links_name">Kho hàng</span>
                 </a>
-                <span class="tooltip">Product warehouse</span>
+                <span class="tooltip">Kho hàng</span>
             </li>
 
             <li>
@@ -72,9 +113,9 @@
                                 d="M2.522 5H2a.5.5 0 0 0-.494.574l1.372 9.149A1.5 1.5 0 0 0 4.36 16h7.278a1.5 1.5 0 0 0 1.483-1.277l1.373-9.149A.5.5 0 0 0 14 5h-.522A5.5 5.5 0 0 0 2.522 5zm1.005 0a4.5 4.5 0 0 1 8.945 0H3.527z" />
                         </svg>
                     </i>
-                    <span class="links_name">Oder</span>
+                    <span class="links_name">Đơn hàng</span>
                 </a>
-                <span class="tooltip">Oder</span>
+                <span class="tooltip">Đơn hàng</span>
             </li>
 
             <li>
@@ -88,9 +129,9 @@
                                 d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
                         </svg>
                     </i>
-                    <span class="links_name">Statistical</span>
+                    <span class="links_name">Thống kê</span>
                 </a>
-                <span class="tooltip">Statistical</span>
+                <span class="tooltip">Thống kê</span>
             </li>
 
 
@@ -105,9 +146,9 @@
                                 d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
                         </svg>
                     </i>
-                    <span class="links_name">Setting</span>
+                    <span class="links_name">Cài đặt</span>
                 </a>
-                <span class="tooltip">Setting</span>
+                <span class="tooltip">Cài đặt</span>
             </li>
 
             <li>
@@ -121,12 +162,42 @@
                                 d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
                         </svg>
                     </i>
-                    <span class="links_name">Logout</span>
+                    <span class="links_name">Đăng xuất</span>
                 </a>
-                <span class="tooltip">Logout</span>
+                <span class="tooltip">Đăng xuất</span>
             </li>
         </ul>
     </div>
 
-    <div class="home-section"> 
-        <div style="margin-top: 20px;"></div>
+    
+
+    <div class="home-section">
+        <div style="margin-top: 100px;"></div>
+
+
+        <nav class="navbar fixed-top justify-content-between py-2"
+        style="background-color: rgb(188, 198, 200); z-index: 1;">
+
+        <div class="ms-2">
+            <div>
+                <p class="fw-bold fs-2 text-primary ">   <%= heading ? heading : heading %></p>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="d-flex mx-2 align-items-center">
+
+                <div id="clock" class="fw-bold  fs-6 me-5 d-none d-sm-block d-md-block d-lg-block d-xxl-block">
+                </div>
+                <div class="dropstart" id="personal">
+                    <button type="button"
+                        style="border-width: 0px; border-radius: 50%; width: 45px; height: 45px; padding: 0;"
+                        data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                        <img src="https://fptshop.com.vn/Uploads/images/image001(1265).jpg" alt=""
+                            width="45px" height="45px" style="object-fit: cover;
+                        border-radius: 50%;">
+                    </button>
+                   
+                </div>
+            </div>
+        </div>
+    </nav>

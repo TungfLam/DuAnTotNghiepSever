@@ -1,6 +1,7 @@
 const mUser = require('../models/user.model');
 var fs = require('fs');
-
+let title = 'User'
+let heading = 'User'
 exports.list = async (req , res , next) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
@@ -29,7 +30,8 @@ exports.list = async (req , res , next) => {
     }
 
     res.render('user/listUser',{
-        title : "user",
+        title : title,
+        heading:heading,
         listUser : listUser,
         search : search,
         page : page,
@@ -106,7 +108,9 @@ exports.add = async (req , res , next) => {
   
     res.render("user/addStaff", {
         title : "Add Staff",
-        msg : msg
+        msg : msg,
+        title : title,
+        heading:heading,
     });
 }
 
