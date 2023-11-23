@@ -92,11 +92,11 @@
 
                                         <!-- Button trigger modal -->
                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                            data-bs-target="#staticBackdropp">
+                                            data-bs-target="#staticBackdropp<%=  row._id  %>">
                                             <i class="fa-solid fa-trash-can"></i> Xóa
                                         </button>
                                         <!-- Modal -->
-                                        <div class="modal fade" id="staticBackdropp" data-bs-backdrop="static"
+                                        <div class="modal fade" id="staticBackdropp<%=  row._id  %>" data-bs-backdrop="static"
                                             data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
                                             aria-hidden="true">
                                             <div class="modal-dialog">
@@ -119,9 +119,53 @@
                                             </div>
                                         </div>
 
-                                        <a href="/product/updateproduct/<%= row._id %>" class="btn btn-primary">
+                                        <!-- Modal Sửa -->
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#staticBackdropp1<%=  row._id  %>">
                                             <i class="fa-regular fa-pen-to-square"></i> Sửa
-                                        </a>
+                                        </button>
+                                        <div class="modal fade" id="staticBackdropp1<%=  row._id  %>"
+                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form method="POST" action="/color/update/<%=  row._id  %>">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="staticBackdropLabel">Sửa sản
+                                                                phẩm
+                                                            </h5>
+
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="form-floating mb-2">
+                                                                <input name="nameColor" type="text" class="form-control"
+                                                                    id="floatingInput" placeholder="" required
+                                                                    value="<%=  row.name  %>">
+                                                                <label for="floatingInput">Tên màu sắc</label>
+
+                                                                <label for="floatingInput"></label>
+                                                            </div>
+                                                            <div class="form-floating mb-2">
+                                                                <input name="codecolor" type="text" class="form-control"
+                                                                    id="floatingInput" placeholder="" required
+                                                                    value=" <%=row.colorcode %>">
+                                                                <label for="floatingInput">Mã màu</label>
+
+                                                                <label for="floatingInput"></label>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Hủy</button>
+                                                            <button type="submit" class="btn btn-primary">Lưu thay
+                                                                đổi</button>
+                                                        </div>
+                                                    </form>
+
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 <% } %>
