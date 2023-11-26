@@ -18,13 +18,14 @@ var colorRouter = require('./routes/color')
 var apiRouter = require('./routes/api');
 var product_size_color_router = require('./routes/product_size_color');
 const notificationRouter = require('./routes/notification');
-
+const orderRouter = require('./routes/order')
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -54,6 +55,9 @@ app.use('/category', categoryRouter);
 app.use('/color', colorRouter);
 app.use('/size', sizeRouter);
 app.use('/notification',notificationRouter);
+
+app.use('/order',orderRouter);
+
 
 
 // catch 404 and forward to error handler
