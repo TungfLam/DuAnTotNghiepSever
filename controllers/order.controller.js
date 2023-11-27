@@ -39,14 +39,14 @@ const create_payment_url = (req, res, next) => {
     var date = new Date();
     let createDate = moment(date).format('YYYYMMDDHHmmss');
     var orderId = dateFormat(date, 'HHmmss');
-    let amount = req.body.amount;  
+    let amount = req.body.amount;
 
 
     var orderInfo = '**Nap tien cho thue bao 0123456789. So tien 100,000 VND**'    // Thông tin mô tả nội dung thanh toá
     var orderType = req.body.orderType;  ////Mã danh mục hàng hóa. Mỗi hàng hóa sẽ thuộc một nhóm danh mục do VNPAY quy định. Xem thêm bảng Danh mục hàng hóa
-   
+
     let locale = req.body.language;
-    if(locale === null || locale === ''){
+    if (locale === null || locale === '') {
         locale = 'vn';
     }
     var currCode = 'VND';
@@ -97,16 +97,16 @@ const vnpay_return = (req, res, next) => {
 
     let querystring = require('qs');
     let signData = querystring.stringify(vnp_Params, { encode: false });
-    let crypto = require("crypto");     
+    let crypto = require("crypto");
     let hmac = crypto.createHmac("sha512", secretKey);
-    let signed = hmac.update(new Buffer.from(signData, 'utf-8')).digest("hex");     
+    let signed = hmac.update(new Buffer.from(signData, 'utf-8')).digest("hex");
 
-    if(secureHash === signed){
-        //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-            // console.log();
-        res.render('order/success', {code: vnp_Params['vnp_ResponseCode']})
-    } else{
-        res.render('order/success', {code: '97'})
+    if (secureHash === signed) {
+        res.render('order/success', {
+            code: vnp_Params['vnp_ResponseCode']
+        })
+    } else {
+        res.render('order/success', { code: '97' })
     }
 }
 

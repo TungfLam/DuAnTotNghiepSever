@@ -15,11 +15,12 @@ const getListAll = async (req, res) => {
             .populate('product_id', "name price")
             .populate('size_id', "name")
             .populate('color_id', "name").skip((page - 1) * limit).limit(limit).sort({ createdAt: -1 })
+
+            console.log('productListSizeColor',productListSizeColor);
         const listproduct = await productModel.productModel.find()
 
         const countProducts = await model_product_size_color.product_size_color_Model.count();
         const countPages = Math.ceil(countProducts / limit);
-        console.log(countProducts);
         res.render('product_size_color/product_size_color', {
             title: title,
             heading: heading,

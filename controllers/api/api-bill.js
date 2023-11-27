@@ -31,7 +31,22 @@ exports.listBillByUserId = async (req, res, next) => {
     let list = [];
 
     try {
-        list = await md.billModel.find({ user_id: userId });
+        list = await md.billModel.find({ user_id: userId })
+        .populate("user_id")
+        
+        .populate({
+            path: 'cart_id',
+            populate: {
+                path: 'product_id',
+                model: 'product_size_color_Model',
+                populate: [
+                    { path: 'product_id' },
+                    { path: 'size_id' },
+                    { path: 'color_id' }
+                ]
+            },
+            
+        })
         if (list.length > 0)
             objReturn.data = list;
         else {
