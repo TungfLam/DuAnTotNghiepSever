@@ -3,8 +3,9 @@ let express = require('express');
 let dateFormat = require('date-format')
 let moment = require('moment')
 var config = require('../config/default.json');
-
-
+let mdBill = require('../models/bill.model')
+let mdProduct = require('../models/product_size_color.model')
+let mdCart = require('../models/cart.model')
 function sortObject(obj) {
     let sorted = {};
     let str = [];
@@ -22,6 +23,7 @@ function sortObject(obj) {
 }
 
 
+let globalIdBill;
 
 const create_payment_url = (req, res, next) => {
     var ipAddr =
@@ -40,7 +42,8 @@ const create_payment_url = (req, res, next) => {
     let createDate = moment(date).format('YYYYMMDDHHmmss');
     var orderId = dateFormat(date, 'HHmmss');
     let amount = req.body.amount;
-
+    let idbill = req.params.idbill;
+    globalIdBill = idbill;
 
     var orderInfo = '**Nap tien cho thue bao 0123456789. So tien 100,000 VND**'    // Thông tin mô tả nội dung thanh toá
     var orderType = req.body.orderType;  ////Mã danh mục hàng hóa. Mỗi hàng hóa sẽ thuộc một nhóm danh mục do VNPAY quy định. Xem thêm bảng Danh mục hàng hóa
@@ -64,10 +67,10 @@ const create_payment_url = (req, res, next) => {
     vnp_Params['vnp_ReturnUrl'] = returnUrl;
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;
+
     // if(bankCode !== null && bankCode !== ''){
     //     vnp_Params['vnp_BankCode'] = bankCode;
     // }
-
     vnp_Params = sortObject(vnp_Params);
 
     var querystring = require('qs');
@@ -83,8 +86,10 @@ const create_payment_url = (req, res, next) => {
 }
 
 
-const vnpay_return = (req, res, next) => {
+const vnpay_return = async (req, res, next) => {
     let vnp_Params = req.query;
+    let idbill = globalIdBill;
+
     let secureHash = vnp_Params['vnp_SecureHash'];
     delete vnp_Params['vnp_SecureHash'];
     delete vnp_Params['vnp_SecureHashType'];
@@ -102,6 +107,30 @@ const vnpay_return = (req, res, next) => {
     let signed = hmac.update(new Buffer.from(signData, 'utf-8')).digest("hex");
 
     if (secureHash === signed) {
+        try {
+            // thay đổi trạng thái bill
+
+            const dat_hang_thanh_cong = 2;
+            const da_dat_hang = 'ordered'
+            const finBill = await mdBill.billModel.findById(idbill)
+                .populate('cart_id')
+            finBill.status = dat_hang_thanh_cong
+            await finBill.save();
+
+            // thay đổi trạng thái cart 
+            const finCart = await mdCart.cartModel.findById(finBill.cart_id)
+            finCart.status = da_dat_hang
+            await finCart.save();
+
+            // trừ số lướng sản phẩm
+            const finProduct = await mdProduct.product_size_color_Model.findById(finBill.cart_id.product_id)
+            finProduct.quantity -= finCart.quantity;
+            await finProduct.save();
+
+
+        } catch (error) {
+            console.log(error);
+        }
         res.render('order/success', {
             code: vnp_Params['vnp_ResponseCode']
         })
