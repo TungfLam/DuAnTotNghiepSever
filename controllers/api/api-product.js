@@ -14,7 +14,7 @@ exports.getProducts = async (req, res) => {
     const products = await md.productModel.find({ category_id: category })
         .populate('category_id', "name")
         .skip(skip - 1 )
-        .limit(6)
+        .limit(10)
         .sort({ createdAt: -1 });
     res.json(products);
 };

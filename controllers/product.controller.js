@@ -11,6 +11,7 @@ var path = require('path');
 const { DateTime } = require('luxon');
 let heading = 'Danh sách sản phẩm'
 let title = 'Sản phẩm'
+let ExcelJS = require('exceljs')
 
 const getlistproduct = async (req, res) => {
     const itemsPerPage = 10;
@@ -38,7 +39,47 @@ const getlistproduct = async (req, res) => {
 
     });
 };
+const exportExcel = async (req, res) => {
+    try {
+        const listProducts = await model.productModel.find().sort({ createdAt: -1 })
+            .populate('category_id', "name");
 
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('ListProducts');
+        const headers = ['STT', 'Tên sản phẩm', 'Danh mục', 'Giá', 'Ngày tạo'];
+        worksheet.addRow(headers);
+
+        listProducts.forEach((product, index) => {
+            const rowData = [
+                index + 1,
+                product.name,
+                product.category_id.name ? product.category_id.name : 'Không có danh mục',
+                product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }), // Format giá
+                product.createdAt.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) // Format ngày tạo
+            ];
+            worksheet.addRow(rowData);
+        });
+
+        // Tên file Excel
+        const fileName = `ListProducts.xlsx`;
+
+        // Ghi workbook vào file
+        await workbook.xlsx.writeFile(fileName);
+
+        res.download(fileName, (err) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Internal Server Error');
+            } else {
+
+                fs.unlinkSync(fileName);
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 const detailProduct = async (req, res) => {
     try {
         const idProduct = req.params.idProduct;
@@ -46,11 +87,11 @@ const detailProduct = async (req, res) => {
         const ListProduct = await model.productModel.findById(idProduct)
         const ListColor = await modelColor.colorModel.find();
         const ListSize = await modelSize.sizeModel.find();
-        // console.log(ListCate);
         const details = await model_product_size_color.product_size_color_Model.find({ product_id: idProduct })
             .populate('product_id')
             .populate('size_id', 'name')
             .populate('color_id', 'name');
+         console.log("details",details);
 
         res.render('product/detail', {
             title: title,
@@ -337,4 +378,4 @@ const statistical = (req, res) => {
     });
 }
 
-module.exports = { addDetail, getlistproduct, addproduct, deleteproduct, updateproduct, searchProduct, sortUp, sortDown, filterCategory, statistical, detailProduct }
+module.exports = { exportExcel, addDetail, getlistproduct, addproduct, deleteproduct, updateproduct, searchProduct, sortUp, sortDown, filterCategory, statistical, detailProduct }
