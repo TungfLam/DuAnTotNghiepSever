@@ -37,7 +37,7 @@ http://localhost:3000/api/userslogin POSTLOGIN
 http://localhost:3000/api/users POST
 http://localhost:3000/api/users/idu PUT
 http://localhost:3000/api/users/idu DELETE
-
+<!-- nodemon ./bin/www -->
 // cart
 http://localhost:3000/api/cart GET
 http://localhost:3000/api/cart/pagination?page=1 PAGINATION

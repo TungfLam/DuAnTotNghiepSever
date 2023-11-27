@@ -117,7 +117,7 @@ const addproduct = async (req, res) => {
     let message = ''
     const { name, description, price, category } = req.body;
     const image = [];
-    const nowInVietnam = DateTime.now().setZone('Asia/Ho_Chi_Minh');
+    const nowInVietnam = Date.now();
 
     // Xử lý tất cả các tệp hình ảnh đã tải lên
     for (const file of req.files) {
