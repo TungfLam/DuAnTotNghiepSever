@@ -156,11 +156,8 @@ exports.deleteBill = async (req, res, next) => {
         if (!deletedBill) {
             return res.status(404).json({ message: 'Bill not found' });
         }
-
-        console.log(deletedBill);
-        res.json({ message: 'Bill deleted', bill: deletedBill });
+        res.json({ message: 'Bill deleted' });
     } catch (err) {
-        console.error(err.message);
         return res.status(500).json({ message: 'Server Error', error: err.toString() });
     }
 }

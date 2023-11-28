@@ -126,8 +126,6 @@ const vnpay_return = async (req, res, next) => {
             const finProduct = await mdProduct.product_size_color_Model.findById(finBill.cart_id.product_id)
             finProduct.quantity -= finCart.quantity;
             await finProduct.save();
-
-
         } catch (error) {
             console.log(error);
         }
