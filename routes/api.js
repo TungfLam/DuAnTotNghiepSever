@@ -21,6 +21,7 @@ var api_address = require('../controllers/api/api-address')
 router.get('/users', api_users.listUser);
 router.get('/users/pagination', api_users.pagination);
 router.post('/userslogin', api_users.userLogin);
+router.put('/setoken/:idUser' , api_users.setToken);
 
 router.post('/users', api_users.addUser);
 router.put('/users/:idu', api_users.updateUser);

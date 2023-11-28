@@ -25,25 +25,96 @@ exports.listUser = async (req, res, next) => {
     res.json(objReturn);
 }
 exports.userLogin = async (req, res, next) => {
-    try {
-        const user = await md.userModel.findOne({ username: req.body.username });
-        if (!user) {
-            objReturn.msg = 'Không tìm thấy người dùng';
-            console.log(req.body.username);
-            console.log(req.body.password);
-            return res.status(404).json(objReturn);
+    let msg = "";
+    let err = true;
+    let objUser;
+    
+    if(req.method == 'POST'){
+        let sUsername = req.body.Username;
+        let password = req.body.Password;
 
+        if(!isNaN(sUsername)){
+            objUser = await md.userModel.findOne({phone_number : sUsername})
+        }else if(sUsername.split('@').length >= 2){
+            objUser = await md.userModel.findOne({email : sUsername});
+        }else{
+            objUser = await md.userModel.findOne({username : sUsername});
         }
-        if (user.password !== req.body.password) {
-            objReturn.msg = 'Mật Khẩu sai';
-            return res.status(401).json(objReturn);
+
+        if(objUser){
+            if(objUser.password == password){
+                msg = "Đăng nhập thành công"
+                err = false;
+            }else{
+                msg = "Mật khẩu không chính xác"
+            }
+        }else{
+            msg = "Tài khoản không tồn tại"
         }
-        objReturn.msg = "Đăng nhập thành công";
-        return res.status(200).json(objReturn);
-    } catch (err) {
-        return res.status(500).send();
     }
+
+    res.status(200).json({
+        msg : msg,
+        err : err,
+        idUser : (objUser._id != "") ? objUser._id : "",
+        role : (objUser.role != "") ? objUser.role : "",
+    });
 }
+
+exports.setToken = async (req , res , next) => {
+    let msg = "";
+    let err = true;
+    let objUser;
+
+    if(req.method == 'PUT'){
+        let idUser = req.params.idUser;
+        let token = req.body.token;
+        let deviceId = req.body.deviceId;
+        
+        try {
+            objUser = await md.userModel.findById(idUser);
+        } catch (error) {
+            console.log("tài khoản không tồn tại");
+        }
+
+        if(objUser){
+            objUser.token = token;
+
+            if(objUser.deviceId == deviceId){
+                err = false;
+            }else if(objUser.deviceId == "" || !objUser.deviceId){
+                objUser.deviceId = deviceId;
+                try {
+                    await md.userModel.findByIdAndUpdate(idUser , objUser);
+                    msg = "update thành công";
+                    err = false;
+                } catch (error) {
+                    msg = "update thất bại";
+                }
+            }else{
+                objUser.deviceId = deviceId;
+                try {
+                    await md.userModel.findByIdAndUpdate(idUser , objUser);
+                    msg = "đăng nhập thiết bị 2";
+                    err = false;
+                } catch (error) {
+                    msg = "update thất bại";
+                }
+            }
+        }else{
+            msg = "Tài khoản không tồn tại";
+        }
+    }else{
+        msg = "err method : vui lòng dùng method PUT"
+    }
+
+    res.status(200).json({
+        msg : msg,
+        err : err
+    });
+}
+
+
 exports.pagination = async (req, res, next) => {
     const PAGE_SIZE = 5;
 
