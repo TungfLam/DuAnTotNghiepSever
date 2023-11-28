@@ -92,7 +92,7 @@ const detailProduct = async (req, res) => {
             .populate('product_id')
             .populate('size_id', 'name')
             .populate('color_id', 'name');
-         console.log("details",details);
+        console.log("details", details);
 
         res.render('product/detail', {
             title: title,
@@ -115,22 +115,25 @@ const addDetail = async (req, res) => {
 }
 
 const addproduct = async (req, res) => {
-    let message = ''
+    let message = '';
     const { name, description, price, category } = req.body;
     const image = [];
     const nowInVietnam = Date.now();
 
     // Xử lý tất cả các tệp hình ảnh đã tải lên
     for (const file of req.files) {
-        const imageBuffer = fs.readFileSync(file.path);
-        
-        // Chuyển đổi ảnh AVIF thành PNG bằng sharp
-        const pngBuffer = await sharp(imageBuffer).toFormat('png').toBuffer();
-    
-        // mã hóa base64
-        const base64Image = pngBuffer.toString('base64');
-        image.push(base64Image);
+        try {
+            const imageBuffer = fs.existsSync(file.path) ? fs.readFileSync(file.path) : null;
+            const pngBuffer = await sharp(imageBuffer).toFormat('png').toBuffer();
+            const base64Image = pngBuffer.toString('base64');
+            image.push(base64Image);
+        } catch (error) {
+            console.error('Lỗi chuyển đổi AVIF sang PNG:', error);
+            res.status(500).json({ message: 'Lỗi chuyển đổi ảnh: ' + error.message });
+            return; 
+        }
     }
+
     if (req.method === 'POST') {
         let objProduct = new model.productModel({
             name: name,
@@ -142,15 +145,16 @@ const addproduct = async (req, res) => {
             heading: heading,
             title: title,
         });
-        try {
 
+        try {
             await objProduct.save();
-            res.redirect(`/product/listproduct/1}`)
+            res.redirect(`/product/listproduct/1}`);
         } catch (error) {
             res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
         }
     }
-}
+};
+
 
 const deleteproduct = async (req, res) => {
     try {
