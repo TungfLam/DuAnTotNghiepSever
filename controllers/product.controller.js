@@ -12,6 +12,7 @@ const { DateTime } = require('luxon');
 let heading = 'Danh sách sản phẩm'
 let title = 'Sản phẩm'
 let ExcelJS = require('exceljs')
+let sharp = require('sharp')
 
 const getlistproduct = async (req, res) => {
     const itemsPerPage = 10;
@@ -122,8 +123,12 @@ const addproduct = async (req, res) => {
     // Xử lý tất cả các tệp hình ảnh đã tải lên
     for (const file of req.files) {
         const imageBuffer = fs.readFileSync(file.path);
+        
+        // Chuyển đổi ảnh AVIF thành PNG bằng sharp
+        const pngBuffer = await sharp(imageBuffer).toFormat('png').toBuffer();
+    
         // mã hóa base64
-        const base64Image = imageBuffer.toString('base64');
+        const base64Image = pngBuffer.toString('base64');
         image.push(base64Image);
     }
     if (req.method === 'POST') {

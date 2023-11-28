@@ -96,9 +96,14 @@
                                                 </td>
 
                                                 <td class="">
-                                                    <i class="fa-regular fa-money-bill-1"></i>
-                                                    <%= (row.product_id.price ).toLocaleString('vi-VN', {
-                                                        style: 'currency' , currency: 'VND' }) %>
+                                                    <% if (row.product_id && row.product_id.price !== undefined && row.product_id.price !== null) { %>
+                                                        <i class="fa-regular fa-money-bill-1"></i>
+                                                        <%= (row.product_id.price ).toLocaleString('vi-VN', {
+                                                            style: 'currency' , currency: 'VND' }) %>
+                                                    <% } else { %>
+                                                        <!-- Hiển thị gì đó khi không có giá -->
+                                                        Giá không khả dụng
+                                                    <% } %>
                                                 </td>
                                                 <td>
                                                     <%= row.size_id ? row.size_id.name : 'NULL' %>
