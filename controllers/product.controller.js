@@ -20,7 +20,7 @@ const getlistproduct = async (req, res) => {
     const startCount = (page - 1) * itemsPerPage + 1;
     const skip = (page - 1) * itemsPerPage;
     const limit = itemsPerPage;
-    const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 })
+    const listProducts = await model.productModel.find().skip(skip).limit(limit)
         .populate('category_id', "name");
     const listCategory = await modelCategories.categoryModel.find()
     const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
