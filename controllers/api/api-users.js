@@ -4,7 +4,6 @@ var objReturn = {
     msg: 'OK'
 }
 
-
 exports.listUser = async (req, res, next) => {
     let list = [];
 
@@ -107,6 +106,84 @@ exports.setToken = async (req , res , next) => {
     }else{
         msg = "err method : vui lòng dùng method PUT"
     }
+
+    res.status(200).json({
+        msg : msg,
+        err : err
+    });
+}
+
+exports.checkLogin = async (req , res , next) => {
+    let msg = "";
+    let err = true;
+    let objUser;
+
+    if(req.method == 'POST'){
+        let idUser = req.params.idUser;
+        let deviceId = req.body.deviceId;
+
+        try {
+            objUser = await md.userModel.findById(idUser);
+        } catch (error) {
+            console.log("tài khoản không tồn tại");
+        }
+
+        if(objUser){
+            if(objUser.status){
+                if(objUser.deviceId == deviceId){
+                    msg = "Đã đăng nhập";
+                    err = false;
+                }else{
+                    msg = "Tài khoản đã đăng nhập ở lơi khác"
+                }
+            }else{
+                msg = "Tài khoản đã bị khóa";
+            }
+        }else{
+            msg = "Tài khoản không tồn tại";
+        }
+    }else{
+        msg = "err method : vui lòng dùng method POST"
+    }
+
+    res.status(200).json({
+        msg : msg,
+        err : err
+    });
+}
+
+exports.logout = async (req , res , next) => {
+    let msg = "";
+    let err = true;
+    let objUser;
+
+    if(req.method == 'POST'){
+        let idUser = req.params.idUser;
+
+        try {
+            objUser = await md.userModel.findById(idUser);
+        } catch (error) {
+            console.log("tài khoản không tồn tại");
+        }
+
+        if(objUser){
+            objUser.token = "";
+            objUser.deviceId = "";
+            try {
+                await md.userModel.findByIdAndUpdate(idUser , objUser);
+                msg = "Logout thành công";
+                err = false;
+            } catch (error) {
+                msg = "Logout thất bại";
+            }
+        }else{
+            msg = "Tài khoản không tồn tại";
+        }
+        
+    }else{
+        msg = "err method : vui lòng dùng method POST"
+    }
+
 
     res.status(200).json({
         msg : msg,
