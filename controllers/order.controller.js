@@ -124,7 +124,7 @@ const vnpay_return = async (req, res, next) => {
             const amount = globalAmount;
             // // thay đổi trạng thái cart 
             const finCart = await mdCart.cartModel.findById(idCart)
-            console.log('finCart', finCart);
+            // console.log('finCart', okokokokok);
             finCart.status = da_dat_hang
             await finCart.save();
 
