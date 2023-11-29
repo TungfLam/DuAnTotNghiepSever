@@ -8,6 +8,14 @@ const listCategorys = async (req,res)=>{
 }
 
 
+///////////////
+
+///////////////
+
+///////////////
+
+///////////////
+
 
 const addCategory = async (req,res)=>{
     const { name } = req.body;
