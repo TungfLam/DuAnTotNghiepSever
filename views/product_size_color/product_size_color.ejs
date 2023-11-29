@@ -50,8 +50,8 @@
             <div class="row p-4"
                 style="width: 100%; background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); display: flex;">
                 <div class="d-flex justify-content-end me-3 mb-2">
-                    <button type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
-                        Export</button>
+                    <a href="//" type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
+                        Export</a>
                     <a class="btn btn-primary" href="/product_size_color/add_product_size_color"><i
                             class="fa-solid fa-plus" style="color: #ffffff;"></i> Thêm sản phẩm</a>
                 </div>
@@ -96,9 +96,14 @@
                                                 </td>
 
                                                 <td class="">
-                                                    <i class="fa-regular fa-money-bill-1"></i>
-                                                    <%= (row.product_id.price ).toLocaleString('vi-VN', {
-                                                        style: 'currency' , currency: 'VND' }) %>
+                                                    <% if (row.product_id && row.product_id.price !== undefined && row.product_id.price !== null) { %>
+                                                        <i class="fa-regular fa-money-bill-1"></i>
+                                                        <%= (row.product_id.price ).toLocaleString('vi-VN', {
+                                                            style: 'currency' , currency: 'VND' }) %>
+                                                    <% } else { %>
+                                                        <!-- Hiển thị gì đó khi không có giá -->
+                                                        Giá không khả dụng
+                                                    <% } %>
                                                 </td>
                                                 <td>
                                                     <%= row.size_id ? row.size_id.name : 'NULL' %>

@@ -113,8 +113,8 @@
         <div class="row p-3"
             style=" background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); margin: 20px; ">
             <div class="d-flex justify-content-end me-5 m-2 mb-6">
-                <button type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
-                    Export</button>
+                <a href="/product/export" type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
+                    Export</a>
 
                 <button type="button" class="btn btn-primary btn-sm " data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop"> <i class="fa-solid fa-plus" style="color: #ffffff;"></i> Thêm sản
@@ -164,7 +164,7 @@
                                     </td>
                                     <td class=""  style="width: 90px;">
                                         <i class="fa-regular fa-money-bill-1"></i>
-                                        <%= (row.price ).toLocaleString('vi-VN', { style: 'currency' , currency: 'VND'
+                                        <%= (row?.price ).toLocaleString('vi-VN', { style: 'currency' , currency: 'VND'
                                             }) %>
                                     </td>
 

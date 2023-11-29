@@ -11,6 +11,8 @@ var path = require('path');
 const { DateTime } = require('luxon');
 let heading = 'Danh sách sản phẩm'
 let title = 'Sản phẩm'
+let ExcelJS = require('exceljs')
+let sharp = require('sharp')
 
 const getlistproduct = async (req, res) => {
     const itemsPerPage = 10;
@@ -18,7 +20,7 @@ const getlistproduct = async (req, res) => {
     const startCount = (page - 1) * itemsPerPage + 1;
     const skip = (page - 1) * itemsPerPage;
     const limit = itemsPerPage;
-    const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 })
+    const listProducts = await model.productModel.find().skip(skip).limit(limit)
         .populate('category_id', "name");
     const listCategory = await modelCategories.categoryModel.find()
     const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
@@ -38,7 +40,47 @@ const getlistproduct = async (req, res) => {
 
     });
 };
+const exportExcel = async (req, res) => {
+    try {
+        const listProducts = await model.productModel.find().sort({ createdAt: -1 })
+            .populate('category_id', "name");
 
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('ListProducts');
+        const headers = ['STT', 'Tên sản phẩm', 'Danh mục', 'Giá', 'Ngày tạo'];
+        worksheet.addRow(headers);
+
+        listProducts.forEach((product, index) => {
+            const rowData = [
+                index + 1,
+                product.name,
+                product.category_id.name ? product.category_id.name : 'Không có danh mục',
+                product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }), // Format giá
+                product.createdAt.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }) // Format ngày tạo
+            ];
+            worksheet.addRow(rowData);
+        });
+
+        // Tên file Excel
+        const fileName = `ListProducts.xlsx`;
+
+        // Ghi workbook vào file
+        await workbook.xlsx.writeFile(fileName);
+
+        res.download(fileName, (err) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Internal Server Error');
+            } else {
+
+                fs.unlinkSync(fileName);
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 const detailProduct = async (req, res) => {
     try {
         const idProduct = req.params.idProduct;
@@ -46,11 +88,11 @@ const detailProduct = async (req, res) => {
         const ListProduct = await model.productModel.findById(idProduct)
         const ListColor = await modelColor.colorModel.find();
         const ListSize = await modelSize.sizeModel.find();
-        // console.log(ListCate);
         const details = await model_product_size_color.product_size_color_Model.find({ product_id: idProduct })
             .populate('product_id')
             .populate('size_id', 'name')
             .populate('color_id', 'name');
+        console.log("details", details);
 
         res.render('product/detail', {
             title: title,
@@ -73,18 +115,25 @@ const addDetail = async (req, res) => {
 }
 
 const addproduct = async (req, res) => {
-    let message = ''
+    let message = '';
     const { name, description, price, category } = req.body;
     const image = [];
-    const nowInVietnam = DateTime.now().setZone('Asia/Ho_Chi_Minh');
+    const nowInVietnam = Date.now();
 
     // Xử lý tất cả các tệp hình ảnh đã tải lên
     for (const file of req.files) {
-        const imageBuffer = fs.readFileSync(file.path);
-        // mã hóa base64
-        const base64Image = imageBuffer.toString('base64');
-        image.push(base64Image);
+        try {
+            const imageBuffer = fs.existsSync(file.path) ? fs.readFileSync(file.path) : null;
+            const pngBuffer = await sharp(imageBuffer).toFormat('png').toBuffer();
+            const base64Image = pngBuffer.toString('base64');
+            image.push(base64Image);
+        } catch (error) {
+            console.error('Lỗi chuyển đổi AVIF sang PNG:', error);
+            res.status(500).json({ message: 'Lỗi chuyển đổi ảnh: ' + error.message });
+            return; 
+        }
     }
+
     if (req.method === 'POST') {
         let objProduct = new model.productModel({
             name: name,
@@ -96,15 +145,16 @@ const addproduct = async (req, res) => {
             heading: heading,
             title: title,
         });
-        try {
 
+        try {
             await objProduct.save();
-            res.redirect(`/product/listproduct/1}`)
+            res.redirect(`/product/listproduct/1}`);
         } catch (error) {
             res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
         }
     }
-}
+};
+
 
 const deleteproduct = async (req, res) => {
     try {
@@ -337,4 +387,4 @@ const statistical = (req, res) => {
     });
 }
 
-module.exports = { addDetail, getlistproduct, addproduct, deleteproduct, updateproduct, searchProduct, sortUp, sortDown, filterCategory, statistical, detailProduct }
+module.exports = { exportExcel, addDetail, getlistproduct, addproduct, deleteproduct, updateproduct, searchProduct, sortUp, sortDown, filterCategory, statistical, detailProduct }

@@ -29,6 +29,8 @@ router.get('/sortUp',product_controller.sortUp)
 router.get('/sortDown',product_controller.sortDown)
 router.get('/filterCategory', product_controller.filterCategory)
 router.get('/detail/:idProduct', product_controller.detailProduct)
+router.get('/export', product_controller.exportExcel)
+
 
 
 
