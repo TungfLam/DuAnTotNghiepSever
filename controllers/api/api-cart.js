@@ -139,39 +139,53 @@ exports.addCart = async (req, res) => {
     const id_Product = req.params.idProduct;
     const id_User = req.params.idUser;
     const quantityCart = req.body.quantity;
+
     try {
         const user = await mdUser.userModel.findById(id_User);
-        const product = await mdProduct.product_size_color_Model.findById(id_Product)
+        const product = await mdProduct.product_size_color_Model.findById(id_Product);
 
-        const existingCartItem = await md.cartModel.findOne({
+        const existingCartItems = await md.cartModel.find({
             user_id: user._id,
             product_id: product._id,
         });
-        if (existingCartItem) {
-            existingCartItem.quantity += quantityCart;
-            if (existingCartItem.quantity > product.quantity || existingCartItem.quantity <= 0) {
-                return res.json({ message: 'Số lượng giỏ hàng đã vượt quá số lượng sản phẩm' });
+
+        if (existingCartItems.length > 0) {
+            for (const existingCartItem of existingCartItems) {
+                // Kiểm tra nếu trạng thái là 'successfully'
+                if (existingCartItem.status === 'successfully') {
+                    
+                    existingCartItem.quantity += quantityCart;
+
+                    if (existingCartItem.quantity > product.quantity || existingCartItem.quantity <= 0) {
+                        return res.json({ message: 'Số lượng giỏ hàng đã vượt quá số lượng sản phẩm' });
+                    }
+                    await existingCartItem.save();
+                    return res.json({ message: 'Add Cart successfully' });
+                }
             }
-            await existingCartItem.save();
-        } else {
-            if (quantityCart > product.quantity || quantityCart <= 0) {
-                return res.json({ message: 'Số lượng giỏ hàng đã vượt quá số lượng sản phẩm' });
-            }
-            const cartobj = new md.cartModel({
-                user_id: user._id,
-                product_id: product._id,
-                quantity: quantityCart,
-                status: 'successfully'
-            })
-            await cartobj.save();
         }
+
+        // không phải 'successfully', thêm một mục mới
+        const cartobj = new md.cartModel({
+            user_id: user._id,
+            product_id: product._id,
+            quantity: quantityCart,
+            status: 'successfully',
+        });
+        if (cartobj.quantity > product.quantity || cartobj.quantity <= 0) {
+            return res.json({ message: 'Số lượng giỏ hàng đã vượt quá số lượng sản phẩm' });
+        }
+        await cartobj.save();
 
         res.json({ message: 'Add Cart successfully' });
     } catch (error) {
-
+        // Xử lý lỗi
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
+};
 
-}
+
 
 exports.updateCart = async (req, res, next) => {
     try {
