@@ -130,6 +130,19 @@ const vnpay_return = async (req, res, next) => {
         
             finCart.status = da_dat_hang
             await finCart.save();
+///////////////@ts-check
+///////////////
+
+///////////////
+
+///////////////
+
+///////////////
+
+///////////////
+
+///////////////
+
 
             // // trừ số luong sản phẩm
             const finProduct = await mdProduct.product_size_color_Model.findById(finCart.product_id)
