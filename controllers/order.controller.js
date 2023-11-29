@@ -46,10 +46,13 @@ const create_payment_url = async (req, res, next) => {
     let amount = req.body.amount;
     let idCart = req.params.idCart;
     try {
-         await mdCart.cartModel.findById(idCart);
+       const fincart =  await mdCart.cartModel.findById(idCart);
+       if (!fincart) {
+        return res.status(404).json({ message: 'Không tìm thấy sản phẩm trong giỏ hàng' });
+    }
         
     } catch (error) {
-        return res.status(404).json({ message: 'Không tìm thấy idCart', error});
+        return res.status(404).json({ error});
     }
     globalIdCart = idCart;
     globalAmount = amount
@@ -117,14 +120,14 @@ const vnpay_return = async (req, res, next) => {
 
     if (secureHash === signed) {
         try {
-            const dat_hang_thanh_cong = "Đặt hàng thành công";
+            const dat_hang_thanh_cong = 2;
             const da_dat_hang = 'Đã đặt hàng'
             const idCart = globalIdCart;
-            console.log('idCart', idCart);
+        
             const amount = globalAmount;
             // // thay đổi trạng thái cart 
             const finCart = await mdCart.cartModel.findById(idCart)
-            // console.log('finCart', okokokokok);
+        
             finCart.status = da_dat_hang
             await finCart.save();
 
@@ -144,7 +147,7 @@ const vnpay_return = async (req, res, next) => {
             const newBill = new mdBill.billModel(newBillData);
             newBill.save()
         } catch (error) {
-            console.log(error);
+            return res.status(500).json({ message: 'Đã xảy ra lỗi khi xử lý đơn hàng' });
         }
         res.render('order/success', {
             code: vnp_Params['vnp_ResponseCode']
