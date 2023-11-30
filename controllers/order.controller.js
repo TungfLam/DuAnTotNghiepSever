@@ -141,7 +141,7 @@ const vnpay_return = async (req, res, next) => {
             // tạo mới bill 
             const newBillData = {
                 user_id: finCart.user_id,
-                cart_id: finCart.product_id,
+                cart_id: finCart._id,
                 payments: 1,
                 total_amount: amount,
                 status: dat_hang_thanh_cong,
