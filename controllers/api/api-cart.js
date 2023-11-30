@@ -127,7 +127,6 @@ exports.listCart = async (req, res) => {
                     }
                 }
             });
-
         if (!listCart || listCart.length === 0) {
             return res.json({ message: 'Giỏ hàng của bạn chưa có sản phẩm nào, thêm sản phẩm vào giỏ hàng ngay!', listCart: [] });
         }

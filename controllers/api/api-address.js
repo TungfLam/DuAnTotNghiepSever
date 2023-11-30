@@ -3,11 +3,9 @@ var objReturn = {
     status: 1,
     msg: 'OK'
 }
-
 // get
 exports.listAddress = async (req, res, next) => {
     let list = [];
-
     try {
         list = await md.addressModel.find();
         if (list.length > 0)
@@ -15,7 +13,6 @@ exports.listAddress = async (req, res, next) => {
         else {
             objReturn.status = 0;
             objReturn.msg = 'Không có dữ liệu phù hợp';
-
         }
     } catch (error) {
         objReturn.status = 0;
@@ -40,8 +37,6 @@ exports.addAddress = async (req, res, next) => {
         if (validation.error) {
             return res.status(400).json({ message: 'Validation Error', error: validation.error.details });
         }
-
-
         const address = req.body;
         const newAddress = md.addressModel(address);
         await newAddress.save();

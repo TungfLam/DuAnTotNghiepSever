@@ -110,8 +110,6 @@ exports.addBill = async (req, res, next) => {
         if (validation.error) {
             return res.status(400).json({ message: 'Validation Error', error: validation.error.details });
         }
-
-
         const bill = req.body;
         bill.status = 1;
         bill.date = DateTime.now().setZone('Asia/Ho_Chi_Minh');
