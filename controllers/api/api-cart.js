@@ -115,20 +115,23 @@ exports.listCart = async (req, res) => {
                 path: 'product_id',
                 populate: {
                     path: 'product_id size_id color_id',
-                    select: 'name image price quantity  '
+                    select: 'name image price   '
                 }
             }).sort({ createdAt: -1 })
+            
+            listCart.forEach(async item => {         
+                if (item.product_id.quantity < item.quantity ) {
+                    if (item.status === 'successfully') {
+                    item.status = 'Sản phẩm của bạn đã vượt quá số lượng';
+                    await item.save();
+                    }
+                }
+            });
+
         if (!listCart || listCart.length === 0) {
             return res.json({ message: 'Giỏ hàng của bạn chưa có sản phẩm nào, thêm sản phẩm vào giỏ hàng ngay!', listCart: [] });
         }
-        // Your cart does not have any products, please add products to your cart now!
-        // // const checkProduct = await mdProduct.product_size_color_Model.findById(ListCart.product_id._id)
-        //   listCart.forEach(async element => {
-
-        //     const checkProduct = await mdProduct.product_size_color_Model.findById(element.product_id)
-        //     console.log(checkProduct);
-        //   });     
-
+   
         res.json({ message: 'Get the list successfully', listCart: listCart });
     } catch (error) {
 
