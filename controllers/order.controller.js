@@ -127,27 +127,17 @@ const vnpay_return = async (req, res, next) => {
             const amount = globalAmount;
             // // thay đổi trạng thái cart 
             const finCart = await mdCart.cartModel.findById(idCart)
-        
             finCart.status = da_dat_hang
             await finCart.save();
-///////////////@ts-check
-///////////////
-
-///////////////
-
-///////////////
-
-///////////////
-
-///////////////
-
-///////////////
-
-
             // // trừ số luong sản phẩm
             const finProduct = await mdProduct.product_size_color_Model.findById(finCart.product_id)
-            finProduct.quantity -= finCart.quantity;
-            await finProduct.save();
+            if (finProduct.quantity < finCart.quantity) {
+                res.status(200).json({message: 'Không thể thực hiện , Số lượng mua vượt quá số lượng sản phẩm'});
+            }else{
+                finProduct.quantity -= finCart.quantity;
+                await finProduct.save();
+            }
+           
             // tạo mới bill 
             const newBillData = {
                 user_id: finCart.user_id,

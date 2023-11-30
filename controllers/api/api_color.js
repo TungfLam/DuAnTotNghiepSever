@@ -10,15 +10,6 @@ const listColors = async (req,res)=>{
 }
 
 
-///////////////
-
-///////////////
-
-///////////////
-
-///////////////
-
-
 const addColor = async (req,res)=>{
     const { name } = req.body;
     if (req.method === 'POST') {
