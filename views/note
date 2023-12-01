@@ -5,6 +5,10 @@ user.edit.ejs
 //123
 
 status bill
+1 = Chưa thanh toán
+2 = Đã thanh toán
+
+payments bill
 1 = COD
 2 = VNP
 
