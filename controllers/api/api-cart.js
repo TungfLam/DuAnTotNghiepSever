@@ -117,20 +117,29 @@ exports.listCart = async (req, res) => {
                     path: 'product_id size_id color_id',
                     select: 'name image price   '
                 }
-            }).sort({ createdAt: -1 })
-            
-            listCart.forEach(async item => {         
-                if (item.product_id.quantity < item.quantity ) {
-                    if (item.status === 'successfully') {
+            })
+            .populate('user_id')
+            .sort({ createdAt: -1 })
+
+        listCart.forEach(async item => {
+            console.log('Số lượng của sản phẩm ', item.product_id.quantity);
+            if (item.product_id.quantity < item.quantity) {
+
+                if (item.status === 'successfully') {
                     item.status = 'Sản phẩm của bạn đã vượt quá số lượng';
                     await item.save();
-                    }
+                } 
+            }else{
+                if (item.status === 'Sản phẩm của bạn đã vượt quá số lượng') {
+                    item.status = 'successfully';
+                    await item.save();
                 }
-            });
+            }
+        });
         if (!listCart || listCart.length === 0) {
             return res.json({ message: 'Giỏ hàng của bạn chưa có sản phẩm nào, thêm sản phẩm vào giỏ hàng ngay!', listCart: [] });
         }
-   
+
         res.json({ message: 'Get the list successfully', listCart: listCart });
     } catch (error) {
 
@@ -145,6 +154,11 @@ exports.addCart = async (req, res) => {
     try {
         const user = await mdUser.userModel.findById(id_User);
         const product = await mdProduct.product_size_color_Model.findById(id_Product);
+        if (!user || !user._id) {
+            return res.status(404).json({ message: 'Không tìm thấy người dùng' });
+        } else if (!product || !product._id) {
+            return res.status(404).json({ message: 'Không tìm thấy sản phẩm' });
+        }
 
         const existingCartItems = await md.cartModel.find({
             user_id: user._id,
@@ -155,7 +169,7 @@ exports.addCart = async (req, res) => {
             for (const existingCartItem of existingCartItems) {
                 // Kiểm tra nếu trạng thái là 'successfully'
                 if (existingCartItem.status === 'successfully') {
-                    
+
                     existingCartItem.quantity += quantityCart;
 
                     if (existingCartItem.quantity > product.quantity || existingCartItem.quantity <= 0) {
@@ -188,19 +202,17 @@ exports.addCart = async (req, res) => {
 };
 
 
-
 exports.updateCart = async (req, res, next) => {
     try {
         if (req.method === 'POST') {
             const id_Cart = req.params.idCart;
-            const id_User = req.params.idUser;
             const quantityCart = req.body.quantity
-
             const findCart = await md.cartModel.findById(id_Cart)
-            const findUser = await mdUser.userModel.findById(id_User)
+
+
             const findproduct = await mdProduct.product_size_color_Model.findById(findCart.product_id)
             if (quantityCart > findproduct.quantity || quantityCart <= 0) {
-                return res.json({ message: 'action cannot be taken' });
+                return res.json({ message: 'Không thể thực hiện' });
             }
 
             await md.cartModel.findByIdAndUpdate(id_Cart, { quantity: quantityCart });

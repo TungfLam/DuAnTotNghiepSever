@@ -2,32 +2,53 @@
     <div class="container-fluid">
         <p class="fw-bold fs-2 text-primary">Edit Product</p>
 
-        <form method="POST" action="/product/updateproduct/<%= itemedit.id %>" enctype="multipart/form-data" multiple>
+        <form method="POST" action="/product/updateproduct/<%= itemedit?.id %>" enctype="multipart/form-data" multiple>
             <div class="container-fluid border border-secondary">
                 <div class="modal-body m-2">
                     <div class="form-floating mb-2">
                         <input type="text" class="form-control" id="floatingInput" placeholder="Fullname" required
                             name="name" value="<%= itemedit.name %>">
-                        <label for="floatingInput">Name Product</label>
+                        <label for="floatingInput">Tên sản phẩm</label>
                     </div>
-                    <div class="form-floating mb-2">
-                        <input type text" class="form-control" id="floatingInput" placeholder="Fullname" required
-                            name="description" value="<%= itemedit.description %>">
-                        <label for="floatingInput">Description</label>
-                    </div>
+            
+                        <div class="form-floating mb-2">
+                            <div class="form-floating mb-2">
+                                <select name="category" class="form-select" id="filterGroup1">
+                                    <% listCategory.forEach(category => { %>
+                                        <option value="<%= category._id %>" <%= itemedit.category_id.toString() === category._id.toString()  ? 'selected' : '' %>>
+                                            <%= category.name %>
+                                        </option>
+                                    <% }); %>
+                                </select>
+         
+                            </div>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type text" class="form-control" id="floatingInput" placeholder="Fullname" required
+                                name="description" value="<%= itemedit.description %>">
+                            <label for="floatingInput">Mô tả</label>
+                        </div>
 
-                    <div class="input-group mb-3">
+                        <div style="margin-bottom: 20px;">
+                            <p>Ảnh sản phẩm :</p>
+                            <% itemedit.image .forEach(element=> {%>
+                                <img src="<%=element%>" alt="Hình ảnh" width="120px" height="120px">
+                                <% }); %>
+                        </div>
 
-                        <input type="file" class="form-control" id="inputGroupFile02" name="image" multiple
-                            value="<%= itemedit.image %>">
-                        <label class="input-group-text" for="inputGroupFile02">Upload</label>
-                    </div>
+                        <div class="input-group mb-3">
 
-                    <div class="form-floating mb-2">
-                        <input type="text" class="form-control" id="floatingInput" placeholder="Fullname" required
-                            name="price" value="<%= itemedit.price %>">
-                        <label for="floatingInput">Price</label>
-                    </div>
+
+                            <input type="file" class="form-control" id="inputGroupFile02" name="image" multiple
+                                value="">
+                            <label class="input-group-text" for="inputGroupFile02">Upload</label>
+                        </div>
+
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control" id="floatingInput" placeholder="Fullname" required
+                                name="price" value="<%= itemedit.price %>">
+                            <label for="floatingInput">Giá</label>
+                        </div>
 
                 </div>
 

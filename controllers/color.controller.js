@@ -16,9 +16,11 @@ const addColor = async (req, res) => {
     const { name, codecolor } = req.body;
 
     // Tạo một bản ghi mới trong cơ sở dữ liệu
+
     await colormd.colorModel.create({
       name: name,
       colorcode: codecolor,
+
     });
     res.redirect('/color');
   } catch (error) {
