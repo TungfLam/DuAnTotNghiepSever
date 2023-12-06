@@ -13,6 +13,9 @@ const bill_SChema = new db.mongoose.Schema(
         collection: 'bill'
     }
 )
+
+
 let billModel = db.mongoose.model('billModel', bill_SChema);
+
 
 module.exports = { billModel }

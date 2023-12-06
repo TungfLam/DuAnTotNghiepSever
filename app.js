@@ -13,6 +13,7 @@ var usersRouter = require('./routes/users');
 var productRouter = require('./routes/product')
 var categoryRouter = require('./routes/category')
 var sizeRouter = require('./routes/size')
+var billRouter = require('./routes/bill')
 var colorRouter = require('./routes/color')
 
 var apiRouter = require('./routes/api');
@@ -48,15 +49,16 @@ app.use(session({
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/product',productRouter);
+app.use('/product', productRouter);
 app.use('/api', apiRouter);
 app.use('/product_size_color', product_size_color_router);
 app.use('/category', categoryRouter);
 app.use('/color', colorRouter);
 app.use('/size', sizeRouter);
-app.use('/notification',notificationRouter);
+app.use('/bill', billRouter);
+app.use('/notification', notificationRouter);
 
-app.use('/order',orderRouter);
+app.use('/order', orderRouter);
 
 
 
