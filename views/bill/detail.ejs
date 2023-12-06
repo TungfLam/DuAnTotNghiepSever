@@ -1,0 +1,103 @@
+<%- include('../inc/top') %>
+
+    <!-- Thêm CSS Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            margin: 20px;
+        }
+
+        img {
+            max-width: 100%;
+        }
+    </style>
+    <div class="container">
+        <h1 class="text-center my-4">
+            Chi tiết hóa đơn
+        </h1>
+
+        <div class="card">
+            <div class="card-header">
+                Thông tin hóa đơn
+            </div>
+            <div class="card-body">
+                <p>Mã hóa đơn: <%= bill._id %>
+                </p>
+                <p>Phương thức thanh toán: <%= bill.payments==1 ? 'COD' : 'VNP' %>
+                </p>
+                <p>Tổng tiền: <%= bill.total_amount %>
+                </p>
+                <p>Trạng thái: <%= bill.status==1 ? 'Chưa thanh toán' : 'Đã thanh toán' %>
+                </p>
+                <p>Ngày: <%= bill.date %>
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Thông tin người dùng
+            </div>
+            <div class="card-body">
+                <p>Mã người dùng: <%= bill.user_id._id %>
+                </p>
+                <p>Tên người dùng: <%= bill.user_id.username %>
+                </p>
+                <p>Họ và tên: <%= bill.user_id.full_name %>
+                </p>
+                <p>Địa chỉ: <%= bill.user_id.address %>
+                </p>
+                <p>Số điện thoại: <%= bill.user_id.phone_number %>
+                </p>
+                <p>Vai trò: <%= bill.user_id.role %>
+                </p>
+                <p>Email: <%= bill.user_id.email %>
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Thông tin giỏ hàng
+            </div>
+            <div class="card-body">
+                <p>Mã giỏ hàng: <%= bill.cart_id._id %>
+                </p>
+                <p>Số lượng: <%= bill.cart_id.quantity %>
+                </p>
+                <p>Trạng thái: <%= bill.cart_id.status %>
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Thông tin sản phẩm
+            </div>
+            <div class="card-body">
+                <p>Mã sản phẩm: <%= bill.cart_id.product_id._id %>
+                </p>
+                <p>Tên sản phẩm: <%= bill.cart_id.product_id.name %>
+                </p>
+                <p>Sản phẩm: <%= bill.cart_id.product_id.category_id.name %>
+                </p>
+                <p>Mô tả: <%= bill.cart_id.product_id.description %>
+                </p>
+                <p>Giá: <%= bill.cart_id.product_id.price %>
+                </p>
+                <img src="<%= bill.cart_id.product_id.image[0] %>" alt="Hình ảnh sản phẩm">
+            </div>
+        </div>
+    </div>
+
+    <!-- Thêm JavaScript Bootstrap -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+
+
+    <%- include('../inc/bottom') %>

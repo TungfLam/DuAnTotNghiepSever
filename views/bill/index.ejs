@@ -1,0 +1,390 @@
+<%- include('../inc/top') %>
+  <style>
+    .form-row {
+      display: flex;
+      padding: 10px;
+
+    }
+
+    .form-row .col-md-2 {
+      flex: 1;
+      padding: 0 10px;
+    }
+
+    .btn-toggle {
+      transition: all 0.3s ease;
+      border: none;
+      padding: 5px 10px;
+      /* Giảm giá trị padding */
+      font-weight: bold;
+      font-size: 1em;
+      /* Giảm kích thước font */
+    }
+
+    .btn-toggle.paid {
+      background: #92ff94;
+      color: black;
+    }
+
+    .btn-toggle.unpaid {
+      background: rgb(255, 140, 142);
+      color: black;
+    }
+
+    .container {
+      width: 100%;
+      /* Giảm kích thước container */
+      margin: auto;
+      /* Căn giữa container */
+    }
+
+    .fa {
+      margin-right: 5px;
+      /* Thêm khoảng cách giữa icon và văn bản */
+    }
+
+    nav {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 90%;
+      /* Điều chỉnh độ rộng của nav tùy theo nhu cầu của bạn */
+    }
+  </style>
+
+  <% if(msg.length> 0){ %>
+    <p class="alert alert-info">
+      <%= msg %>
+    </p>
+    <% } %>
+
+      <% if(msg2.length> 0){ %>
+        <p class="alert alert-danger">
+          <%= msg2 %>
+        </p>
+        <% } %>
+
+
+
+          <div class="form-row">
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+              <span class="btn btn-danger btn-lg" style="padding: 20px 20px; ">Số lượng sản hóa đơn: <%= tong_so_hoa_don
+                  %></span>
+            </div>
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+              <span class="btn btn-warning btn-lg" style="padding: 20px 20px; ">Phương thức COD: <%=
+                  tong_so_hoa_don_payments_1 %> VNP: <%= tong_so_hoa_don_payments_2 %></span>
+            </div>
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+              <span class="btn btn-secondary btn-lg" style="padding: 20px 20px; ">Tỉ lệ thanh toán <%= ti_le_thanh_toan
+                  %> %
+              </span>
+            </div>
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+              <span class="btn btn-primary btn-lg" style="padding: 20px 20px; ">Tổng tiền: <%=
+                  tong_tien.toLocaleString('vi-VN') %> VNĐ</span>
+            </div>
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+              <span class="btn btn-success btn-lg" style="padding: 20px 20px; ">Đã thanh toán: <%=
+                  tong_tien_da_thanh_toan.toLocaleString('vi-VN') %> VNĐ
+              </span>
+            </div>
+          </div>
+
+
+
+
+          <!-- Biểu mẫu tìm kiếm -->
+          <form class="mb-3" action="" method="get" enctype="multipart/form-data">
+            <div class="form-row">
+              <div class="col-md-2">
+                <label for="from-date">Từ ngày</label>
+                <input type="date" id="from-date" name="from-date" class="form-control"
+                  value="<%= query['from-date'] %>">
+              </div>
+              <div class="col-md-2">
+                <label for="to-date">Đến ngày</label>
+                <input type="date" id="to-date" name="to-date" class="form-control" value="<%= query['to-date'] %>">
+              </div>
+              <div class="col-md-4">
+                <label for="order-id">Mã đơn hàng</label>
+                <input placeholder="ID đơn hàng" type="text" id="id_" name="id_" class="form-control"
+                  value="<%= query.id_ %>">
+              </div>
+              <div class="col-md-2">
+                <label for="order-id">Mã người dùng</label>
+                <input placeholder="ID người dùng" type="text" id="user-id" name="user-id" class="form-control"
+                  value="<%= query['user-id'] %>">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-2">
+                <label for="min-price">Giá tối thiểu</label>
+                <input type="number" id="min-price" name="min-price" class="form-control"
+                  value="<%= query['min-price'] %>">
+              </div>
+              <div class="col-md-2">
+                <label for="max-price">Giá tối đa</label>
+                <input type="number" id="max-price" name="max-price" class="form-control"
+                  value="<%= query['max-price'] %>">
+              </div>
+              <div class="col-md-2">
+                <label for="status">Trạng thái thanh toán</label>
+                <select id="status" name="status" class="form-control">
+                  <option selected value="">none...</option>
+                  <option value="2" <%=query.status=='2' ? 'selected' : '' %>>Đã thanh toán</option>
+                  <option value="1" <%=query.status=='1' ? 'selected' : '' %>>Chưa thanh toán</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <label for="payments">Hình thức thanh toán</label>
+                <select id="payments" name="payments" class="form-control">
+                  <option selected value="">none...</option>
+                  <option value="1" <%=query.payments=='1' ? 'selected' : '' %>>COD</option>
+                  <option value="2" <%=query.payments=='2' ? 'selected' : '' %>>VNP</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <label for="role">Role</label>
+                <select disabled class="form-control">
+                  <option selected value="">none...</option>
+                  <option value="1">Admin</option>
+                  <option value="2">Staff</option>
+                  <option value="3">User</option>
+                </select>
+              </div>
+              <div class="col-md-2 d-flex align-items-end justify-content-center">
+                <button type="submit" class="btn btn-success">Tìm kiếm</button>
+
+              </div>
+              <div class="col-md-1 d-flex align-items-end">
+
+                <a href="../bill?from-date=&to-date=&id_=&user-id=&min-price=&max-price=&status=&payments="
+                  class="btn btn-primary" role="button" aria-pressed="true">Reset</a>
+              </div>
+            </div>
+          </form>
+
+
+
+          <!-- Bảng dữ liệu -->
+          <table class="table table-hover table-success ">
+            <thead>
+              <tr>
+                <th>ID - Mã đơn</th>
+                <th>Cart </th>
+                <th>Payments</th>
+                <th>Date - Đơn hàng</th>
+                <th>User</th>
+                <th>Status</th>
+                <th>Total Amount</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% bills.forEach(function(bill) { %>
+
+                <tr>
+                  <td>
+                    <i class="far fa-calendar-alt"></i>
+                    <span style="color: rgb(0, 0, 0); font-weight: bold;">
+                      <%= bill._id %>
+                    </span>
+                  </td>
+                  <td>
+                    Id cart:
+                    <%= bill.cart_id._id %>
+                      <br>
+
+                      Id sản phẩm:
+                      <span style="color: rgb(1, 46, 106); font-weight: bold;">
+
+                        <% if (bill.cart_id && bill.cart_id.product_id) { %>
+                          <%= bill.cart_id.product_id._id %>
+                            <% } else { %>
+                              Sản phẩm đã bị xóa
+                              <% } %>
+
+                      </span>
+
+                      <br>
+                      Tên sản phẩm:
+                      <span style="color: rgb(0, 108, 249); font-weight: bold;">
+
+                        <% if (bill.cart_id && bill.cart_id.product_id) { %>
+                          <%= bill.cart_id.product_id.name %>
+                            <% } else { %>
+                              <span style="color: red; font-weight: bold;">
+                                Sản phẩm đã bị xóa
+                              </span>
+                              <% } %>
+
+                      </span>
+                      <br>
+
+                      Trạng thái:
+                      <i class="fas fa-calendar-check"></i>
+
+                      <span
+                        style="display: inline-block; padding: 2px 10px; color: white; background-color: #26A844; font-weight: normal; border-radius: 5px;">
+
+                        <%= bill.cart_id.status %>
+                      </span>
+
+                  </td>
+                  <td>
+                    <% if (bill.payments===1) { %>
+                      <span
+                        style="display: inline-block; padding: 5px 20px; color: black; background-color: #FEC007; font-weight: bold; border-radius: 10px;">
+                        COD
+                      </span>
+                      <% } else if (bill.payments===2) { %>
+                        <span
+                          style="display: inline-block; padding: 5px 20px; color: black; background-color: #FEC007; font-weight: bold; border-radius: 10px;">
+                          VNP
+                        </span>
+                        <% } %>
+                  </td>
+                  <td>
+                    <i class="far fa-calendar-plus"></i>
+                    <span style="color: rgb(0, 0, 0); font-weight: bold;">
+                      <% var date=new Date(bill.date); %>
+                        <%= date.toLocaleTimeString('vi-VN', { hour: '2-digit' , minute: '2-digit' }) %> - <%=
+                            date.toLocaleDateString('vi-VN', { day: '2-digit' , month: '2-digit' , year: 'numeric' }) %>
+                    </span>
+                  </td>
+
+                  <td>
+                    <i class="fas fa-address-card"></i>
+                    username :
+                    <span style="color: rgb(2, 120, 120); font-weight: bold;">
+                      <%= bill.user_id.username %>
+                    </span>
+                    <br>
+                    Địa chỉ :
+                    <span style="color: rgb(0, 0, 0); font-weight: bold;">
+                      <%= bill.user_id.address %>
+                    </span>
+                    <br>
+                    Role :
+                    <% if (bill.user_id.role=='Admin' ) { %>
+                      <span style="color: red; font-weight: bold;">
+                        <%= bill.user_id.role %>
+                      </span>
+                      <% } else if (bill.user_id.role=='User' ) { %>
+                        <span style="color: green; font-weight: bold;">
+                          <%= bill.user_id.role %>
+                        </span>
+                        <% } else if (bill.user_id.role=='Staff' ) { %>
+                          <span style="color: blue; font-weight: bold;">
+                            <%= bill.user_id.role %>
+                          </span>
+                          <% } %>
+                            <br>
+                            ID:
+                            <span style="color: purple; font-weight: bold;">
+                              <%= bill.user_id._id %>
+                            </span>
+
+
+
+                  </td>
+                  <td>
+                    <% if (bill.status===1) { %>
+                      <i class="fas fa-exclamation-triangle"></i>
+                      <span style="color: red; font-weight: bold;">Chưa thanh toán</span>
+                      <% } else if (bill.status===2) { %>
+                        <i class="fa fa-check-square" aria-hidden="true"></i>
+                        <span style="color: green; font-weight: bold;">Đã thanh toán</span>
+                        <% } %>
+
+                          <div class="container">
+                            <form action="" method="post" enctype="multipart/form-data">
+                              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <input type="hidden" name="billId" value="<%= bill._id %>">
+                                <label class="btn btn-toggle paid <%= bill.status === 2 ? 'active' : '' %>">
+                                  <input type="radio" name="status" id="paid" value="2" <%=bill.status===2 ? 'checked'
+                                    : '' %>>
+                                  Đã thanh toán
+                                </label>
+                                <label class="btn btn-toggle unpaid <%= bill.status === 1 ? 'active' : '' %>">
+                                  <input type="radio" name="status" id="unpaid" value="1" <%=bill.status===1 ? 'checked'
+                                    : '' %>>
+                                  Chưa thanh toán
+                                </label>
+                              </div>
+                              <button class="btn btn-secondary mt-0 " type="submit">Update</button>
+                            </form>
+                          </div>
+                  </td>
+
+
+                  <td>
+                    <span style="color: rgb(0, 0, 0); font-weight: bold;">
+                      <%= bill.total_amount.toLocaleString('vi-VN') %> VNĐ
+                    </span>
+                  </td>
+
+                  <td>
+                    <a href="/bill/detail/<%= bill._id %>" class="btn btn-success btn-md" style="padding: 10px 20px; ">
+                      Details</a>
+                  </td>
+                </tr>
+
+                <% }); %>
+            </tbody>
+            <nav aria-label="Page navigation">
+              <ul class="pagination">
+                <% if (currentPage> 1) { %>
+                  <li class="page-item">
+                    <a class="page-link"
+                      href="?from-date=<%= query['from-date'] %>&to-date=<%= query['to-date'] %>&id_=<%= query.id_ %>&user-id=<%= query['user-id'] %>&min-price=<%= query['min-price'] %>&max-price=<%= query['max-price'] %>&status=<%= query.status %>&payments=<%= query.payments %>&page=1"
+                      aria-label="Previous">
+                      <span aria-hidden="true">««</span>
+                    </a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link"
+                      href="?from-date=<%= query['from-date'] %>&to-date=<%= query['to-date'] %>&id_=<%= query.id_ %>&user-id=<%= query['user-id'] %>&min-price=<%= query['min-price'] %>&max-price=<%= query['max-price'] %>&status=<%= query.status %>&payments=<%= query.payments %>&page=<%= currentPage - 1 %>">
+                      <span aria-hidden="true">«</span>
+                    </a>
+                  </li>
+                  <% } %>
+                    <% for (let i=1; i <=totalPages; i++) { %>
+                      <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                        <a class="page-link"
+                          href="?from-date=<%= query['from-date'] %>&to-date=<%= query['to-date'] %>&id_=<%= query.id_ %>&user-id=<%= query['user-id'] %>&min-price=<%= query['min-price'] %>&max-price=<%= query['max-price'] %>&status=<%= query.status %>&payments=<%= query.payments %>&page=<%= i %>">
+                          <%= i %>
+                        </a>
+                      </li>
+                      <% } %>
+                        <% if (currentPage < totalPages) { %>
+                          <li class="page-item">
+                            <a class="page-link"
+                              href="?from-date=<%= query['from-date'] %>&to-date=<%= query['to-date'] %>&id_=<%= query.id_ %>&user-id=<%= query['user-id'] %>&min-price=<%= query['min-price'] %>&max-price=<%= query['max-price'] %>&status=<%= query.status %>&payments=<%= query.payments %>&page=<%= currentPage + 1 %>">
+                              <span aria-hidden="true">»</span>
+                            </a>
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link"
+                              href="?from-date=<%= query['from-date'] %>&to-date=<%= query['to-date'] %>&id_=<%= query.id_ %>&user-id=<%= query['user-id'] %>&min-price=<%= query['min-price'] %>&max-price=<%= query['max-price'] %>&status=<%= query.status %>&payments=<%= query.payments %>&page=<%= totalPages %>"
+                              aria-label="Next">
+                              <span aria-hidden="true">»»</span>
+                            </a>
+                          </li>
+                          <% } %>
+              </ul>
+            </nav>
+
+
+          </table>
+          <script>
+            $('button[type="reset"]').click(function () {
+              // Đặt lại giá trị của các trường input và select
+              $('input[type="text"], input[type="number"], input[type="date"], select').val('');
+            });
+          </script>
+
+
+
+          <%- include('../inc/bottom') %>

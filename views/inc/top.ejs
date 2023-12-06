@@ -6,13 +6,14 @@
     <title>
         <%= title ? title : '' %>
     </title>
-    <link rel="stylesheet"  href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="icon" type="image/jpg+png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvQQUWGc8Yh40A63eZSMRTCqU9MDK5GLti1xuhfYakUg&s" />
+    <link rel="icon" type="image/jpg+png"
+        href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvQQUWGc8Yh40A63eZSMRTCqU9MDK5GLti1xuhfYakUg&s" />
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <script src="/bootstrap/js/bootstrap.bundle.js"></script>
     <link rel="stylesheet" href="/bootstrap-icons-1.10.5/font/bootstrap-icons.css">
@@ -87,6 +88,19 @@
                     <span class="links_name">Kho hàng</span>
                 </a>
                 <span class="tooltip">Kho hàng</span>
+            </li>
+            <li>
+                <a href="/bill">
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-box-seam" viewBox="0 0 16 16">
+                            <path
+                                d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z" />
+                        </svg>
+                    </i>
+                    <span class="links_name">Hóa đơn</span>
+                </a>
+                <span class="tooltip">Hóa đơn</span>
             </li>
 
             <li>
@@ -169,35 +183,37 @@
         </ul>
     </div>
 
-    
+
 
     <div class="home-section">
         <div style="margin-top: 100px;"></div>
 
 
         <nav class="navbar fixed-top justify-content-between py-2"
-        style="background-color: rgb(188, 198, 200); z-index: 1;">
+            style="background-color: rgb(188, 198, 200); z-index: 1;">
 
-        <div class="ms-2">
-            <div>
-                <p class="fw-bold fs-2 text-primary ">   <%= heading ? heading : heading %></p>
-            </div>
-        </div>
-        <div class="d-flex">
-            <div class="d-flex mx-2 align-items-center">
-
-                <div id="clock" class="fw-bold  fs-6 me-5 d-none d-sm-block d-md-block d-lg-block d-xxl-block">
+            <div class="ms-2">
+                <div>
+                    <p class="fw-bold fs-2 text-primary ">
+                        <%= heading ? heading : heading %>
+                    </p>
                 </div>
-                <div class="dropstart" id="personal">
-                    <button type="button"
-                        style="border-width: 0px; border-radius: 50%; width: 45px; height: 45px; padding: 0;"
-                        data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                        <img src="https://fptshop.com.vn/Uploads/images/image001(1265).jpg" alt=""
-                            width="45px" height="45px" style="object-fit: cover;
+            </div>
+            <div class="d-flex">
+                <div class="d-flex mx-2 align-items-center">
+
+                    <div id="clock" class="fw-bold  fs-6 me-5 d-none d-sm-block d-md-block d-lg-block d-xxl-block">
+                    </div>
+                    <div class="dropstart" id="personal">
+                        <button type="button"
+                            style="border-width: 0px; border-radius: 50%; width: 45px; height: 45px; padding: 0;"
+                            data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                            <img src="https://fptshop.com.vn/Uploads/images/image001(1265).jpg" alt="" width="45px"
+                                height="45px" style="object-fit: cover;
                         border-radius: 50%;">
-                    </button>
-                   
+                        </button>
+
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
