@@ -6,10 +6,11 @@ const productSchema = new db.mongoose.Schema(
         description: { type: String, required: true },
         image: { type: [String], required: false },
         category_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'categoryModel' },
-        createdAt: { type: String, required: false },
-        updatedAt: { type: String, required: false },
         price: { type: Number, required: true },
-        rating: { type: Number, require: false }
+        rating: { type: Number, require: false },
+        createdAt: { type: Date, required: false },
+        updatedAt: { type: Date, required: false },
+
     },
     { collection: 'product' }
 );

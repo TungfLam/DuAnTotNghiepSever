@@ -12,15 +12,12 @@ const getListAll_deltail = async (req, res) => {
             .populate('product_id', "name price description")
             .populate('size_id', "name")
             .populate('color_id', "name");
-        console.log('ádasdasd', productListSize);
         res.status(200).json({ productListSize: productListSize });
     } catch (error) {
         res.status(500).json({ message: 'Lỗi truy vấn CSDL: ' + error.message });
     }
 }
 const add_product_size_color = async (req, res) => {
-
-    console.log('ádkjaskjfjaksfkj');
     if (req.method === 'POST') {
         try {
             const { name, categories, size, color, quantity } = req.body;
@@ -35,7 +32,6 @@ const add_product_size_color = async (req, res) => {
             }
             if (!checkcategories) {
                 return res.status(400).json({ message: 'Không tìm thấy danh mục tương ứng.' });
-
             }
             if (!checksizes) {
                 return res.status(400).json({ message: 'Không tìm thấy  kích thước  tương ứng.' });

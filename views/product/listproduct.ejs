@@ -113,7 +113,8 @@
         <div class="row p-3"
             style=" background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); margin: 20px; ">
             <div class="d-flex justify-content-end me-5 m-2 mb-6">
-                <a href="/product/export" type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
+                <a href="/product/export" type="button" class="btn btn-success me-3"><i
+                        class="fa-regular fa-file-excel"></i>
                     Export</a>
 
                 <button type="button" class="btn btn-primary btn-sm " data-bs-toggle="modal"
@@ -125,6 +126,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Thời gian</th>
                         <th>Tên sản phẩm</th>
                         <th>Thể loại</th>
                         <th>Giá
@@ -140,7 +142,7 @@
 
                     </tr>
                 </thead>
-               
+
                 <% if (listProducts.length===0) { %>
                     <tr>
                         <td colspan="7" style="text-align: center;justify-content: center;">
@@ -150,49 +152,79 @@
                     <% } else { %>
                         <% for (let i=0; i < listProducts.length; i++) { %>
                             <% const row=listProducts[i]; %>
-                                <tr style="height: 100px;">
-                                    <td  style="width: 60px;">
+                                <tr >
+                                    <td  style="width: 70px;">
                                         <%= startCount + i %>
-
                                     </td>
-                                    <td  style="width: 300px;">
-                                        <%= row.name %>
+                                    <td style="width: 170px;">
+                                        <div>
+                                            <i class="fa-regular fa-calendar"></i>
+                                            <%= new Intl.DateTimeFormat('vi-VN', { hour: 'numeric' , minute: 'numeric' ,
+                                                }).format(new Date(row.createdAt)) %>
+                                                -
+                                                <%= new Intl.DateTimeFormat('vi-VN', { day: 'numeric' , month: 'numeric'
+                                                    , year: 'numeric' , }).format(new Date(row.createdAt)) %>
+
+                                        </div>
+                                        <div>
+                                        
+                                            <% if (row && row.updatedAt) { %>
+                                                <i class="fa-solid fa-pen"></i>
+                                              <%= new Intl.DateTimeFormat('vi-VN', { hour: 'numeric', minute: 'numeric' })
+                                                .format(new Date(row.updatedAt)) %>
+                                              -
+                                              <%= new Intl.DateTimeFormat('vi-VN', { day: 'numeric', month: 'numeric', year: 'numeric' })
+                                                .format(new Date(row.updatedAt)) %>
+                                            <% } else { %>
+                                             
+                                            <% } %>
+                                          </div>
+                                          
                                     </td>
 
-                                    <td  style="width: 150px;">
+
+                                    <td style="width: 300px;">
+                                   
+                                        <% const name = row.name && row.name.length > 50 ? `${row.name.slice(0, 50)}...` : row.name; %>
+                                        <%= name %>
+                                    </td>
+
+                                    <td style="width: 150px;">
                                         <%= row?.category_id?.name ? row.category_id.name : 'null' %>
+                                         
                                     </td>
-                                    <td class=""  style="width: 90px;">
+                                    <td class="" style="width: 170px;">
                                         <i class="fa-regular fa-money-bill-1"></i>
                                         <%= (row?.price ).toLocaleString('vi-VN', { style: 'currency' , currency: 'VND'
                                             }) %>
                                     </td>
 
                                     <td class="" style="width: 100px;">
-                                        <img src="data:image/jpeg;base64,<%=row.image[0]%>" alt="Hình ảnh" width="100px"
-                                            height="100px">
+                                        <img src="<%=row.image[0]%>" alt="Hình ảnh" width="100px" height="100px">
                                     </td>
-                                    <td  style="width: 300px;">
-                                        <%= row.description %>
+                                    <td style="width: 300px;">
+                                        <% const description = row.description && row.description.length > 50 ? `${row.description.slice(0, 80)}...` : row.description; %>
+                                        <%= description %>
                                     </td>
 
                                     <td style="width: 190px;">
-                                        <a href="/product/detail/<%= row._id %>" type="button" class="btn btn-warning m3-1">
-                                            <i class="fa-solid fa-eye"></i></a >
-                                       
+                                        <a href="/product/detail/<%= row._id %>" type="button"
+                                            class="btn btn-warning m3-1">
+                                            <i class="fa-solid fa-eye"></i></a>
+
                                         <!-- Button trigger modal -->
                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                             data-bs-target="#staticBackdropp<%=  row._id  %>">
                                             <i class="fa-solid fa-trash-can"></i> Xóa
                                         </button>
                                         <!-- Modal -->
-                                        <div class="modal fade" id="staticBackdropp<%=  row._id  %>" data-bs-backdrop="static"
-                                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                            aria-hidden="true">
+                                        <div class="modal fade" id="staticBackdropp<%=  row._id  %>"
+                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                            aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="staticBackdropLabel">Thông báo 
+                                                        <h5 class="modal-title" id="staticBackdropLabel">Thông báo
                                                         </h5>
 
                                                     </div>
@@ -222,7 +254,9 @@
         </div>
         <!-- Modal -->
         <nav class="m-4" aria-label="Page navigation example">
-        <p><%= displayMessage %></p>
+            <p>
+                <%= displayMessage %>
+            </p>
 
             <ul class="pagination">
                 <% if (page==1 || countProducts===0) { %>

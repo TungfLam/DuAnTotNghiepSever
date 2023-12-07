@@ -46,10 +46,13 @@ const create_payment_url = async (req, res, next) => {
     let amount = req.body.amount;
     let idCart = req.params.idCart;
     try {
-         await mdCart.cartModel.findById(idCart);
+       const fincart =  await mdCart.cartModel.findById(idCart);
+       if (!fincart) {
+        return res.status(404).json({ message: 'Không tìm thấy sản phẩm trong giỏ hàng' });
+    }
         
     } catch (error) {
-        return res.status(404).json({ message: 'Không tìm thấy idCart', error});
+        return res.status(404).json({ error});
     }
     globalIdCart = idCart;
     globalAmount = amount
@@ -117,25 +120,30 @@ const vnpay_return = async (req, res, next) => {
 
     if (secureHash === signed) {
         try {
-            const dat_hang_thanh_cong = "Đặt hàng thành công";
+            const dat_hang_thanh_cong = 2;
             const da_dat_hang = 'Đã đặt hàng'
             const idCart = globalIdCart;
-            console.log('idCart', idCart);
+        
             const amount = globalAmount;
             // // thay đổi trạng thái cart 
             const finCart = await mdCart.cartModel.findById(idCart)
-            // console.log('finCart', okokokokok);
             finCart.status = da_dat_hang
             await finCart.save();
-
             // // trừ số luong sản phẩm
             const finProduct = await mdProduct.product_size_color_Model.findById(finCart.product_id)
-            finProduct.quantity -= finCart.quantity;
-            await finProduct.save();
+            if (finProduct.quantity < finCart.quantity) {
+              
+                res.status(200).json({message: 'Không thể thực hiện , Số lượng mua vượt quá số lượng sản phẩm'});
+            }else{
+                console.log(`Số lượng sản phẩm ${finProduct.quantity} -- số lượng sản phẩm giỏ hàng ${finCart.quantity}`);
+                finProduct.quantity -= finCart.quantity;
+                await finProduct.save();
+            }
+           
             // tạo mới bill 
             const newBillData = {
                 user_id: finCart.user_id,
-                cart_id: finCart.product_id,
+                cart_id: finCart._id,
                 payments: 1,
                 total_amount: amount,
                 status: dat_hang_thanh_cong,
@@ -144,7 +152,7 @@ const vnpay_return = async (req, res, next) => {
             const newBill = new mdBill.billModel(newBillData);
             newBill.save()
         } catch (error) {
-            console.log(error);
+            return res.status(500).json({ message: 'Đã xảy ra lỗi khi xử lý đơn hàng' });
         }
         res.render('order/success', {
             code: vnp_Params['vnp_ResponseCode']
