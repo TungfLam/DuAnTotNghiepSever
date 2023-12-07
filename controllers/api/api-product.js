@@ -14,7 +14,7 @@ exports.getProducts = async (req, res) => {
     const products = await md.productModel.find({ category_id: category })
         .populate('category_id', "name")
         .skip(skip - 1 )
-        .limit(6)
+        .limit(10)
         .sort({ createdAt: -1 });
     res.json(products);
 };
@@ -25,7 +25,6 @@ exports.createProduct = async (req, res) => {
     await product.save();
     res.json(product);
 };
-
 exports.updateProduct = async (req, res) => {
     const { name, description, price, createdAt, updatedAt } = req.body;
     const image = req.files.map(file => file.buffer.toString('base64'));

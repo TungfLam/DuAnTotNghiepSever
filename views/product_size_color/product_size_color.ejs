@@ -12,6 +12,7 @@
                                 d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
                         </svg>
                     </button>
+
                 </div>
                 <div class="d-flex" style="width: 20%;">
                     <select class="form-select" id="filterGroup2" onchange="filterNameProduct()" style="width: 100%;">
@@ -23,6 +24,7 @@
                             <% }); %>
                     </select>
                 </div>
+
             </form>
 
 
@@ -37,6 +39,7 @@
 
 
                 }
+                
             </script>
         </div>
 
@@ -50,8 +53,8 @@
             <div class="row p-4"
                 style="width: 100%; background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); display: flex;">
                 <div class="d-flex justify-content-end me-3 mb-2">
-                    <button type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
-                        Export</button>
+                    <a href="//" type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
+                        Export</a>
                     <a class="btn btn-primary" href="/product_size_color/add_product_size_color"><i
                             class="fa-solid fa-plus" style="color: #ffffff;"></i> Thêm sản phẩm</a>
                 </div>
@@ -96,9 +99,14 @@
                                                 </td>
 
                                                 <td class="">
-                                                    <i class="fa-regular fa-money-bill-1"></i>
-                                                    <%= (row.product_id.price ).toLocaleString('vi-VN', {
-                                                        style: 'currency' , currency: 'VND' }) %>
+                                                    <% if (row.product_id && row.product_id.price !== undefined && row.product_id.price !== null) { %>
+                                                        <i class="fa-regular fa-money-bill-1"></i>
+                                                        <%= (row.product_id.price ).toLocaleString('vi-VN', {
+                                                            style: 'currency' , currency: 'VND' }) %>
+                                                    <% } else { %>
+                                                        <!-- Hiển thị gì đó khi không có giá -->
+                                                        Giá không khả dụng
+                                                    <% } %>
                                                 </td>
                                                 <td>
                                                     <%= row.size_id ? row.size_id.name : 'NULL' %>

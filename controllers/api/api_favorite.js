@@ -18,7 +18,6 @@ const addFavorite = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({ message: 'ERROR  : ' + error.message });
-
     }
 
 }
@@ -27,7 +26,7 @@ const getListFavorite = async (req, res) => {
     try {
         const idUser = req.params.idUser;
         const listFavorite = await mdFavorite.favorite_Model.findOne({ user_id: idUser })
-            .populate('product_id', "name price image").populate('user_id', "name").sort({ createdAt: -1 })
+            .populate('product_id').populate('user_id', "name").sort({ createdAt: -1 })
         res.status(200).json({ message: "Success", listFavorite: listFavorite });
     } catch (error) {
         res.status(500).json({ message: 'ERROR : ' + error.message });

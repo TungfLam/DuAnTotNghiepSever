@@ -8,7 +8,6 @@ exports.getCommentByProduct = async (req , res , next) => {
     res.status(200).json(listComment);
 }
 
-
 exports.newComment = async (req , res , next) => {
     let message = "";
 

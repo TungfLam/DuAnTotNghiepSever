@@ -31,7 +31,22 @@ exports.listBillByUserId = async (req, res, next) => {
     let list = [];
 
     try {
-        list = await md.billModel.find({ user_id: userId });
+        list = await md.billModel.find({ user_id: userId })
+        .populate("user_id")
+        
+        .populate({
+            path: 'cart_id',
+            populate: {
+                path: 'product_id',
+                model: 'product_size_color_Model',
+                populate: [
+                    { path: 'product_id' },
+                    { path: 'size_id' },
+                    { path: 'color_id' }
+                ]
+            },
+            
+        })
         if (list.length > 0)
             objReturn.data = list;
         else {
@@ -95,8 +110,6 @@ exports.addBill = async (req, res, next) => {
         if (validation.error) {
             return res.status(400).json({ message: 'Validation Error', error: validation.error.details });
         }
-
-
         const bill = req.body;
         bill.status = 1;
         bill.date = DateTime.now().setZone('Asia/Ho_Chi_Minh');
@@ -141,11 +154,8 @@ exports.deleteBill = async (req, res, next) => {
         if (!deletedBill) {
             return res.status(404).json({ message: 'Bill not found' });
         }
-
-        console.log(deletedBill);
-        res.json({ message: 'Bill deleted', bill: deletedBill });
+        res.json({ message: 'Bill deleted' });
     } catch (err) {
-        console.error(err.message);
         return res.status(500).json({ message: 'Server Error', error: err.toString() });
     }
 }

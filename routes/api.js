@@ -40,7 +40,7 @@ router.get('/products/sortUp', api_product.sortUp);
 router.get('/products/sortDown', api_product.sortDown);
 router.get('/products/search', api_product.searchProduct);
 
-//comment
+//comment 
 router.get('/comment/:ProductId', api_comment.getCommentByProduct);
 router.post('/comment', api_comment.newComment);
 router.put('/comment/:CommentId', api_comment.updateComment);
