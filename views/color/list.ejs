@@ -1,6 +1,15 @@
 <%- include('../inc/top') %>
     <div class="container-fluid">
-     
+        <% if (message === 'Thêm thành công' || message === 'Cập nhật thành công' || message === 'Xóa thành công') { %>
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thông báo!',
+                    text: '<%= message %>',
+                  
+                });
+            </script>
+        <% } %>
         <!-- Modal -->
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -70,19 +79,10 @@
                                     <td style="width: 300px;">
                                         <%= row.name %>
                                     </td>
-                                    <style>
-                                        .codecolor {
-                                            width: 30px;
-                                            height: 30px;
-                                            border-radius: 100px;
-                                            background-color: black;
-                                            margin-right: 10px;
-                                            display: inline-block;
-                                        }
-                                    </style>
+                                   
                                     <td style="width: 300px;">
                                         <div style=" display: flex; align-items: center;">
-                                            <div class="codecolor"></div>
+                                            <div style="width: 35px; height: 35px;margin-right: 20px ; border-radius: 50%; background-color: <%=row.colorcode %>; "></div>
                                             <div>
                                                      <%=row.colorcode %>
                                             </div>

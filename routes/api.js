@@ -29,6 +29,8 @@ router.delete('/users/:idu', api_users.deleteUser);
 // api product
 
 router.get('/products/:category/:skip', api_product.getProducts);
+router.get('/products/:skip', api_product.getAllProduct);
+
 router.post('/products', upload.array('image'), api_product.createProduct);
 router.put('/products/:id', upload.array('image'), api_product.updateProduct);
 router.delete('/products/:id', api_product.deleteProduct);

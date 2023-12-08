@@ -4,22 +4,22 @@ let title = 'Thể loại'
 let heading = 'Danh sách thể loại'
 let message = ''
 const getAll = async (req, res) => {
+  const aler = req.query.aler;
   const listCate = await catemd.categoryModel.find()
-console.log(listCate);
   res.render('category/list', {
     title: title,
     heading: heading,
-    listCate: listCate
+    listCate: listCate,
+    message:aler
   });
 }
 const addCate = async (req, res) => {
   const nameCate = req.body.name;
-  console.log('nameCate', nameCate);
 
   try {
     if (req.method === 'POST') {
       await catemd.categoryModel.create({ name: nameCate });
-      res.redirect('/category');
+      res.redirect('/category?aler=Thêm thành công');
     }
   } catch (error) {
     res.status(500).json({ error: error, message: 'Có lỗi xảy ra' });
@@ -31,14 +31,7 @@ const addCate = async (req, res) => {
     console.log(idCate)
     try {
       await catemd.categoryModel.findByIdAndDelete(idCate);
-      res.redirect('/category');
-      // res.render('category/list', {
-      //   title: title,
-      //   heading: heading,
-      //   listCate: listCate,
-      //   message:'Xóa thành công'
-      // });
-
+      res.redirect('/category?aler=Xóa thành công');
     } catch (error) {
       res.status(500).json({ error: error });
     }
@@ -49,7 +42,7 @@ const updateCate = async (req, res) => {
     const newName = req.body.nameCate;
     try {
         await catemd.categoryModel.findByIdAndUpdate(idCate, { name: newName });
-        res.redirect('/category');
+        res.redirect('/category?aler=Cập nhật thành công');
     } catch (error) {
         res.status(500).json({ error: error, message: 'Có lỗi xảy ra' });
     }
