@@ -115,12 +115,12 @@ exports.listCart = async (req, res) => {
                 path: 'product_id',
                 populate: {
                     path: 'product_id size_id color_id',
-                    select: 'name image price   '
+                    select: 'name image price'
                 }
             })
             .populate('user_id')
             .sort({ createdAt: -1 })
-
+        console.log("================================", listCart);
         for (const item of listCart) {
             if (item.product_id && item.product_id.quantity < item.quantity) {
                 if (item.status === 'successfully') {
