@@ -25,6 +25,8 @@ exports.createProduct = async (req, res) => {
     await product.save();
     res.json(product);
 };
+
+
 exports.updateProduct = async (req, res) => {
     const { name, description, price, createdAt, updatedAt } = req.body;
     const image = req.files.map(file => file.buffer.toString('base64'));

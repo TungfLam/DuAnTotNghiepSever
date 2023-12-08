@@ -121,28 +121,27 @@ exports.listCart = async (req, res) => {
             .populate('user_id')
             .sort({ createdAt: -1 })
 
-        listCart.forEach(async item => {
-            console.log('Số lượng của sản phẩm ', item.product_id.quantity);
-            if (item.product_id.quantity < item.quantity) {
-
+        for (const item of listCart) {
+            if (item.product_id && item.product_id.quantity < item.quantity) {
                 if (item.status === 'successfully') {
                     item.status = 'Sản phẩm của bạn đã vượt quá số lượng';
                     await item.save();
-                } 
-            }else{
+                }
+            } else {
                 if (item.status === 'Sản phẩm của bạn đã vượt quá số lượng') {
                     item.status = 'successfully';
                     await item.save();
                 }
             }
-        });
+        }
         if (!listCart || listCart.length === 0) {
             return res.json({ message: 'Giỏ hàng của bạn chưa có sản phẩm nào, thêm sản phẩm vào giỏ hàng ngay!', listCart: [] });
         }
 
         res.json({ message: 'Get the list successfully', listCart: listCart });
     } catch (error) {
-
+        console.error('Error in listCart:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
 
