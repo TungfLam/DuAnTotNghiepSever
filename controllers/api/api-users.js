@@ -17,6 +17,8 @@ exports.listUser = async (req, res, next) => {
             objReturn.msg = 'Không có dữ liệu phù hợp';
 
         }
+
+        
     } catch (error) {
         objReturn.status = 0;
         objReturn.msg = error.message;
