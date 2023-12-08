@@ -5,6 +5,26 @@ user.edit.ejs
 //123
 
 status bill
+1 : Đã đặt hàng (thông báo cho người dùng đã đặt hàng thàng công);
+2 : Đặt hàng thất bại (lỗi do một vấn đề nào đó không biết);
+3 : Đã thanh toán
+4 : Chưa thanh toán (trường hợp này cho khi thanh toán online lỗi);
+5 : Đang vận chuyển
+6 : Vận chuyển thất bại
+7 : Hoàn thành
+// có thể thêm
+8 : người mua không nhận hàng
+9 : ....
+// có thể sử dụng thẻ option , 
+nếu được thì làm thêm phân màu  : 
+    7 xanh lá 
+    4 , 6 , 2  màu đỏ
+    1 , 3 ,5 màu xanh dương
+
+
+
+
+payments bill
 1 = COD
 2 = VNP
 
