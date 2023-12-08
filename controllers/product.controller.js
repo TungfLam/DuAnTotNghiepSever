@@ -13,16 +13,19 @@ const { DateTime } = require('luxon');
 let heading = 'Danh sách sản phẩm'
 let title = 'Sản phẩm'
 let ExcelJS = require('exceljs')
-let sharp = require('sharp');
-const { url } = require('inspector');
+let message ;
+
 
 const getlistproduct = async (req, res) => {
+
     const itemsPerPage = 10;
+    const aler = req.query.aler;
+    console.log("aler",aler);
     const page = parseInt(req.params.page) || 1;
     const startCount = (page - 1) * itemsPerPage + 1;
     const skip = (page - 1) * itemsPerPage;
     const limit = itemsPerPage;
-    const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({createdAt:-1})
+    const listProducts = await model.productModel.find().skip(skip).limit(limit).sort({ createdAt: -1 })
         .populate('category_id', "name");
     const listCategory = await modelCategories.categoryModel.find()
     const countProducts = await model.productModel.count(); // Tính tổng số sản phẩm
@@ -39,8 +42,38 @@ const getlistproduct = async (req, res) => {
         heading: heading,
         displayMessage: displayMessage,
         selectedCategoryId: 'all',
-
+        message:aler
     });
+};
+
+const addproduct = async (req, res) => {
+
+    const { name, description, price, category } = req.body;
+    const image = []
+    const fileData = req.files
+    fileData.forEach(item => {
+        image.push(item.path)
+    });
+    if (req.method === 'POST') {
+        let objProduct = new model.productModel({
+            name: name,
+            description: description,
+            category_id: category,
+            createdAt: Date.now(),
+            image: image,
+            price: price,
+            heading: 'Thêm sản phẩm',
+            title: title,
+        });
+
+        try {
+            await objProduct.save();
+
+            res.redirect(`/product/listproduct/1?aler=Thêm thành công`);
+        } catch (error) {
+            res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
+        }
+    }
 };
 const exportExcel = async (req, res) => {
     try {
@@ -86,15 +119,20 @@ const exportExcel = async (req, res) => {
 const detailProduct = async (req, res) => {
     try {
         const idProduct = req.params.idProduct;
+        const query = req.query;
+
+        let currenImage = Number(query.left) || Number(query.right) || 0;
+
 
         const ListProduct = await model.productModel.findById(idProduct)
+        let lengthImage = ListProduct.image.length
+        console.log("currenImage", currenImage);
+        console.log("lengthImage", lengthImage);
         const ListColor = await modelColor.colorModel.find();
         const ListSize = await modelSize.sizeModel.find();
         const details = await model_product_size_color.product_size_color_Model.find({ product_id: idProduct })
-            .populate('product_id')
             .populate('size_id', 'name')
             .populate('color_id', 'name');
-        console.log("details", details);
 
         res.render('product/detail', {
             title: title,
@@ -102,8 +140,10 @@ const detailProduct = async (req, res) => {
             ListProduct: ListProduct,
             ListColor: ListColor,
             ListSize: ListSize,
+            currenImage: currenImage,
             heading: 'Chi tiết sản phẩm',
-            displayMessage: ''
+            displayMessage: '',
+            lengthImage: lengthImage - 1
         });
     } catch (error) {
         // Xử lý lỗi và trả về một trang lỗi hoặc thông báo lỗi cho người dùng
@@ -116,34 +156,6 @@ const addDetail = async (req, res) => {
     // console.log(' req.body', req.body)
 }
 
-const addproduct = async (req, res) => {
-    let message = '';
-    const { name, description, price, category } = req.body;
-    const image = []
-    const fileData = req.files
-    fileData.forEach(item => {
-        image.push(item.path)
-    });
-    if (req.method === 'POST') {
-        let objProduct = new model.productModel({
-            name: name,
-            description: description,
-            category_id: category,
-            createdAt: Date.now(),
-            image: image,
-            price: price,
-            heading: heading,
-            title: title,
-        });
-
-        try {
-            await objProduct.save();
-            res.redirect(`/product/listproduct/1}`);
-        } catch (error) {
-            res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
-        }
-    }
-};
 function getPublicIdFromUrl(url) {
     const startIndex = url.lastIndexOf('/') + 1;
     const endIndex = url.lastIndexOf('.');
@@ -185,64 +197,62 @@ const updateproduct = async (req, res) => {
     let title = 'Update Product'
 
     try {
-        var itemedit = await model.productModel.findById(id);
-        var listCategory = await modelCategories.categoryModel.find()
-        
-    } catch (error) {
-    }
+        let itemedit = await model.productModel.findById(id);
+        let listCategory = await modelCategories.categoryModel.find()
 
-
-    if (req.method == 'POST') {
-        try {
-
-            // xóa ảnh cũ khỏi cloud 
-                itemedit.image.map(url=>{
+        if (req.method === 'POST') {
+            try {
+                // xóa ảnh cũ khỏi cloud 
+                itemedit.image.map(url => {
                     const publicId = getPublicIdFromUrl(url)
-                    cloudinary.uploader.destroy(publicId),(erro,result)=>{
-                        if (erro) {
+                    cloudinary.uploader.destroy(publicId), (error, result) => {
+                        if (error) {
                             console.log("Update Product xóa ảnh khỏi cloud không thành công !!");
-                        }else{
+                        } else {
                             console.log("Update Product xóa ảnh khỏi cloud  thành công !!");
-
+    
                         }
                     }
                 })
-            //// thêm ảnh vào cloud 
-            var image = [];
-            const fileData = req.files
-            fileData.forEach(item => {
-                image.push(item.path)
-            });
-
-        } catch (error) {
-
+                //// thêm ảnh vào cloud 
+                var image = [];
+                const fileData = req.files
+                fileData.forEach(item => {
+                    image.push(item.path)
+                });
+    
+                itemedit.name = req.body.name
+                itemedit.description = req.body.description
+                if (image.length !== 0) {
+                    itemedit.image = image;
+                    console.log('image', image);
+                }
+                itemedit.price = req.body.price
+                itemedit.updatedAt = DateTime.now()
+                itemedit.category_id = req.body.category
+    
+                await model.productModel.findByIdAndUpdate(id, itemedit);
+                res.redirect('/product/listproduct/1?aler=Cập nhật thành công sản phẩm');
+            } catch (error) {
+                res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
+            }
+        }else{
+            res.render('product/updateproduct',
+            {
+                title: title,
+                itemedit: itemedit,
+                heading: 'Cập nhật sán phẩm',
+                listCategory: listCategory
+            })
         }
-
-        itemedit.name = req.body.name
-        itemedit.description = req.body.description
-        if (image.length !== 0) {
-            itemedit.image = image;
-            console.log(image);
-        }
-        itemedit.price = req.body.price
-        itemedit.updatedAt = DateTime.now()
-        itemedit.category_id = req.body.category
-        try {
-            await model.productModel.findByIdAndUpdate(id, itemedit);
-            res.redirect('/product/listproduct/1');
-        } catch (error) {
-            res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
-        }
+        
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
     }
 
-    res.render('product/updateproduct',
-        {
-            title: title,
-            itemedit: itemedit,
-            heading: heading,
-            listCategory:listCategory
-        })
+
 }
+
 
 
 const searchProduct = async (req, res) => {
@@ -254,7 +264,7 @@ const searchProduct = async (req, res) => {
 
     const listProducts = await model.productModel.find({
         name: { $regex: new RegExp(searchQuery, 'i') },
-    });
+    }).populate('category_id');
     const listCategory = await modelCategories.categoryModel.find()
     res.render('product/listproduct', {
         title: title,
@@ -294,7 +304,8 @@ const sortUp = async (req, res) => {
             listCategory: listCategories,
             heading: heading,
             displayMessage: '',
-            selectedCategoryId: 'all'
+            selectedCategoryId: 'all',
+            message: 'message'
         })
 
     } catch (error) {
@@ -327,7 +338,8 @@ const sortDown = async (req, res) => {
             listCategory: listCategories,
             heading: heading,
             displayMessage: '',
-            selectedCategoryId: 'all'
+            selectedCategoryId: 'all',
+            message: 'message'
         })
     } catch (error) {
         console.log(error);

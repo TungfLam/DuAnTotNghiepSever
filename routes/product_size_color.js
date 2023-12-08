@@ -12,11 +12,11 @@ router.post('/update_product_size_color/:id_product_color_size',product_size_col
 router.get('/sortUp',product_size_color_CTL.sortUp)
 router.get('/sortDown',product_size_color_CTL.sortDown)
 router.get('/delete_product_color_size/:id_product_color_size',product_size_color_CTL.delete_product_color_size)
-router.get('/delete_product_color_size/:id_product_color_size',product_size_color_CTL.delete_product_color_size)
+router.post('/updateQuantity',product_size_color_CTL.updateQuantity)
 
 router.get('/filterNameProduct',product_size_color_CTL.filterNameProduct)
 router.get('/search',product_size_color_CTL.search)
-
+router.get('/export',product_size_color_CTL.exportExcel)
 
 
 
