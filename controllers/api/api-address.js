@@ -19,6 +19,8 @@ exports.listAddress = async (req, res, next) => {
         objReturn.msg = error.message;
     }
 
+    
+
     res.json(objReturn);
 }
 // validate address

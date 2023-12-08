@@ -22,6 +22,9 @@ const addFavorite = async (req, res) => {
 
 }
 
+
+
+
 const getListFavorite = async (req, res) => {
     try {
         const idUser = req.params.idUser;

@@ -6,8 +6,8 @@ const product_size_color_SChema = new db.mongoose.Schema(
         size_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'sizeModel'},
         color_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'colorModel'},
         quantity:{type:Number,require:true},
-        createdAt: { type: Date, default: Date.now },
-        updatedAt: { type: Date, default: Date.now },
+        createdAt: { type: Date, required: false },
+        updatedAt: { type: Date, required: false },
     },
     {
         // dinh nghia ten bang du lieu 

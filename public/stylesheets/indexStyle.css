@@ -37,7 +37,7 @@
     margin-right: 13px;
     margin-bottom: 13px;
     border-radius: 10px;
-    max-width: 500px;   
+    max-width: 500px;
     max-height: 500px;
 }
 
@@ -68,4 +68,12 @@ footer {
 
 .bg-thead {
     background-color: #1f68e560;
+}
+
+.bgform {
+    background-color: white;
+    border-radius: 13px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
+    width: 98%;
+    padding: 40px;
 }

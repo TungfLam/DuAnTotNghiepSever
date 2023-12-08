@@ -17,6 +17,9 @@ const getListAll_deltail = async (req, res) => {
         res.status(500).json({ message: 'Lỗi truy vấn CSDL: ' + error.message });
     }
 }
+
+
+
 const add_product_size_color = async (req, res) => {
     if (req.method === 'POST') {
         try {

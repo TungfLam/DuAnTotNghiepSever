@@ -52,7 +52,17 @@ function personal() {
 function backPage(){
   history.back();
 }
+const moment = require('moment-timezone');
 
 
+const moment = require('moment-timezone');
 
+// Hàm chuyển định dạng ngày giờ
+function formatDateTime(dateTimeString, timeZone = 'Asia/Ho_Chi_Minh') {
+  return moment(dateTimeString).tz(timeZone).format('HH:mm - DD/MM/YYYY');
+}
+
+// Sử dụng biến formattedCreatedAt và formattedUpdatedAt trong template của bạn
+const formattedCreatedAt = formatDateTime(row.createdAt);
+const formattedUpdatedAt = row.updatedAt ? formatDateTime(row.updatedAt) : '';
 

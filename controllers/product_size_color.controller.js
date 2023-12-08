@@ -3,6 +3,7 @@ const productModel = require('../models/product.model');
 const colorModel = require('../models/color.model')
 const sizeModel = require('../models/sizes.model')
 const categoriModel = require('../models/category.model')
+let ExcelJS = require('exceljs')
 let heading = 'Danh sách kho hàng'
 let title = 'Kho hàng'
 const getListAll = async (req, res) => {
@@ -16,7 +17,7 @@ const getListAll = async (req, res) => {
             .populate('size_id', "name")
             .populate('color_id', "name").skip((page - 1) * limit).limit(limit).sort({ createdAt: -1 })
 
-            console.log('productListSizeColor',productListSizeColor);
+        console.log('productListSizeColor', productListSizeColor);
         const listproduct = await productModel.productModel.find()
 
         const countProducts = await model_product_size_color.product_size_color_Model.count();
@@ -37,6 +38,7 @@ const getListAll = async (req, res) => {
         res.status(500).json({ message: 'Lỗi truy vấn CSDL: ' + error.message });
     }
 }
+var existingProductGlobal;
 const add_product_size_color = async (req, res) => {
     const product = await productModel.productModel.find();
     const category = await categoriModel.categoryModel.find();
@@ -53,46 +55,60 @@ const add_product_size_color = async (req, res) => {
                 message = "Vui lòng chọn đúng"
                 res.redirect('/product_size_color/add_product_size_color');
             }
-
             const existingProduct = await model_product_size_color.product_size_color_Model.findOne({
-                product_id: checkproduct._id,
-                size_id: checksizes._id,
-                color_id: checkcolors._id,
+                product_id: checkproduct ? checkproduct._id : null,
+                size_id: checksizes ? checksizes._id : null,
+                color_id: checkcolors ? checkcolors._id : null,
             });
+
             if (existingProduct) {
-                existingProduct.quantity += parseInt(quantity);
-                await existingProduct.save();
-                message = "Updated successfully";
+                message = "Cập nhật thành công";
+                existingProductGlobal = existingProduct
+
+                // existingProduct.quantity += parseInt(quantity);
+                // await existingProduct.save();
+
             } else {
                 const checkproduct = await productModel.productModel.findOne({ name: name });
                 const checksizes = await sizeModel.sizeModel.findOne({ name: size });
                 const checkcolors = await colorModel.colorModel.findOne({ name: color });
-
                 let obj_product_size_color = new model_product_size_color.product_size_color_Model({
                     product_id: checkproduct._id,
-
                     size_id: checksizes._id,
                     color_id: checkcolors._id,
                     quantity: quantity,
+                    createdAt: Date.now(),
                 });
                 await obj_product_size_color.save();
-                message = "Added successfully"
+                message = "Thêm thành công"
             }
         }
 
 
     } catch (error) {
-        message = "Please choose the correct format"
+        console.log(error);
+        // message = "Please choose the correct format"
     }
     res.render('product_size_color/add_product_size_color', {
         title: title,
-        heading: heading,
+        heading: "Thêm sản phẩm",
         product: product,
         category: category,
         size: size,
         color: color,
-        message: message
+        message: message,
+        // existingProduct:existingProduct
     });
+}
+
+const updateQuantity = async (req, res) => {
+    const updateQuantity = req.body.updateQuantity;
+    // console.log('existingProductGlobal', existingProductGlobal.id);
+    const finproduct = await model_product_size_color.product_size_color_Model.findById(existingProductGlobal.id);
+    finproduct.quantity = updateQuantity
+    await finproduct.save();
+    console.log('finproduct',finproduct);
+    res.redirect(`/product_size_color/getListAll/1?aler=Cập nhật thành công sản phẩm`)
 }
 
 const delete_product_color_size = async (req, res) => {
@@ -128,7 +144,7 @@ const sortUp = async (req, res) => {
             startCount: 1,
             listCategory: listCategory,
             selectedroductName: 'all',
-            message: 'Filter products successfully',
+            message: '',
 
         })
     } catch (error) {
@@ -162,7 +178,7 @@ const sortDown = async (req, res) => {
             startCount: 1,
             listCategory: listCategory,
             selectedroductName: 'all',
-            message: 'Filter products successfully'
+            message: '  '
         })
     } catch (error) {
         console.log(error)
@@ -195,18 +211,19 @@ const update_product_size_color = async (req, res) => {
         if (existingProduct) {
             existingProduct.quantity += parseInt(quantity);
             await existingProduct.save();
-            message = 'Product already exists. Quantity updated successfully.';
+            message = 'Sản phẩm đã tồn tại bạn có muốn tiếp tục';
         } else {
             product_size_color.size_id = size;
             product_size_color.color_id = color;
             product_size_color.quantity = quantity;
-            await product_size_color.save();
-            message = 'Updated successfully'
+            product_size_color.updatedAt = Date.now(),
+                await product_size_color.save();
+            message = 'Cập nhật thành công'
         }
     }
     res.render('product_size_color/update_product_size_color', {
         title: title,
-        heading: heading,
+        heading: 'Cập nhật sản phẩm',
         message: message,
         size: size,
         color: color,
@@ -227,10 +244,10 @@ const filterNameProduct = async (req, res) => {
     const listCategory = await categoriModel.categoryModel.find();
     const listproduct = await productModel.productModel.find()
     if (filterProductName.length === 0) {
-        message = 'Product not found'
+        message = '  '
 
     } else {
-        message = 'Filter products successfully'
+        message = ''
     }
     res.render('product_size_color/product_size_color', {
         title: title,
@@ -264,13 +281,7 @@ const search = async (req, res) => {
         const filteredList = productListSizeColor.filter((item) => {
             return item.product_id.name.toLowerCase().includes(searchQuery);
         });
-        if (filteredList.length > 0) {
-            message = 'Search for success'
-        } else {
-            message = 'Product does not exist'
-            // res.redirect('/product_size_color/getListAll/1');
 
-        }
         const listCate = await categoriModel.categoryModel.find()
         const listProduct = await productModel.productModel.find()
         res.render('product_size_color/product_size_color', {
@@ -293,7 +304,51 @@ const search = async (req, res) => {
     }
 };
 
+const exportExcel = async (req, res) => {
+    try {
+        const listProducts = await model_product_size_color.product_size_color_Model.find()
+            .populate('product_id')
+            .populate('size_id')
+            .populate('color_id').sort({ createdAt: -1 })
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Danh sách kho hàng');
+        const headers = ['STT', 'Ngày tạo', 'Tên sản phẩm', 'Giá', 'Kích cỡ', 'Màu sắc', 'Số lượng'];
+        worksheet.addRow(headers);
+
+        listProducts.forEach((product, index) => {
+            const rowData = [
+                index + 1,
+                product.createdAt.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
+                product.product_id.name,
+                product.product_id.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }),
+                product.size_id.name,
+                product.color_id.name,
+                product.quantity
+
+            ];
+            worksheet.addRow(rowData);
+        });
+
+        // Tên file Excel
+        const fileName = `Danh sách kho hàng.xlsx`;
+
+        // Ghi workbook vào file
+        await workbook.xlsx.writeFile(fileName);
+
+        res.download(fileName, (err) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Internal Server Error');
+            } else {
+
+                fs.unlinkSync(fileName);
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 
-
-module.exports = { search, getListAll, delete_product_color_size, sortUp, sortDown, add_product_size_color, update_product_size_color, filterNameProduct }
+module.exports = { updateQuantity, exportExcel, search, getListAll, delete_product_color_size, sortUp, sortDown, add_product_size_color, update_product_size_color, filterNameProduct }
