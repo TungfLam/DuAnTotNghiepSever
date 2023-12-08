@@ -9,14 +9,41 @@ var objReturn = {
 
 
 exports.getProducts = async (req, res) => {
-    const skip = parseInt(req.params.skip) || 1
-    const category = req.params.category;
-    const products = await md.productModel.find({ category_id: category })
-        .populate('category_id', "name")
-        .skip(skip - 1 )
-        .limit(10)
-        .sort({ createdAt: -1 });
-    res.json(products);
+    try {
+        const skip = parseInt(req.params.skip) || 1;
+        const category = req.params.category;
+        const products = await md.productModel.find({ category_id: category })
+            .populate('category_id', 'name')
+            .skip((skip - 1) * 10)
+            .limit(10)
+            .sort({ createdAt: -1 });
+        if (products.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy sản phẩm nào.' });
+        }
+        res.json(products);
+    } catch (error) {
+        console.error('Error in getProducts:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+exports.getAllProduct = async (req, res) => {
+    try {
+        const skip = parseInt(req.params.skip) || 1;
+        const products = await md.productModel.find()
+            .populate('category_id', 'name')
+            .skip((skip - 1) * 10)
+            .limit(10)
+            .sort({ createdAt: -1 });
+        if (products.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy sản phẩm nào.' });
+        }
+
+        res.json(products);
+    } catch (error) {
+        console.error('Error in getAllProduct:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 };
 exports.createProduct = async (req, res) => {
     const { name, description, price, createdAt, updatedAt } = req.body;
@@ -44,7 +71,7 @@ exports.sortUp = async (req, res) => {
         const category = req.query.category
         console.log(category);
         const findIdCate = await mdcategory.categoryModel.findOne({ name: category })
-        const sortUpPrice = await md.productModel.find({category_id:findIdCate}).sort({ price: - 1 }).populate('category_id', "name");
+        const sortUpPrice = await md.productModel.find({ category_id: findIdCate }).sort({ price: - 1 }).populate('category_id', "name");
         res.json({ message: 'sort up by price success', sortUpPrice: sortUpPrice });
     } catch (error) {
         console.log('đã xảy ra lỗi ', error);
@@ -58,18 +85,18 @@ exports.sortDown = async (req, res) => {
         console.log(category);
         const findIdCate = await mdcategory.categoryModel.findOne({ name: category })
 
-        const sortDownPrice = await md.productModel.find({category_id:findIdCate}).sort({ price: 1 }).populate('category_id', "name");
+        const sortDownPrice = await md.productModel.find({ category_id: findIdCate }).sort({ price: 1 }).populate('category_id', "name");
         res.json({ message: 'sort down by price success', sortDownPrice: sortDownPrice });
     } catch (error) {
         console.log('đã xảy ra lỗi ', error);
     }
 };
 
-exports.searchProduct = async (req,res)=>{
+exports.searchProduct = async (req, res) => {
     try {
         const searchValues = req.query.searchValues.toLowerCase();
         const listProducts = await md.productModel.find({
-            name: { $regex: new RegExp(searchValues, 'i') }, 
+            name: { $regex: new RegExp(searchValues, 'i') },
         });
         res.json({ message: 'search for success', listProducts: listProducts });
     } catch (error) {

@@ -1,5 +1,15 @@
 <%- include('../inc/top') %>
     <div class="container-fluid">
+        <% if (message === 'Thêm thành công' || message === 'Cập nhật thành công' || message === 'Xóa thành công') { %>
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thông báo!',
+                    text: '<%= message %>',
+                  
+                });
+            </script>
+        <% } %>
 
         <!-- Modal -->
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
