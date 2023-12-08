@@ -53,7 +53,7 @@
             <div class="row p-4"
                 style="width: 100%; background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); display: flex;">
                 <div class="d-flex justify-content-end me-3 mb-2">
-                    <a href="//" type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
+                    <a href="/product_size_color/export" type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
                         Export</a>
                     <a class="btn btn-primary" href="/product_size_color/add_product_size_color"><i
                             class="fa-solid fa-plus" style="color: #ffffff;"></i> Thêm sản phẩm</a>
@@ -64,6 +64,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Thời gian</th>
                             <th>Tên sản phẩm</th>
                             <th>Giá
                                 <span class="sort-icon">
@@ -93,6 +94,32 @@
 
                                                 <td>
                                                     <%= i+1 %>
+                                                </td>
+                                                <td>
+                                                    <div>
+                                                        <i class="fa-regular fa-calendar"></i>
+                                                        <%= new Intl.DateTimeFormat('vi-VN', { hour: 'numeric' ,
+                                                            minute: 'numeric' , }).format(new Date(row.createdAt)) %>
+                                                            -
+                                                            <%= new Intl.DateTimeFormat('vi-VN', { day: 'numeric' ,
+                                                                month: 'numeric' , year: 'numeric' , }).format(new
+                                                                Date(row.createdAt)) %>
+    
+                                                    </div>
+                                                    <div>
+    
+                                                        <% if (row && row.updatedAt) { %>
+                                                            <i class="fa-solid fa-pen"></i>
+                                                            <%= new Intl.DateTimeFormat('vi-VN', { hour: 'numeric' ,
+                                                                minute: 'numeric' }) .format(new Date(row.updatedAt)) %>
+                                                                -
+                                                                <%= new Intl.DateTimeFormat('vi-VN', { day: 'numeric' ,
+                                                                    month: 'numeric' , year: 'numeric' }) .format(new
+                                                                    Date(row.updatedAt)) %>
+                                                                    <% } else { %>
+    
+                                                                        <% } %>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <%= row.product_id ? row.product_id.name : 'NULL' %>

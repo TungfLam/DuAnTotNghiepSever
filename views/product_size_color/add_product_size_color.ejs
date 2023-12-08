@@ -1,56 +1,108 @@
 <%- include('../inc/top') %>
-    <div class="container-">
-        <p class="fw-bold fs-2 text-primary ">Add Warehouse</p>
-        <form method="POST" class="m-4">
 
-                <div class="fw-bolder fs-4 text-success"><%= message %></div>
-            <div class="input-group input-group-lg mb-3">
-                <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Name Product</span>
-                <select name="name" class="form-control form-select" aria-label="Sizing example input Default select example"
-                    aria-describedby="inputGroup-sizing-lg" name="productName">
-                    <option  selected>Open this select product</option>
-                    <% product.forEach((product)=> { %>
-                        <option  value="<%= product.name %>">
-                            <%= product.name %>
-                        </option>
+    <% if (message==='Thêm thành công' ) { %>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Thông báo!',
+                text: '<%= message %>',
+            });
+        </script>
+        <% } else if (message==='Cập nhật thành công' ) { %>
+            <script>
+                Swal.fire({
+                    icon: 'question',
+                    title: 'Sản phẩm đã tồn tại',
+                    text: 'Bạn có muốn cập nhật lại số lượng không?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'Không',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Xử lý khi người dùng chọn Có
+                        // Có thể thêm một modal khác để cập nhật số lượng
+                        $('#updateQuantityModal').modal('show');
+                    }
+                });
+            </script>
+            <% } %>
+            
+            <div class="modal fade" id="updateQuantityModal" tabindex="-1" aria-labelledby="updateQuantityModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateQuantityModalLabel">Cập nhật số lượng</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Nội dung modal cập nhật số lượng -->
+                            <form method="post" action="/product_size_color/updateQuantity">
+                                <div class="mb-3">
+                                    <label for="newQuantity" class="form-label">Số lượng mới:</label>
+                                    <input type="text" class="form-control" id="newQuantity" name="updateQuantity" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="container-fluid bgform">
+                    <form method="POST" class="m-4">
+                        <div class="input-group input-group-lg mb-3">
+                            <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Tên sản
+                                phẩm</span>
+                            <select name="name" class="form-control form-select"
+                                aria-label="Sizing example input Default select example"
+                                aria-describedby="inputGroup-sizing-lg" name="productName">
+                                <option selected>Vui lòng chọn sản phẩm</option>
+                                <% product.forEach((product)=> { %>
+                                    <option value="<%= product.name %>">
+                                        <%= product.name %>
+                                    </option>
 
-                        <% }); %>
+                                    <% }); %>
 
-                </select>
-            </div>
-            <div class="input-group input-group-lg mb-3">
-                <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Size </span>
-                <select  name="color" class="form-control form-select " aria-label="Sizing example input Default select example"
-                    aria-describedby="inputGroup-sizing-lg" name="productName">
-                    <option selected>Open this select color</option>
-                    <% color.forEach((color)=> { %>
-                        <option value="<%= color.name %>">
-                            <%= color.name %>
-                        </option>
-                        <% }); %>
-                </select>
-            </div>
-            <div class="input-group input-group-lg mb-3">
-                <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Color</span>
-                <select name="size" class="form-control form-select" aria-label="Sizing example input Default select example"
-                    aria-describedby="inputGroup-sizing-lg" name="productName">
-                    <option  selected>Open this select size</option>
-                    <% size.forEach((size)=> { %>              
-                        <option value="<%= size.name %>">
-                            <%= size.name %>
-                        </option>
-                        <% }); %>
-                </select>
-            </div>
-            <div class="input-group input-group-lg mb-3">
-                <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Quantity</span>
-                <input name="quantity" type="text" class="form-control" aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-lg">
-            </div>
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary " style="width: 250px; ">Submit</button>
-            </div>
-        </form>
-    </div>
+                            </select>
+                        </div>
+                        <div class="input-group input-group-lg mb-3">
+                            <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Màu
+                                sắc</span>
+                            <select name="color" class="form-control form-select "
+                                aria-label="Sizing example input Default select example"
+                                aria-describedby="inputGroup-sizing-lg" name="productName">
+                                <option selected>Vui lòng chọn màu sắc</option>
+                                <% color.forEach((color)=> { %>
+                                    <option value="<%= color.name %>">
+                                        <%= color.name %>
+                                    </option>
+                                    <% }); %>
+                            </select>
+                        </div>
+                        <div class="input-group input-group-lg mb-3">
+                            <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">kích
+                                cỡ</span>
+                            <select name="size" class="form-control form-select"
+                                aria-label="Sizing example input Default select example"
+                                aria-describedby="inputGroup-sizing-lg" name="productName">
+                                <option selected style="font-size: 10px;">Vui lòng chọn kích cỡ</option>
+                                <% size.forEach((size)=> { %>
+                                    <option value="<%= size.name %>">
+                                        <%= size.name %>
+                                    </option>
+                                    <% }); %>
+                            </select>
+                        </div>
+                        <div class="input-group input-group-lg mb-3">
+                            <span class="input-group-text" style="width: 170px; "
+                                id="inputGroup-sizing-lg">Quantity</span>
+                            <input name="quantity" type="text" class="form-control" aria-label="Sizing example input"
+                                aria-describedby="inputGroup-sizing-lg">
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary " style="width: 250px; ">Submit</button>
+                        </div>
+                    </form>
+                </div>
 
-    <%- include('../inc/bottom') %>
+                <%- include('../inc/bottom') %>
