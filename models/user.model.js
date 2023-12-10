@@ -3,7 +3,7 @@ var userSchema = new db.mongoose.Schema(
     {
         avata: { type: String, required: false },
         username: { type: String, required: false },
-        password: { type: String, required: true },
+        password: { type: String, required: false },
         email: { type: String, required: false },
         address : {type : String , require : false},
         role: { type: String, required: true },
@@ -17,10 +17,9 @@ var userSchema = new db.mongoose.Schema(
 );
 const addressChema = new db.mongoose.Schema(
     {
+        user_id: { type: String, required: true },
         address: { type: String, required: true },
-        city: { type: String, required: true },
-        postalcode: { type: String, required: true },
-        country: { type: String, required: true }
+        specific_addres: { type: String, required: true },
     },
     { collection: 'address' }
 );

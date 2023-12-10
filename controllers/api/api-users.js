@@ -1,4 +1,5 @@
 var md = require('../../models/user.model');
+var fs = require('fs');
 var objReturn = {
     status: 1,
     msg: 'OK'
@@ -14,10 +15,8 @@ exports.listUser = async (req, res, next) => {
         else {
             objReturn.status = 0;
             objReturn.msg = 'Không có dữ liệu phù hợp';
-
         }
 
-        
     } catch (error) {
         objReturn.status = 0;
         objReturn.msg = error.message;
@@ -43,12 +42,17 @@ exports.userLogin = async (req, res, next) => {
         }
 
         if(objUser){
-            if(objUser.password == password){
-                msg = "Đăng nhập thành công"
-                err = false;
+            if(objUser.status){
+                if(objUser.password == password){
+                    msg = "Đăng nhập thành công"
+                    err = false;
+                }else{
+                    msg = "Mật khẩu không chính xác"
+                }
             }else{
-                msg = "Mật khẩu không chính xác"
+                msg = "Tải khoản đã bị khóa"
             }
+            
         }else{
             msg = "Tài khoản không tồn tại"
         }
@@ -78,8 +82,13 @@ exports.userLoginPhone = async (req , res , next) => {
         }
 
         if(objUser){
-            msg = "Đăng nhập thành công";
-            err = false;
+            if(objUser.status){
+                msg = "Đăng nhập thành công";
+                err = false;
+            }else{
+                msg = "Tài khoản đã bị khóa";
+            }
+            
         }else{
             msg = "Số điện thoại chưa đăng ký";
         }
@@ -220,7 +229,6 @@ exports.logout = async (req , res , next) => {
         msg = "err method : vui lòng dùng method POST"
     }
 
-
     res.status(200).json({
         msg : msg,
         err : err
@@ -235,40 +243,65 @@ exports.addUser = async (req, res, next) => {
     if(req.method == 'POST'){
         let phone = req.body.Phone;
         let fullname = req.body.Fullname;
-        let address = req.body.Address;
-        let email = req.body.Eamil;
+        let email = req.body.Email;
         let password = req.body.Password;
         let token = req.body.Token;
         let deviceId = req.body.DeviceId;
 
         objUser.full_name = fullname;
         objUser.phone_number = phone;
-        objUser.address = address;
         objUser.role = "User";
         objUser.status = true;
         objUser.token = token;
         objUser.deviceId = deviceId;
 
-        if(email != "" || email != null){
-            objUser.email = email;
-            objUser.password = password;
+        objUser.email = email;
+        objUser.password = password;
+
+        if(req.file){
+            try {
+                fs.renameSync(req.file.path, './public/avatas/' + objUser._id + '_' + req.file.originalname);
+                objUser.avata = '/avatas/' + objUser._id + '_' + req.file.originalname;
+            } catch (error) {
+                console.log("Ảnh bị lỗi rồi: "+error);
+            }
         }
 
         try {
-            await objUser.save();
-            msg = "Tạo tài khoản thành công";
-            err = false;
+            var objUserPhone = await md.userModel.findOne({phone_number : phone});
+            if(String(email) != ""){
+                var objUserEmail = await md.userModel.findOne({email : email});
+            }else{
+                var objUserEmail = false;
+            }
+            
         } catch (error) {
-            msg = "Tạo tài khoản thất bại";
+            console.log(error);
         }
-       
+        
+        if(objUserPhone){
+            msg = "Số điện thoại đã được đăng ký";
+        }else if(objUserEmail){
+            msg = "Email đã được đăng ký";
+        }else{
+            try {
+                await objUser.save();
+                msg = "Tạo tài khoản thành công";
+                err = false;
+            } catch (error) {
+                msg = "Tạo tài khoản thất bại";
+                console.log(error);
+            }
+        }
     }else{
         msg = "err method : vui lòng dùng method POST"
     }
 
     res.status(200).json({
         msg : msg,
-        err : err
+        err : err,
+        idUser : (objUser != null) ? objUser._id : "",
+        role : (objUser != null) ? objUser.role : ""
     });
 }
 
@@ -349,3 +382,156 @@ exports.deleteUser = async (req, res, next) => {
 
     res.json(objReturn);
 };
+
+// address
+
+exports.getAddressByIdUser = async (req , res , next) => {
+    let idUser = req.params.idUser;
+    let arrAddres = [];
+
+    if(idUser != null){
+        arrAddres = await md.addressModel.find({user_id : idUser});
+    }else{
+        console.log("idUser null");
+    }
+
+    res.status(200).json(arrAddres);
+}
+
+exports.addAddress = async (req , res , next) => {
+    let msg = "";
+    let err = true;
+
+    if(req.method == 'POST'){
+        let idUser = req.body.idUser;
+        let address = req.body.address;
+        let specificAddres = req.body.specificAddres;
+        let objAddress = new md.addressModel();
+        let objUser;
+
+        try {
+            objUser = await md.userModel.findById(idUser);
+        } catch (error) {
+            console.log("user khoong tồn tại");
+        }
+
+        if(objUser){
+
+            let countAddress = await md.addressModel.find({user_id : idUser}).count();
+            if(countAddress >= 3){
+                msg = "Đã vượt quá số lượng địa chỉ";
+            }else{
+                if(address != "" || specificAddres != "" || address != null || specificAddres != null){
+                    objAddress.user_id = idUser;
+                    objAddress.address = address;
+                    objAddress.specific_addres = specificAddres;
+                    objUser.address = objAddress._id;
+    
+                    try {
+                        await md.userModel.findByIdAndUpdate(idUser , objUser);
+                        await objAddress.save();
+                        msg = "Thêm thành công";
+                        err = false;
+                    } catch (error) {
+                        msg = "Thêm địa chỉ thất bại";
+                    }
+                }else{
+                    msg = "Chưa nhập đủ các trường"
+                }
+            }
+
+        }else{
+            msg = "Người dùng không tồn tại";
+        }
+    }else{
+        msg = "err method : vui lòng dùng method POST"
+    }
+
+    res.status(200).json({
+        msg : msg,
+        err : err
+    });
+}
+
+exports.updateAddres = async (req , res , next) => {
+    let msg = "";
+    let err = true;
+
+    if(req.method == 'PUT'){
+        let idAddress = req.params.idAddress;
+        let address = req.body.address;
+        let specificAddres = req.body.specificAddres;
+
+        let objAddress;
+        let objUser;
+        try {
+            objAddress = await md.addressModel.findById(idAddress);
+            objUser = await md.userModel.findById(objAddress.user_id);
+        } catch (error) {
+            console.log("address or user Không tồn tại");
+        }
+
+        if(!objAddress){
+            msg = "Địa chỉ không tồn tại";
+        }else if(!objUser){
+            msg = "Người dùng không tồn tại"
+        }else{
+            objAddress.address = address;
+            objAddress.specific_addres = specificAddres;
+
+            try {
+                await md.addressModel.findByIdAndUpdate(idAddress , objAddress);
+                msg = "Sửa địa chỉ thành công";
+                err = false;
+            } catch (error) {
+                msg = "Sửa địa chỉ thất bại";
+            }
+        }
+    }else{
+        msg = "err method : vui lòng dùng method PUT"
+    }
+
+    res.status(200).json({
+        msg : msg,
+        err : err
+    });
+}
+
+exports.deleteAddress = async (req , res , next) => {
+    let msg = "";
+    let err = true;
+
+    if(req.method == 'DELETE'){
+        let idAddress = req.params.idAddress;
+        let objAddress;
+        try {
+            objAddress = await md.addressModel.findById(idAddress);
+        } catch (error) {
+            console.log("địa chỉ không tồn tại");
+        }
+
+        if(objAddress){
+            let countAddress = await md.addressModel.find({user_id : objAddress.user_id}).count();
+            if(countAddress <= 1){
+                msg = "Bạn phải có tối thiểu một địa chỉ";
+            }else{
+                try {
+                    await md.addressModel.findByIdAndDelete(idAddress);
+                    msg = "Xóa địa chỉ thành công";
+                    err = false;
+                } catch (error) {
+                    msg = "Xóa địa chỉ thất bại";
+                }
+            }
+        }else {
+            msg = "Địa chỉ không tồn tại";
+        }
+    }else{
+        msg = "err method : vui lòng dùng method DELETE"
+    }
+
+    res.status(200).json({
+        msg : msg,
+        err : err
+    });
+}
