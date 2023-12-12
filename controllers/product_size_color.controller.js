@@ -15,9 +15,9 @@ const getListAll = async (req, res) => {
         const productListSizeColor = await model_product_size_color.product_size_color_Model.find()
             .populate('product_id', "name price")
             .populate('size_id', "name")
-            .populate('color_id', "name").skip((page - 1) * limit).limit(limit).sort({ createdAt: -1 })
+            .populate('color_id', "name").sort({ createdAt: -1 })
 
-        console.log('productListSizeColor', productListSizeColor);
+console.log(productListSizeColor);
         const listproduct = await productModel.productModel.find()
 
         const countProducts = await model_product_size_color.product_size_color_Model.count();
@@ -47,41 +47,62 @@ const add_product_size_color = async (req, res) => {
     let message = ""
     try {
         if (req.method == 'POST') {
-            const { name, categories, size, color, quantity, selectedname } = req.body;
-            const checkproduct = await productModel.productModel.findOne({ name: name });
-            const checksizes = await sizeModel.sizeModel.findOne({ name: size });
-            const checkcolors = await colorModel.colorModel.findOne({ name: color });
-            if (selectedname) {
-                message = "Vui lòng chọn đúng"
-                res.redirect('/product_size_color/add_product_size_color');
+            const { name, categories, size, color, quantity, selectedname, checksize, checkcolor } = req.body;
+
+            // chuyển thành mảng nếu chọn 1 cái 
+            const selectedSizes = Array.isArray(checksize) ? checksize : [checksize];
+            const selectedColors = Array.isArray(checkcolor) ? checkcolor : [checkcolor]
+            // Lặp qua từng kích thước và màu để thêm vào cơ sở dữ liệu
+            for (const selectedSize of selectedSizes) {
+                for (const selectedColor of selectedColors) {
+                    console.log("selectedSize", selectedSize);
+                    console.log("selectedColor", selectedColor);
+                    // Tạo một bản ghi mới cho product_size_color_Model
+                    const newProductSizeColor = new model_product_size_color.product_size_color_Model({
+                        product_id: name,
+                        size_id: selectedSize,
+                        color_id: selectedColor,
+                        quantity: quantity,
+                        createdAt: Date.now(),
+                    });
+                    await newProductSizeColor.save();
+                }
             }
-            const existingProduct = await model_product_size_color.product_size_color_Model.findOne({
-                product_id: checkproduct ? checkproduct._id : null,
-                size_id: checksizes ? checksizes._id : null,
-                color_id: checkcolors ? checkcolors._id : null,
-            });
 
-            if (existingProduct) {
-                message = "Cập nhật thành công";
-                existingProductGlobal = existingProduct
+            // const checkproduct = await productModel.productModel.findOne({ name: name });
+            // const checksizes = await sizeModel.sizeModel.findOne({ name: size });
+            // const checkcolors = await colorModel.colorModel.findOne({ name: color });
+            // if (selectedname) {
+            //     message = "Vui lòng chọn đúng"
+            //     res.redirect('/product_size_color/add_product_size_color');
+            // }
+            // const existingProduct = await model_product_size_color.product_size_color_Model.findOne({
+            //     product_id: checkproduct ? checkproduct._id : null,
+            //     size_id: checksizes ? checksizes._id : null,
+            //     color_id: checkcolors ? checkcolors._id : null,
+            // });
 
-                // existingProduct.quantity += parseInt(quantity);
-                // await existingProduct.save();
+            // if (existingProduct) {
+            //     message = "Cập nhật thành công";
+            //     existingProductGlobal = existingProduct
 
-            } else {
-                const checkproduct = await productModel.productModel.findOne({ name: name });
-                const checksizes = await sizeModel.sizeModel.findOne({ name: size });
-                const checkcolors = await colorModel.colorModel.findOne({ name: color });
-                let obj_product_size_color = new model_product_size_color.product_size_color_Model({
-                    product_id: checkproduct._id,
-                    size_id: checksizes._id,
-                    color_id: checkcolors._id,
-                    quantity: quantity,
-                    createdAt: Date.now(),
-                });
-                await obj_product_size_color.save();
-                message = "Thêm thành công"
-            }
+            //     // existingProduct.quantity += parseInt(quantity);
+            //     // await existingProduct.save();
+
+            // } else {
+            //     const checkproduct = await productModel.productModel.findOne({ name: name });
+            //     const checksizes = await sizeModel.sizeModel.findOne({ name: size });
+            //     const checkcolors = await colorModel.colorModel.findOne({ name: color });
+            //     let obj_product_size_color = new model_product_size_color.product_size_color_Model({
+            //         product_id: checkproduct._id,
+            //         size_id: checksizes._id,
+            //         color_id: checkcolors._id,
+            //         quantity: quantity,
+            //         createdAt: Date.now(),
+            //     });
+            //     await obj_product_size_color.save();
+            //     message = "Thêm thành công"
+            // }
         }
 
 
@@ -107,7 +128,7 @@ const updateQuantity = async (req, res) => {
     const finproduct = await model_product_size_color.product_size_color_Model.findById(existingProductGlobal.id);
     finproduct.quantity = updateQuantity
     await finproduct.save();
-    console.log('finproduct',finproduct);
+    console.log('finproduct', finproduct);
     res.redirect(`/product_size_color/getListAll/1?aler=Cập nhật thành công sản phẩm`)
 }
 

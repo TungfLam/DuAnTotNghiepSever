@@ -77,3 +77,54 @@ footer {
     width: 98%;
     padding: 40px;
 }
+
+
+.checkbox-group {
+    font-size: 23px; /* Đặt kích thước font chung cho toàn bộ nhóm checkbox */
+}
+
+.checkbox-group .form-check-label {
+    margin-left: 5px; /* Tăng khoảng cách giữa checkbox và nhãn */
+}
+
+
+.btn-checkbox {
+    display: none; /* Ẩn nút gốc */
+}
+
+
+/* size */
+
+.checkbox-group {
+    width: 700px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.btn-checkbox {
+    display: none; /* Ẩn checkbox gốc */
+}
+
+.checkbox-label {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    padding: 0.6rem 1rem; /* Tăng padding để nút to ra một chút */
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease; /* Hiệu ứng chuyển động */
+}
+
+.btn-checkbox:checked + .checkbox-label {
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Hiệu ứng shadow khi checkbox được chọn */
+    transform: scale(1.0); /* Nút to ra khi checkbox được chọn */
+    font-weight: bold;
+    margin-inline: 15px;
+}
+
+.btn-checkbox:checked.black + .checkbox-label {
+    color: black; /* Màu chữ khi checkbox được chọn và màu nền đen */
+}

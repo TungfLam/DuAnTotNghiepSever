@@ -131,6 +131,7 @@ const vnpay_return = async (req, res, next) => {
             await finCart.save();
             // // trừ số luong sản phẩm
             const finProduct = await mdProduct.product_size_color_Model.findById(finCart.product_id)
+            
             if (finProduct.quantity < finCart.quantity) {
               
                 res.status(200).json({message: 'Không thể thực hiện , Số lượng mua vượt quá số lượng sản phẩm'});

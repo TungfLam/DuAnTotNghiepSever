@@ -82,3 +82,5 @@ http://localhost:6868/api/getListCart/:idUser/:idProduct GET
 http://localhost:6868/api/updateCart/:idUser/:idCart POST         // truyền body tên là quantity
 /addCart/:idUser/:idProduct POST
 /deleteCart/:id    DELETE
+// sửa lại một số thứ 
+// sửa lại thêm sản phẩm vòa kho , check sửa sản phẩm trong kho , và đang phân vân có nên làm chưcs năng xóa hay không 
