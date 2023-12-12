@@ -8,10 +8,18 @@ const categoriModel = require('../../models/category.model')
 const getListAll_deltail = async (req, res) => {
     try {
         let id_product = req.params.id_product;
-        const productListSize = await model_product_size_color.product_size_color_Model.find({ product_id: id_product }).sort({ createdAt: -1 })
+        const productListSize = await model_product_size_color.product_size_color_Model.find({ product_id: id_product })
+            .sort({ createdAt: -1 })
             .populate('product_id', "name price description")
             .populate('size_id', "name")
             .populate('color_id', "name");
+
+        // Sắp xếp kích cỡ theo thứ tự "S M L XL XXL"
+        productListSize.sort((a, b) => {
+            const sizeOrder = { 'S': 0, 'M': 1, 'L': 2, 'XL': 3, 'XXL': 4 };
+            return sizeOrder[a.size_id.name] - sizeOrder[b.size_id.name];
+        });
+
         res.status(200).json({ productListSize: productListSize });
     } catch (error) {
         res.status(500).json({ message: 'Lỗi truy vấn CSDL: ' + error.message });

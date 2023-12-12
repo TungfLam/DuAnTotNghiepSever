@@ -184,6 +184,7 @@ const deleteproduct = async (req, res) => {
 
         await model.productModel.findByIdAndDelete(id);
         await model_product_size_color.product_size_color_Model.deleteMany({ product_id: id });
+        
         res.redirect(`/product/listproduct/${countPages}`)
     } catch (error) {
         msg = 'Lỗi Ghi CSDL: ' + error.message;

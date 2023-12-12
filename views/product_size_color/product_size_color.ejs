@@ -39,7 +39,7 @@
 
 
                 }
-                
+
             </script>
         </div>
 
@@ -53,142 +53,124 @@
             <div class="row p-4"
                 style="width: 100%; background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); display: flex;">
                 <div class="d-flex justify-content-end me-3 mb-2">
-                    <a href="/product_size_color/export" type="button" class="btn btn-success me-3"><i class="fa-regular fa-file-excel"></i>
+                    <a href="/product_size_color/export" type="button" class="btn btn-success me-3"><i
+                            class="fa-regular fa-file-excel"></i>
                         Export</a>
                     <a class="btn btn-primary" href="/product_size_color/add_product_size_color"><i
                             class="fa-solid fa-plus" style="color: #ffffff;"></i> Thêm sản phẩm</a>
                 </div>
 
 
-                <table id="example" class="table ">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Thời gian</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Giá
-                                <span class="sort-icon">
-                                    <a href="/product_size_color/sortDown"><i class="fa-solid fa-caret-down"></i></a>
-                                    <a href="/product_size_color/sortUp"><i class="fa-solid fa-caret-up"></i></a>
-                                </span>
-                            </th>
-                            <th>Kích cỡ</th>
-                            <th>Màu sắc</th>
-                            <th>Số lượng</th>
-                            <th>Thao tác</th>
-                        </tr>
-                    </thead>
-
-                    <% if (productListSizeColor.length===0) { %>
-                        <tr>
-                            <td colspan="7" style="text-align: center;justify-content: center;">
-                                <p>Dữ liệu không tồn tại.</p>
-                            </td>
-                        </tr>
-                        <% } else { %>
-                            <% let previousProductName='' ; %>
-                                <% let sizeColorQuantityString='' ; %>
-                                    <% for (let i=0; i < productListSizeColor.length; i++) { %>
-                                        <% const row=productListSizeColor[i]; %>
-                                            <tr style="height: 70px;">
-
-                                                <td>
-                                                    <%= i+1 %>
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <i class="fa-regular fa-calendar"></i>
-                                                        <%= new Intl.DateTimeFormat('vi-VN', { hour: 'numeric' ,
-                                                            minute: 'numeric' , }).format(new Date(row.createdAt)) %>
-                                                            -
-                                                            <%= new Intl.DateTimeFormat('vi-VN', { day: 'numeric' ,
-                                                                month: 'numeric' , year: 'numeric' , }).format(new
-                                                                Date(row.createdAt)) %>
-    
-                                                    </div>
-                                                    <div>
-    
-                                                        <% if (row && row.updatedAt) { %>
-                                                            <i class="fa-solid fa-pen"></i>
-                                                            <%= new Intl.DateTimeFormat('vi-VN', { hour: 'numeric' ,
-                                                                minute: 'numeric' }) .format(new Date(row.updatedAt)) %>
-                                                                -
-                                                                <%= new Intl.DateTimeFormat('vi-VN', { day: 'numeric' ,
-                                                                    month: 'numeric' , year: 'numeric' }) .format(new
-                                                                    Date(row.updatedAt)) %>
-                                                                    <% } else { %>
-    
-                                                                        <% } %>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <%= row.product_id ? row.product_id.name : 'NULL' %>
-                                                </td>
-
-                                                <td class="">
-                                                    <% if (row.product_id && row.product_id.price !== undefined && row.product_id.price !== null) { %>
-                                                        <i class="fa-regular fa-money-bill-1"></i>
-                                                        <%= (row.product_id.price ).toLocaleString('vi-VN', {
-                                                            style: 'currency' , currency: 'VND' }) %>
-                                                    <% } else { %>
-                                                        <!-- Hiển thị gì đó khi không có giá -->
-                                                        Giá không khả dụng
-                                                    <% } %>
-                                                </td>
-                                                <td>
-                                                    <%= row.size_id ? row.size_id.name : 'NULL' %>
-                                                </td>
-                                                <td>
-                                                    <%= row.color_id ? row.color_id.name : 'NULL' %>
-                                                </td>
-                                                <td>
-                                                    <%= row.quantity ? row.quantity : 'Out of stock' %>
-                                                </td>
-
-                                                <td style="width: 190px;">
-
-                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                        data-bs-target="#staticBackdropp<%=  row._id  %>">
-                                                        <i class="fa-solid fa-trash-can"></i> Xóa
-                                                    </button>
-                                                    <div class="modal fade" id="staticBackdropp<%=  row._id  %>"
-                                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                                        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="staticBackdropLabel">
-                                                                        Thông báo</h5>
-
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    Bạn có muốn xóa <%= row.product_id ?
-                                                                        row.product_id.name : 'NULL' %>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary"
-                                                                        data-bs-dismiss="modal">Hủy</button>
-                                                                    <a href="/product_size_color/delete_product_color_size/<%=row.id %>"
-                                                                        class="btn btn-danger">Lưu thay đổi</a>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <a href="/product_size_color/update_product_size_color/<%=row.id %>"
-                                                        class="btn btn-primary"> <i
-                                                            class="fa-regular fa-pen-to-square"></i> Sửa</a>
-                                                </td>
-
-                                            </tr>
-
-                                            <% } %>
-                                                <% } %>
-                </table>
+              
             </div>
 
         </div>
+        <table id="example" class="table ">
+            <thead>
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <th>Kích cỡ</th>
+                    <th>Màu sắc</th>
+                    <th>Số lượng</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
 
+            <% if (productListSizeColor.length===0) { %>
+                <tr>
+                    <td colspan="7" style="text-align: center;justify-content: center;">
+                        <p>Dữ liệu không tồn tại.</p>
+                    </td>
+                </tr>
+                <% } else { %>
+                    <% let groupedProducts={}; %>
+                        <% productListSizeColor.forEach(row=> { %>
+
+                            <% if (!groupedProducts[row.product_id.name]) { %>
+
+                                <% groupedProducts[row.product_id.name]=[]; %>
+                                    <% } %>
+                                        <% groupedProducts[row.product_id.name].push(row); %>
+                                            <% }); %>
+
+
+                                                <% Object.keys(groupedProducts).forEach(productName=> { %>
+                                                    <% let row=groupedProducts[productName]; %>
+                                                   
+                                                       
+                                                            <td rowspan="<%= row.length %>">
+                                                                <%= productName %>
+                                                            </td>
+                                                            <% row.forEach((variant, index)=> { %>
+                                                                <% if (index !==0) { %>
+                                                        <tr>
+                                                            <% } %>
+
+                                                                <td>
+                                                                    <%= variant?.size_id?.name %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= variant?.color_id?.name %>
+                                                                </td>
+
+                                                                <td>
+                                                                    <%= variant.quantity %>
+                                                                </td>
+
+                                                                <td>
+                                                                    <button type="button" class="btn btn-danger"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#staticBackdropp<%=  variant._id  %>">
+                                                                        <i class="fa-solid fa-trash-can"></i>
+                                                                        Xóa
+                                                                    </button>
+                                                                    <div class="modal fade"
+                                                                        id="staticBackdropp<%=  variant._id  %>"
+                                                                        data-bs-backdrop="static"
+                                                                        data-bs-keyboard="false" tabindex="-1"
+                                                                        aria-labelledby="staticBackdropLabel"
+                                                                        aria-hidden="true">
+                                                                        <div class="modal-dialog">
+                                                                            <div class="modal-content">
+                                                                                <div class="modal-header">
+                                                                                    <h5 class="modal-title"
+                                                                                        id="staticBackdropLabel">
+                                                                                        Thông báo</h5>
+
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    Bạn có muốn xóa
+                                                                                    <%=variant.product_id.name %> </br>
+                                                                                        Kích cỡ :
+                                                                                        <%=variant.size_id.name %> </br>
+                                                                                            Màu sắc:
+                                                                                            <%=variant?.color_id?.name %>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button"
+                                                                                        class="btn btn-secondary"
+                                                                                        data-bs-dismiss="modal">Hủy</button>
+                                                                                    <a href="/product_size_color/delete_product_color_size/<%=variant._id %>"
+                                                                                        class="btn btn-danger">Lưu
+                                                                                        thay đổi</a>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <a href="/product_size_color/update_product_size_color/<%=variant._id %>"
+                                                                        class="btn btn-primary"> <i
+                                                                            class="fa-regular fa-pen-to-square"></i>
+                                                                        Sửa</a>
+                                                                </td>
+                                                        </tr>
+
+                                                        <% }); %>
+                                                          
+                                                            <% }); %>
+                                                                <% } %>
+
+        </table>
 
         <nav aria-label="Page navigation example" style="margin-top: 100px;">
             <ul class="pagination">
