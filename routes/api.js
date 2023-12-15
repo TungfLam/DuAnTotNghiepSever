@@ -5,6 +5,7 @@ const upload = multer({dest : './tmp'});
 
 const api_comment = require('../controllers/api/api_comment');
 const api_users = require('../controllers/api/api-users')
+const api_notification = require('../controllers/api/api_notification');
 var api_color = require('../controllers/api/api_color')
 var api_size = require('../controllers/api/api_size')
 var api_category = require('../controllers/api/api_category')
@@ -32,8 +33,12 @@ router.delete('/users/:idu', api_users.deleteUser);
 //address
 router.get('/address/:idUser' , api_users.getAddressByIdUser); 
 router.post('/address' , api_users.addAddress);
-router.put('/address' , api_users.updateAddres);
+router.put('/address/:idAddress' , api_users.updateAddres);
 router.delete('/address' , api_users.deleteAddress);
+
+//notification
+router.get('/notification/:idUser' , api_notification.getNotification);
+
 
 //===
 // api product
