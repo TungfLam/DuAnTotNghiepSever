@@ -10,7 +10,8 @@ const addFavorite = async (req, res) => {
         if (req.method === 'POST') {
             let objfavorite = new mdFavorite.favorite_Model({
                 user_id: id_user._id,
-                product_id: id_product._id
+                product_id: id_product._id,
+                createdAt:Date.now()
             })
             await objfavorite.save();
             res.status(200).json({ message: "Success" });

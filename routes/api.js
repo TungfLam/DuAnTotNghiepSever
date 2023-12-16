@@ -51,7 +51,7 @@ router.put('/products/:id', upload.array('image'), api_product.updateProduct);
 router.delete('/products/:id', api_product.deleteProduct);
 router.get('/products/sortUp', api_product.sortUp);
 router.get('/products/sortDown', api_product.sortDown);
-router.get('/products/search', api_product.searchProduct);
+router.get('/products', api_product.searchProduct);
 
 //comment 
 router.get('/comment/:ProductId', api_comment.getCommentByProduct);

@@ -185,7 +185,7 @@ const deleteproduct = async (req, res) => {
         await model.productModel.findByIdAndDelete(id);
         await model_product_size_color.product_size_color_Model.deleteMany({ product_id: id });
         
-        res.redirect(`/product/listproduct/${countPages}`)
+        res.redirect(`/product/listproduct/1?aler=Xóa thành công`)
     } catch (error) {
         msg = 'Lỗi Ghi CSDL: ' + error.message;
         console.log(error);
@@ -217,6 +217,7 @@ const updateproduct = async (req, res) => {
                 })
                 //// thêm ảnh vào cloud 
                 var image = [];
+                
                 const fileData = req.files
                 fileData.forEach(item => {
                     image.push(item.path)

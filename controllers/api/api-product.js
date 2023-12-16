@@ -1,7 +1,7 @@
 var md = require('../../models/product.model');
 var mdcategory = require('../../models/category.model');
 const multer = require('multer');
-const upload = multer();
+
 var objReturn = {
     status: 1,
     msg: 'OK'
@@ -93,13 +93,24 @@ exports.sortDown = async (req, res) => {
 };
 
 exports.searchProduct = async (req, res) => {
+    console.log("Vào đây");
+
     try {
         const searchValues = req.query.searchValues.toLowerCase();
-        const listProducts = await md.productModel.find({
-            name: { $regex: new RegExp(searchValues, 'i') },
-        });
-        res.json({ message: 'search for success', listProducts: listProducts });
+        console.log("searchValues:", searchValues);
+
+        if (searchValues) {
+            const regex = new RegExp(searchValues, 'i');
+            console.log("Regex:", regex);
+
+            const finProducts = await md.productModel.find({
+                name: { $regex: regex },
+            });
+
+            res.json({ message: "success", data: finProducts });
+        }
     } catch (error) {
-        console.log('đã xảy ra lỗi ', error);
+        console.log('Đã xảy ra lỗi: ', error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 }

@@ -6,6 +6,7 @@ var config = require('../config/default.json');
 let mdBill = require('../models/bill.model')
 let mdProduct = require('../models/product_size_color.model')
 let mdCart = require('../models/cart.model')
+let mdUser = require('../models/user.model')
 let { DateTime } = require('luxon');
 function sortObject(obj) {
     let sorted = {};
@@ -25,6 +26,7 @@ function sortObject(obj) {
 
 
 let globalIdCart;
+let globalIdUser;
 let globalAmount;
 
 const create_payment_url = async (req, res, next) => {
@@ -43,20 +45,28 @@ const create_payment_url = async (req, res, next) => {
     var date = new Date();
     let createDate = moment(date).format('YYYYMMDDHHmmss');
     var orderId = dateFormat(date, 'HHmmss');
+    let idUser = req.params.idUser;
+    let idCart = req.body.idCart;
     let amount = req.body.amount;
-    let idCart = req.params.idCart;
     try {
-       const fincart =  await mdCart.cartModel.findById(idCart);
-       if (!fincart) {
-        return res.status(404).json({ message: 'Không tìm thấy sản phẩm trong giỏ hàng' });
-    }
-        
+        const finUser = await mdUser.userModel.findById(idUser);
+        if (!idCart || !Array.isArray(idCart) || !finUser) {
+            return res.status(400).json({ message: 'Dữ liệu không hợp lệ.' });
+        }
+        for (const itemCart of idCart) {
+            const fincart = await mdCart.cartModel.findById(itemCart);
+            if (!fincart) {
+                return res.status(200).json({ message: 'Không tìm thấy sản phẩm trong giỏ hàng ' + itemCart });
+            }
+        }
+
+
     } catch (error) {
-        return res.status(404).json({ error});
+        return res.status(404).json({ error: "Đã xảy ra lỗi " + error.message });
     }
     globalIdCart = idCart;
     globalAmount = amount
-
+    globalIdUser = idUser;
     var orderInfo = '**Nap tien cho thue bao 0123456789. So tien 100,000 VND**'    // Thông tin mô tả nội dung thanh toá
     var orderType = req.body.orderType;  ////Mã danh mục hàng hóa. Mỗi hàng hóa sẽ thuộc một nhóm danh mục do VNPAY quy định. Xem thêm bảng Danh mục hàng hóa
 
@@ -120,46 +130,51 @@ const vnpay_return = async (req, res, next) => {
 
     if (secureHash === signed) {
         try {
-            const dat_hang_thanh_cong = 2;
+
+            // duyệt amng id cart và chỉnh sửa trạng thái 
+            // trừ số lượng sản phẩm 
+            // tạo mới bill 
+
+            const dat_hang_thanh_cong = 3;
             const da_dat_hang = 'Đã đặt hàng'
+            const idUser = globalIdUser;
             const idCart = globalIdCart;
-        
             const amount = globalAmount;
-            // // thay đổi trạng thái cart 
-            const finCart = await mdCart.cartModel.findById(idCart)
-            finCart.status = da_dat_hang
-            await finCart.save();
-            // // trừ số luong sản phẩm
-            const finProduct = await mdProduct.product_size_color_Model.findById(finCart.product_id)
-            
-            if (finProduct.quantity < finCart.quantity) {
-              
-                res.status(200).json({message: 'Không thể thực hiện , Số lượng mua vượt quá số lượng sản phẩm'});
-            }else{
-                console.log(`Số lượng sản phẩm ${finProduct.quantity} -- số lượng sản phẩm giỏ hàng ${finCart.quantity}`);
-                finProduct.quantity -= finCart.quantity;
-                await finProduct.save();
+
+            for (const itemCart of idCart) {
+                const finCart = await mdCart.cartModel.findById(itemCart)
+                const finProduct = await mdProduct.product_size_color_Model.findById(finCart.product_id)
+                if (finProduct.quantity < finCart.quantity) {
+                    res.render('order/success', { code: 'Không thể thực hiện , Số lượng mua vượt quá số lượng sản phẩm' })
+                } else {
+                    // // // trừ số luong sản phẩm
+                    console.log(`Số lượng sản phẩm ${finProduct.quantity} -- số lượng sản phẩm giỏ hàng ${finCart.quantity}`);
+                    finProduct.quantity -= finCart.quantity;
+                    await finProduct.save();
+                    // // thay đổi trạng thái cart 
+                    finCart.status = da_dat_hang
+                    await finCart.save();
+                }
             }
-           
             // tạo mới bill 
             const newBillData = {
-                user_id: finCart.user_id,
-                cart_id: finCart._id,
-                payments: 1,
+                user_id: idUser,
+                cart_id: idCart,
+                payments: 2,
                 total_amount: amount,
                 status: dat_hang_thanh_cong,
-                date: DateTime.now().setZone('Asia/Ho_Chi_Minh')
+                createdAt: Date.now()
             };
             const newBill = new mdBill.billModel(newBillData);
             newBill.save()
         } catch (error) {
-            return res.status(500).json({ message: 'Đã xảy ra lỗi khi xử lý đơn hàng' });
+            res.render('order/success', { code: 'Đã xảy ra lỗi khi xử lý đơn hàng' })
         }
         res.render('order/success', {
             code: vnp_Params['vnp_ResponseCode']
         })
     } else {
-        res.render('order/success', { code: '97' })
+        res.render('order/success', { code: 'Đã xảy ra lỗi khi xử lý đơn hàng' })
     }
 }
 
