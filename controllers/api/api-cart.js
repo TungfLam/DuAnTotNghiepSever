@@ -107,7 +107,6 @@ exports.deleteCart = async (req, res, next) => {
 }
 
 exports.listCart = async (req, res) => {
-
     try {
         const id_User = req.params.idUser;
         const listCart = await md.cartModel.find({ user_id: id_User })
@@ -185,6 +184,7 @@ exports.addCart = async (req, res) => {
             product_id: product._id,
             quantity: quantityCart,
             status: 'successfully',
+            createdAt: Date.now(),
         });
         if (cartobj.quantity > product.quantity || cartobj.quantity <= 0) {
             return res.json({ message: 'Số lượng giỏ hàng đã vượt quá số lượng sản phẩm' });
@@ -213,7 +213,11 @@ exports.updateCart = async (req, res, next) => {
                 return res.json({ message: 'Không thể thực hiện' });
             }
 
-            await md.cartModel.findByIdAndUpdate(id_Cart, { quantity: quantityCart });
+            await md.cartModel.findByIdAndUpdate(id_Cart,
+                {
+                    quantity: quantityCart,
+                    updatedAt: Date.now(),
+                });
             res.json({ message: 'Update Sucsess ' });
         }
 

@@ -4,8 +4,8 @@ const favorite_SChema = new db.mongoose.Schema(
     {    
         user_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'userModel'},
         product_id:{type:db.mongoose.Schema.Types.ObjectId,ref:'productModel'},
-        createdAt: { type: Date, default: Date.now },
-        updatedAt: { type: Date, default: Date.now },
+        createdAt: { type: Date, required: false },
+        updatedAt: { type: Date, required: false },
     },
     {
 

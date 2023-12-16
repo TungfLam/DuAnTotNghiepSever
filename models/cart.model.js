@@ -6,8 +6,8 @@ const cart_SChema = new db.mongoose.Schema(
         product_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'product_size_color_Model' },
         quantity: { type: Number, require: true },
         status: { type: String, required: true },
-        createdAt: { type: Date, default: Date.now },
-        updatedAt: { type: Date, default: Date.now },
+        createdAt: { type: Date, required: false },
+        updatedAt: { type: Date, required: false },
     },
     {
         collection: 'cart'

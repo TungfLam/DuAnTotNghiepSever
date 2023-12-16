@@ -10,7 +10,8 @@ const addFavorite = async (req, res) => {
         if (req.method === 'POST') {
             let objfavorite = new mdFavorite.favorite_Model({
                 user_id: id_user._id,
-                product_id: id_product._id
+                product_id: id_product._id,
+                createdAt:Date.now()
             })
             await objfavorite.save();
             res.status(200).json({ message: "Success" });
@@ -28,7 +29,7 @@ const addFavorite = async (req, res) => {
 const getListFavorite = async (req, res) => {
     try {
         const idUser = req.params.idUser;
-        const listFavorite = await mdFavorite.favorite_Model.findOne({ user_id: idUser })
+        const listFavorite = await mdFavorite.favorite_Model.find({ user_id: idUser })
             .populate('product_id').populate('user_id', "name").sort({ createdAt: -1 })
         res.status(200).json({ message: "Success", listFavorite: listFavorite });
     } catch (error) {
