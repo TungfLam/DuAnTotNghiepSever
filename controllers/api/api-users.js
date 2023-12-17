@@ -63,8 +63,11 @@ exports.userLogin = async (req, res, next) => {
     res.status(200).json({
         msg : msg,
         err : err,
-        idUser : (objUser._id != "") ? objUser._id : "",
-        role : (objUser.role != "") ? objUser.role : "",
+        idUser : objUser != null ? objUser._id : "",
+        role : objUser != null ? objUser.role : "",
+        avata : objUser != null ? objUser.avata : "",
+        phone : objUser != null ? objUser.phone_number : "",
+        email : objUser != null ? objUser.email : "",
     });
 }
 
@@ -100,8 +103,11 @@ exports.userLoginPhone = async (req , res , next) => {
     res.status(200).json({
         msg : msg,
         err : err,
-        idUser : (objUser != null) ? objUser._id : "",
-        role : (objUser != null) ? objUser.role : "",
+        idUser : objUser != null ? objUser._id : "",
+        role : objUser != null ? objUser.role : "",
+        avata : objUser != null ? objUser.avata : "",
+        phone : objUser != null ? objUser.phone_number : "",
+        email : objUser != null ? objUser.email : "",
     });
 }
 
