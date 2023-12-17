@@ -11,8 +11,12 @@ exports.getNotification = async (req , res ,next) =>{
         console.log("User không tồn tại")
     }
 
+    console.log(idUser);
     if(objuser){
         arrNotification = await mdNotification.notificationModel.find({id_user : idUser});
+
+    }else{
+        console.log("null");
     }
 
     res.status(200).json(arrNotification);
