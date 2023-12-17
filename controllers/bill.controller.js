@@ -64,7 +64,12 @@ exports.loc = async (req, res, next) => {
                 .populate({
                     path: 'cart_id',
                     populate: {
-                        path: 'product_id'
+                        path: 'product_id',
+                        populate: [
+                            { path: 'product_id' },
+                            { path: 'size_id' },
+                            { path: 'color_id' }
+                        ]
                     }
                 })
                 .sort({ date: -1 });
@@ -77,7 +82,12 @@ exports.loc = async (req, res, next) => {
             // Tính tổng số hóa đơn
             let tong_so_hoa_don = await billMD.billModel.countDocuments(dieu_kien_loc);
             // Tính tổng số hóa đơn đã thanh toán
-            let tong_so_hoa_don_da_thanh_toan = await billMD.billModel.countDocuments({ ...dieu_kien_loc, status: 2 });
+            let tong_so_hoa_don_da_thanh_toan = await billMD.billModel.countDocuments({
+                ...dieu_kien_loc,
+                //  <!-- status đã thanh toán == 3 5 6 7 8 -->
+
+                status: { $in: [3, 5, 7, 6, 8] }
+            });
 
             // Tính tỷ lệ phần trăm
             let ti_le_thanh_toan = ((tong_so_hoa_don_da_thanh_toan / tong_so_hoa_don) * 100).toFixed(2);
@@ -88,9 +98,11 @@ exports.loc = async (req, res, next) => {
                 { $group: { _id: null, total: { $sum: "$total_amount" } } }
             ]);
 
+
+            //  <!-- status đã thanh toán == 3 5 6 7 8 -->
             // Tính tổng tiền đã thanh toán
             let tong_tien_da_thanh_toan = await billMD.billModel.aggregate([
-                { $match: { ...dieu_kien_loc, status: 2 } },
+                { $match: { ...dieu_kien_loc, status: { $in: [3, 5, 7, 6, 8] } } },
                 { $group: { _id: null, total: { $sum: "$total_amount" } } }
             ]);
             // Tính tổng số hóa đơn có payments = 1
@@ -102,6 +114,7 @@ exports.loc = async (req, res, next) => {
             tong_tien = tong_tien.length > 0 ? tong_tien[0].total : 0;
             tong_tien_da_thanh_toan = tong_tien_da_thanh_toan.length > 0 ? tong_tien_da_thanh_toan[0].total : 0;
             //===
+
             if (!bills) {
                 res.status(404).send('Tìm kiếm thất bại');
                 msg2 = 'Tìm kiếm thất bại';
@@ -161,11 +174,14 @@ exports.detail = async (req, res, next) => {
                 path: 'cart_id',
                 populate: {
                     path: 'product_id',
-                    populate: {
-                        path: 'category_id'
-                    }
+                    populate: [
+                        { path: 'product_id' },
+                        { path: 'size_id' },
+                        { path: 'color_id' }
+                    ]
                 }
             })
+
 
     } catch (error) {
 

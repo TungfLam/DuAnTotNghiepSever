@@ -33,7 +33,10 @@
                 </p>
                 <p>Trạng thái: <%= bill.status==1 ? 'Chưa thanh toán' : 'Đã thanh toán' %>
                 </p>
-                <p>Ngày: <%= bill.date %>
+                <p>Ngày: <% var date=new Date(bill.createdAt); %>
+                        <%= date.toLocaleTimeString('vi-VN', { hour: '2-digit' , minute: '2-digit' }) %> -
+                            <%= date.toLocaleDateString('vi-VN', { day: '2-digit' , month: '2-digit' , year: 'numeric'
+                                }) %>
                 </p>
             </div>
         </div>
@@ -74,24 +77,7 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                Thông tin sản phẩm
-            </div>
-            <div class="card-body">
-                <p>Mã sản phẩm: <%= bill.cart_id.product_id._id %>
-                </p>
-                <p>Tên sản phẩm: <%= bill.cart_id.product_id.name %>
-                </p>
-                <p>Sản phẩm: <%= bill.cart_id.product_id.category_id.name %>
-                </p>
-                <p>Mô tả: <%= bill.cart_id.product_id.description %>
-                </p>
-                <p>Giá: <%= bill.cart_id.product_id.price %>
-                </p>
-                <img src="<%= bill.cart_id.product_id.image[0] %>" alt="Hình ảnh sản phẩm">
-            </div>
-        </div>
+
     </div>
 
     <!-- Thêm JavaScript Bootstrap -->
