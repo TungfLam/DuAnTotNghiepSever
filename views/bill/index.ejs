@@ -132,10 +132,18 @@
                 <label for="status">Trạng thái thanh toán</label>
                 <select id="status" name="status" class="form-control">
                   <option selected value="">none...</option>
-                  <option value="2" <%=query.status=='2' ? 'selected' : '' %>>Đã thanh toán</option>
-                  <option value="1" <%=query.status=='1' ? 'selected' : '' %>>Chưa thanh toán</option>
+                  <option value="1" <%=query.status=='1' ? 'selected' : '' %>>Đã đặt hàng</option>
+                  <option value="2" <%=query.status=='2' ? 'selected' : '' %>>Đặt hàng thất bại</option>
+                  <option value="3" <%=query.status=='3' ? 'selected' : '' %>>Đã thanh toán</option>
+                  <option value="4" <%=query.status=='4' ? 'selected' : '' %>>Chưa thanh toán</option>
+                  <option value="5" <%=query.status=='5' ? 'selected' : '' %>>Đang vận chuyển</option>
+                  <option value="6" <%=query.status=='6' ? 'selected' : '' %>>Vận chuyển thất bại</option>
+                  <option value="7" <%=query.status=='7' ? 'selected' : '' %>>Hoàn thành</option>
+                  <option value="8" <%=query.status=='8' ? 'selected' : '' %>>Người mua không nhận hàng</option>
                 </select>
               </div>
+              <!-- status đã thanh toán == 3 5 6 7 8 -->
+
               <div class="col-md-2">
                 <label for="payments">Hình thức thanh toán</label>
                 <select id="payments" name="payments" class="form-control">
@@ -172,7 +180,7 @@
             <thead>
               <tr>
                 <th>ID - Mã đơn</th>
-                <th>Cart </th>
+                <th>Cart - Tên sản phẩm và số lượng</th>
                 <th>Payments</th>
                 <th>Date - Đơn hàng</th>
                 <th>User</th>
@@ -192,44 +200,36 @@
                     </span>
                   </td>
                   <td>
-                    Id cart:
-                    <%= bill.cart_id._id %>
-                      <br>
+                    Sản phẩm:
+                    <span style="color: rgb(0, 0, 0); font-weight: bold;">
+                      <%= bill.cart_id.length %>
+                    </span><br>
 
-                      Id sản phẩm:
-                      <span style="color: rgb(1, 46, 106); font-weight: bold;">
+                    <span style="color: rgb(1, 46, 106); font-weight: bold;">
 
-                        <% if (bill.cart_id && bill.cart_id.product_id) { %>
-                          <%= bill.cart_id.product_id._id %>
-                            <% } else { %>
-                              Sản phẩm đã bị xóa
-                              <% } %>
+                      <% bill.cart_id.forEach(function(cart) { %>
+                        <% if (cart._id) { %>
 
-                      </span>
 
-                      <br>
-                      Tên sản phẩm:
-                      <span style="color: rgb(0, 108, 249); font-weight: bold;">
+                          <%= cart.product_id.product_id.name %>
+                            <span style="color: rgb(255, 1, 1); font-weight: bold;">
 
-                        <% if (bill.cart_id && bill.cart_id.product_id) { %>
-                          <%= bill.cart_id.product_id.name %>
+                              x<%= cart.quantity %>
+                            </span>
+                            <!-- <span
+                              style="display: inline-block; padding: 2px 10px; color: white; background-color: #26A844; font-weight: normal; border-radius: 5px;">
+                              <%= cart.status %>
+                            </span> -->
+
                             <% } else { %>
                               <span style="color: red; font-weight: bold;">
-                                Sản phẩm đã bị xóa
+                                Sản phẩm không tồn tại
                               </span>
                               <% } %>
-
-                      </span>
-                      <br>
-
-                      Trạng thái:
-                      <i class="fas fa-calendar-check"></i>
-
-                      <span
-                        style="display: inline-block; padding: 2px 10px; color: white; background-color: #26A844; font-weight: normal; border-radius: 5px;">
-
-                        <%= bill.cart_id.status %>
-                      </span>
+                                <br>
+                                <% }); %>
+                    </span>
+                    <br>
 
                   </td>
                   <td>
@@ -248,11 +248,13 @@
                   <td>
                     <i class="far fa-calendar-plus"></i>
                     <span style="color: rgb(0, 0, 0); font-weight: bold;">
-                      <% var date=new Date(bill.date); %>
-                        <%= date.toLocaleTimeString('vi-VN', { hour: '2-digit' , minute: '2-digit' }) %> - <%=
-                            date.toLocaleDateString('vi-VN', { day: '2-digit' , month: '2-digit' , year: 'numeric' }) %>
+                      <% var date=new Date(bill.createdAt); %>
+                        <%= date.toLocaleTimeString('vi-VN', { hour: '2-digit' , minute: '2-digit' }) %> -
+                          <%= date.toLocaleDateString('vi-VN', { day: '2-digit' , month: '2-digit' , year: 'numeric' })
+                            %>
                     </span>
                   </td>
+
 
                   <td>
                     <i class="fas fa-address-card"></i>
@@ -290,32 +292,26 @@
 
                   </td>
                   <td>
-                    <% if (bill.status===1) { %>
-                      <i class="fas fa-exclamation-triangle"></i>
-                      <span style="color: red; font-weight: bold;">Chưa thanh toán</span>
-                      <% } else if (bill.status===2) { %>
-                        <i class="fa fa-check-square" aria-hidden="true"></i>
-                        <span style="color: green; font-weight: bold;">Đã thanh toán</span>
-                        <% } %>
-
-                          <div class="container">
-                            <form action="" method="post" enctype="multipart/form-data">
-                              <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                <input type="hidden" name="billId" value="<%= bill._id %>">
-                                <label class="btn btn-toggle paid <%= bill.status === 2 ? 'active' : '' %>">
-                                  <input type="radio" name="status" id="paid" value="2" <%=bill.status===2 ? 'checked'
-                                    : '' %>>
-                                  Đã thanh toán
-                                </label>
-                                <label class="btn btn-toggle unpaid <%= bill.status === 1 ? 'active' : '' %>">
-                                  <input type="radio" name="status" id="unpaid" value="1" <%=bill.status===1 ? 'checked'
-                                    : '' %>>
-                                  Chưa thanh toán
-                                </label>
-                              </div>
-                              <button class="btn btn-secondary mt-0 " type="submit">Update</button>
-                            </form>
-                          </div>
+                    <div class="container"
+                      style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                      <form action="" method="post" enctype="multipart/form-data" style="width: 100%;">
+                        <input type="hidden" name="billId" value="<%= bill._id %>">
+                        <label for="status" style="font-weight: bold; margin-bottom: 10px;">Trạng thái thanh
+                          toán</label>
+                        <select id="status" name="status" class="form-control" style="margin-bottom: 20px;">
+                          <option value="">none...</option>
+                          <option value="1" <%=bill.status=='1' ? 'selected' : '' %>>Đã đặt hàng</option>
+                          <option value="2" <%=bill.status=='2' ? 'selected' : '' %>>Đặt hàng thất bại</option>
+                          <option value="3" <%=bill.status=='3' ? 'selected' : '' %>>Đã thanh toán</option>
+                          <option value="4" <%=bill.status=='4' ? 'selected' : '' %>>Chưa thanh toán</option>
+                          <option value="5" <%=bill.status=='5' ? 'selected' : '' %>>Đang vận chuyển</option>
+                          <option value="6" <%=bill.status=='6' ? 'selected' : '' %>>Vận chuyển thất bại</option>
+                          <option value="7" <%=bill.status=='7' ? 'selected' : '' %>>Hoàn thành</option>
+                          <option value="8" <%=bill.status=='8' ? 'selected' : '' %>>Người mua không nhận hàng</option>
+                        </select>
+                        <button class="btn btn-secondary" type="submit" style="width: 100%;">Update</button>
+                      </form>
+                    </div>
                   </td>
 
 
