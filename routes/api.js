@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
 const multer = require('multer');
-const upload = multer();
+const upload = multer({dest : './tmp'});
 
 const api_comment = require('../controllers/api/api_comment');
 const api_users = require('../controllers/api/api-users')
+const api_notification = require('../controllers/api/api_notification');
 var api_color = require('../controllers/api/api_color')
 var api_size = require('../controllers/api/api_size')
 var api_category = require('../controllers/api/api_category')
@@ -14,17 +15,31 @@ var api_favorite = require('../controllers/api/api_favorite')
 var api_product = require('../controllers/api/api-product')
 var api_bill = require('../controllers/api/api-bill')
 var api_cart = require('../controllers/api/api-cart')
-var api_address = require('../controllers/api/api-address')
 
 // api user
 
 router.get('/users', api_users.listUser);
 router.get('/users/pagination', api_users.pagination);
 router.post('/userslogin', api_users.userLogin);
+router.post('/usersloginphone' , api_users.userLoginPhone);
+router.post('/cheklogin/:idUser' , api_users.checkLogin);
+router.post('/logout/:idUser' , api_users.logout);
+router.put('/setoken/:idUser' , api_users.setToken);
 
-router.post('/users', api_users.addUser);
+router.post('/users',upload.single("image"), api_users.addUser);
 router.put('/users/:idu', api_users.updateUser);
 router.delete('/users/:idu', api_users.deleteUser);
+
+//address
+router.get('/address/:idUser' , api_users.getAddressByIdUser); 
+router.post('/address' , api_users.addAddress);
+router.put('/address/:idAddress' , api_users.updateAddres);
+router.delete('/address' , api_users.deleteAddress);
+
+//notification
+router.get('/notification/:idUser' , api_notification.getNotification);
+
+
 //===
 // api product
 
@@ -92,14 +107,6 @@ router.get('/getListCart/:idUser', api_cart.listCart);
 router.delete('/deletecart/:id', api_cart.deleteCart);
 
 //====
-// api address
 
-router.get('/address', api_address.listAddress);
-router.post('/address', api_address.addAddress);
-router.put('/address/:id', api_address.updateAddress);
-router.delete('/address/:id', api_address.deleteAddress);
-
-//====
-// api socket
 
 module.exports = router;

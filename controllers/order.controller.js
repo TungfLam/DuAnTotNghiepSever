@@ -7,6 +7,11 @@ let mdBill = require('../models/bill.model')
 let mdProduct = require('../models/product_size_color.model')
 let mdCart = require('../models/cart.model')
 let mdUser = require('../models/user.model')
+let mdProduct_detail = require('../models/product_size_color.model')
+let mdProduct_ = require('../models/product.model')
+let mdSize = require('../models/sizes.model')
+let mdColor = require('../models/color.model')
+let mdcategory = require('../models/category.model')
 let { DateTime } = require('luxon');
 function sortObject(obj) {
     let sorted = {};
@@ -157,10 +162,82 @@ const vnpay_return = async (req, res, next) => {
                     await finCart.save();
                 }
             }
+            // get user and cart data
+
+            const userData = await mdUser.userModel.findById(idUser);
+            const userDataToSave = {
+                username: userData.username,
+                phone_number: userData.phone_number,
+                role: userData.role,
+                address: userData.address,
+                full_name: userData.full_name,
+                email: userData.email
+            };
+            console.log("zzzzzzzzzzzzzzzzzz" + userDataToSave);
+            //================
+            const cartData = await mdCart.cartModel.find({ '_id': { $in: idCart } });
+            const cartDataToSave = await Promise.all(cartData.map(async (cart) => {
+                // get product data
+                const productdetailData = await mdProduct_detail.product_size_color_Model.findById(cart.product_id);
+
+                // get product data
+                const productData = await mdProduct_.productModel.findById(productdetailData.product_id);
+
+                // get size data
+                const sizeData = await mdSize.sizeModel.findById(productdetailData.size_id);
+                // get color data
+                const colorData = await mdColor.colorModel.findById(productdetailData.color_id);
+
+                // get category data
+                const categoryData = await mdcategory.categoryModel.findById(productData.category_id);
+
+
+                // create a new object with only the fields you need
+                const productDataToSave = {
+                    //=== deital
+                    product_id: productdetailData._id,
+                    size_id: productdetailData.name,
+                    color_id: productdetailData.description,
+                    quantity: productdetailData.image,
+                    createdAt: productdetailData.category_id,
+                    //=== deital
+                    //=== product
+
+                    name: productData.name,
+                    description: productData.description,
+                    image: productData.image,
+                    category_id: productData.category_id,
+
+                    createdAt: productData.createdAt,
+                    //=== product
+                    //===== category
+                    category_name: categoryData.name,
+                    //===== category
+
+                    size_name: sizeData.name, // add size name
+                    color_name: colorData.name, // add color name
+                    color_code: colorData.colorcode // add color code
+                };
+
+
+                return {
+                    product_id: cart.product_id,
+                    quantity: cart.quantity,
+                    status: cart.status,
+                    createdAt: cart.createdAt,
+                    product_data: productDataToSave
+                };
+            }));
+
+
+
+
             // tạo mới bill 
             const newBillData = {
-                user_id: idUser,
-                cart_id: idCart,
+                // user_id: idUser,
+                // cart_id: idCart,
+                user_data: userDataToSave, // add user data
+                cart_data: cartDataToSave, // add cart data
                 payments: 2,
                 total_amount: amount,
                 status: dat_hang_thanh_cong,
