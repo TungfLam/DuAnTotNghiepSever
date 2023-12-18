@@ -3,6 +3,8 @@ user.edit.ejs
 ...
 ?
 //123
+// "vnp_ReturnUrl""http//localhost:6868/order/vnpay_return"
+
 
 status bill
 1 : Đã đặt hàng (thông báo cho người dùng đã đặt hàng thàng công);
