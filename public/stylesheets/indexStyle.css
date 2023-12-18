@@ -128,3 +128,4 @@ footer {
 .btn-checkbox:checked.black + .checkbox-label {
     color: black; /* Màu chữ khi checkbox được chọn và màu nền đen */
 }
+

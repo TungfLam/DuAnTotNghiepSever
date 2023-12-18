@@ -8,7 +8,6 @@ const { DateTime } = require('luxon');
 // get
 exports.listBill = async (req, res, next) => {
     let list = [];
-
     try {
         list = await md.billModel.find();
         if (list.length > 0)
@@ -16,10 +15,7 @@ exports.listBill = async (req, res, next) => {
         else {
             objReturn.status = 0;
             objReturn.msg = 'Không có dữ liệu phù hợp';
-
         }
-
-        
     } catch (error) {
         objReturn.status = 0;
         objReturn.msg = error.message;
@@ -30,12 +26,11 @@ exports.listBill = async (req, res, next) => {
 // get theo id
 exports.listBillByUserId = async (req, res, next) => {
     let userId = req.params.userId;
+    // console.log("userId",userId);
     let list = [];
-
     try {
         list = await md.billModel.find({ user_id: userId })
         .populate("user_id")
-        
         .populate({
             path: 'cart_id',
             populate: {

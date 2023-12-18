@@ -109,7 +109,7 @@ exports.deleteCart = async (req, res, next) => {
 exports.listCart = async (req, res) => {
     try {
         const id_User = req.params.idUser;
-        const listCart = await md.cartModel.find({ user_id: id_User })
+        let listCart = await md.cartModel.find({ user_id: id_User })
             .populate({
                 path: 'product_id',
                 populate: {
@@ -118,7 +118,11 @@ exports.listCart = async (req, res) => {
                 }
             })
             .populate('user_id')
-            .sort({ createdAt: -1 })
+            .sort({ createdAt: -1 });
+
+        // Lọc các cart có status không phải 'đã đặt hàng'
+        listCart = listCart.filter(item => item.status !== 'Đã đặt hàng');
+        
         for (const item of listCart) {
             if (item.product_id && item.product_id.quantity < item.quantity) {
                 if (item.status === 'successfully') {
@@ -132,6 +136,7 @@ exports.listCart = async (req, res) => {
                 }
             }
         }
+
         if (!listCart || listCart.length === 0) {
             return res.json({ message: 'Giỏ hàng của bạn chưa có sản phẩm nào, thêm sản phẩm vào giỏ hàng ngay!', listCart: [] });
         }

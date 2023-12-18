@@ -49,6 +49,7 @@ const create_payment_url = async (req, res, next) => {
     let idCart = req.body.idCart;
     let amount = req.body.amount;
     try {
+        
         const finUser = await mdUser.userModel.findById(idUser);
         if (!idCart || !Array.isArray(idCart) || !finUser) {
             return res.status(400).json({ message: 'Dữ liệu không hợp lệ.' });

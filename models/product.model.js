@@ -7,6 +7,7 @@ const productSchema = new db.mongoose.Schema(
         image: { type: [String], required: false },
         category_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'categoryModel' },
         price: { type: Number, required: true },
+        discount: { type: Number, required: false },
         rating: { type: Number, require: false },
         createdAt: { type: Date, required: false },
         updatedAt: { type: Date, required: false },
