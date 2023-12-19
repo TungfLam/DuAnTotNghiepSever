@@ -1,6 +1,7 @@
 var fs = require('fs');
 const billMD = require('../models/bill.model');
 const mongoose = require('mongoose');
+var moment = require('moment-timezone');
 
 let title = 'Hóa Đơn'
 let heading = 'Danh sách hóa đơn'
@@ -115,6 +116,8 @@ exports.loc = async (req, res, next) => {
             tong_tien_da_thanh_toan = tong_tien_da_thanh_toan.length > 0 ? tong_tien_da_thanh_toan[0].total : 0;
             //===
 
+            var date = moment(bills.createdAt).tz('Asia/Ho_Chi_Minh').format('HH:mm - DD/MM/YYYY');
+
             if (!bills) {
                 res.status(404).send('Tìm kiếm thất bại');
                 msg2 = 'Tìm kiếm thất bại';
@@ -127,6 +130,7 @@ exports.loc = async (req, res, next) => {
                     title: title,
                     heading: heading,
                     bills: bills,
+                    date: date,
                     totalPages: totalPages,
                     currentPage: page,
                     query: req.query,

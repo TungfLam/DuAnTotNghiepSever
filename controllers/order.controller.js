@@ -13,6 +13,7 @@ let mdSize = require('../models/sizes.model')
 let mdColor = require('../models/color.model')
 let mdcategory = require('../models/category.model')
 let { DateTime } = require('luxon');
+
 function sortObject(obj) {
     let sorted = {};
     let str = [];
@@ -230,6 +231,7 @@ const vnpay_return = async (req, res, next) => {
 
 
 
+            var date = moment(Date.now()).utc().toDate();
 
             // tạo mới bill 
             const newBillData = {
@@ -240,7 +242,7 @@ const vnpay_return = async (req, res, next) => {
                 payments: 2,
                 total_amount: amount,
                 status: dat_hang_thanh_cong,
-                createdAt: Date.now()
+                createdAt: date
             };
             const newBill = new mdBill.billModel(newBillData);
             newBill.save()
