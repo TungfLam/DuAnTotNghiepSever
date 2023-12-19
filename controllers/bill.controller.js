@@ -62,18 +62,20 @@ exports.loc = async (req, res, next) => {
                 .skip(skip)
                 .limit(limit)
                 .populate('user_id')
+                .populate('user_data')
                 .populate({
-                    path: 'cart_id',
+                    path: 'cart_data',
                     populate: {
                         path: 'product_id',
                         populate: [
-                            { path: 'product_id' },
+                            { path: 'product_data' },
                             { path: 'size_id' },
                             { path: 'color_id' }
                         ]
                     }
                 })
                 .sort({ createdAt: -1 });
+
 
             // Tính tổng số trang
             const totalBills = await billMD.billModel.countDocuments(dieu_kien_loc);
@@ -177,13 +179,13 @@ exports.detail = async (req, res, next) => {
 
     try {
         var bill = await billMD.billModel.findById(id)
-            .populate('user_id')
+            .populate('user_data')
             .populate({
-                path: 'cart_id',
+                path: 'cart_data',
                 populate: {
                     path: 'product_id',
                     populate: [
-                        { path: 'product_id' },
+                        { path: 'product_data' },
                         { path: 'size_id' },
                         { path: 'color_id' }
                     ]
