@@ -73,7 +73,7 @@ exports.loc = async (req, res, next) => {
                         ]
                     }
                 })
-                .sort({ date: -1 });
+                .sort({ createdAt: -1 });
 
             // Tính tổng số trang
             const totalBills = await billMD.billModel.countDocuments(dieu_kien_loc);
@@ -116,7 +116,11 @@ exports.loc = async (req, res, next) => {
             tong_tien_da_thanh_toan = tong_tien_da_thanh_toan.length > 0 ? tong_tien_da_thanh_toan[0].total : 0;
             //===
 
-            var date = moment(bills.createdAt).tz('Asia/Ho_Chi_Minh').format('HH:mm - DD/MM/YYYY');
+            // var date = moment(bills.createdAt).tz('Asia/Ho_Chi_Minh').format('HH:mm - DD/MM/YYYY');
+            bills.forEach(bill => {
+                var date = moment(bill.createdAt).tz('Asia/Ho_Chi_Minh').format('HH:mm - DD/MM/YYYY');
+                bill.createdAt = date;
+            });
 
             if (!bills) {
                 res.status(404).send('Tìm kiếm thất bại');
@@ -130,7 +134,6 @@ exports.loc = async (req, res, next) => {
                     title: title,
                     heading: heading,
                     bills: bills,
-                    date: date,
                     totalPages: totalPages,
                     currentPage: page,
                     query: req.query,
