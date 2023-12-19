@@ -1,6 +1,7 @@
 var fs = require('fs');
 const billMD = require('../models/bill.model');
 const mongoose = require('mongoose');
+var moment = require('moment-timezone');
 
 let title = 'Hóa Đơn'
 let heading = 'Danh sách hóa đơn'
@@ -61,18 +62,20 @@ exports.loc = async (req, res, next) => {
                 .skip(skip)
                 .limit(limit)
                 .populate('user_id')
+                .populate('user_data')
                 .populate({
-                    path: 'cart_id',
+                    path: 'cart_data',
                     populate: {
                         path: 'product_id',
                         populate: [
-                            { path: 'product_id' },
+                            { path: 'product_data' },
                             { path: 'size_id' },
                             { path: 'color_id' }
                         ]
                     }
                 })
-                .sort({ date: -1 });
+                .sort({ createdAt: -1 });
+
 
             // Tính tổng số trang
             const totalBills = await billMD.billModel.countDocuments(dieu_kien_loc);
@@ -114,6 +117,13 @@ exports.loc = async (req, res, next) => {
             tong_tien = tong_tien.length > 0 ? tong_tien[0].total : 0;
             tong_tien_da_thanh_toan = tong_tien_da_thanh_toan.length > 0 ? tong_tien_da_thanh_toan[0].total : 0;
             //===
+
+            // var date = moment(bills.createdAt).tz('Asia/Ho_Chi_Minh').format('HH:mm - DD/MM/YYYY');
+            bills.forEach(bill => {
+                var date = new Date(bill.createdAt);
+                date.setHours(date.getHours() + 7);
+                bill.createdAt = date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' - ' + date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            });
 
             if (!bills) {
                 res.status(404).send('Tìm kiếm thất bại');
@@ -169,13 +179,13 @@ exports.detail = async (req, res, next) => {
 
     try {
         var bill = await billMD.billModel.findById(id)
-            .populate('user_id')
+            .populate('user_data')
             .populate({
-                path: 'cart_id',
+                path: 'cart_data',
                 populate: {
                     path: 'product_id',
                     populate: [
-                        { path: 'product_id' },
+                        { path: 'product_data' },
                         { path: 'size_id' },
                         { path: 'color_id' }
                     ]

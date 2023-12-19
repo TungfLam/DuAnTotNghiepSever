@@ -13,6 +13,7 @@ let mdSize = require('../models/sizes.model')
 let mdColor = require('../models/color.model')
 let mdcategory = require('../models/category.model')
 let { DateTime } = require('luxon');
+
 function sortObject(obj) {
     let sorted = {};
     let str = [];
@@ -173,7 +174,6 @@ const vnpay_return = async (req, res, next) => {
                 full_name: userData.full_name,
                 email: userData.email
             };
-            console.log("zzzzzzzzzzzzzzzzzz" + userDataToSave);
             //================
             const cartData = await mdCart.cartModel.find({ '_id': { $in: idCart } });
             const cartDataToSave = await Promise.all(cartData.map(async (cart) => {
@@ -207,8 +207,9 @@ const vnpay_return = async (req, res, next) => {
                     description: productData.description,
                     image: productData.image,
                     category_id: productData.category_id,
-
+                    price: productData.price,
                     createdAt: productData.createdAt,
+
                     //=== product
                     //===== category
                     category_name: categoryData.name,
@@ -222,6 +223,7 @@ const vnpay_return = async (req, res, next) => {
 
                 return {
                     product_id: cart.product_id,
+                    _id: cart._id,
                     quantity: cart.quantity,
                     status: cart.status,
                     createdAt: cart.createdAt,
@@ -231,6 +233,7 @@ const vnpay_return = async (req, res, next) => {
 
 
 
+            var date = moment(Date.now()).utc().toDate();
 
             // tạo mới bill 
             const newBillData = {
@@ -241,7 +244,7 @@ const vnpay_return = async (req, res, next) => {
                 payments: 2,
                 total_amount: amount,
                 status: dat_hang_thanh_cong,
-                createdAt: Date.now()
+                createdAt: date
             };
             const newBill = new mdBill.billModel(newBillData);
             newBill.save()

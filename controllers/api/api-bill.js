@@ -30,20 +30,20 @@ exports.listBillByUserId = async (req, res, next) => {
     let list = [];
     try {
         list = await md.billModel.find({ user_id: userId })
-        .populate("user_id")
-        .populate({
-            path: 'cart_id',
-            populate: {
-                path: 'product_id',
-                model: 'product_size_color_Model',
-                populate: [
-                    { path: 'product_id' },
-                    { path: 'size_id' },
-                    { path: 'color_id' }
-                ]
-            },
-            
-        })
+            .populate("user_id")
+            .populate({
+                path: 'cart_id',
+                populate: {
+                    path: 'product_id',
+                    model: 'product_size_color_Model',
+                    populate: [
+                        { path: 'product_id' },
+                        { path: 'size_id' },
+                        { path: 'color_id' }
+                    ]
+                },
+
+            })
         if (list.length > 0)
             objReturn.data = list;
         else {
@@ -123,25 +123,25 @@ exports.addBill = async (req, res, next) => {
 // Update Bill
 exports.updateBill = async (req, res, next) => {
     try {
-        const validation = schema.validate(req.body);
-        if (validation.error) {
-            return res.status(400).json({ message: 'Validation Error', error: validation.error.details });
+        const { status } = req.body; // get status from request body
+
+        if (!status) {
+            return res.status(400).json({ message: 'Status is required' });
         }
 
-        const bill = req.body;
-        bill.date = DateTime.now().setZone('Asia/Ho_Chi_Minh').toISO(); // Add current date in Vietnam
-        const updatedBill = await md.billModel.findByIdAndUpdate(req.params.id, bill, { new: true });
+        const updatedBill = await md.billModel.findByIdAndUpdate(req.params.id, { status }, { new: true });
+
         if (!updatedBill) {
             return res.status(404).json({ message: 'Bill not found' });
         }
 
-        console.log(updatedBill);
         res.json(updatedBill);
     } catch (err) {
         console.error(err.message);
         return res.status(500).json({ message: 'Server Error', error: err.toString() });
     }
 }
+
 
 
 // Delete Bill
