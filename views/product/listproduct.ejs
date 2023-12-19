@@ -2,7 +2,8 @@
     <div class="container-fluid">
 
 
-        <% if (message==='Thêm thành công' || message==='Cập nhật thành công sản phẩm' || message==='Xóa thành công' ) { %>
+        <% if (message==='Thêm thành công' || message==='Cập nhật thành công sản phẩm' || message==='Xóa thành công' ) {
+            %>
             <script>
                 Swal.fire({
                     icon: 'success',
@@ -56,11 +57,11 @@
                 </div>
 
                 <style>
-                
+
                 </style>
                 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <form method="POST" action="/product/addproduct" enctype="multipart/form-data" multiple>
                                 <script>
@@ -107,12 +108,49 @@
                                             placeholder="Fullname" required name="description">
                                         <label for="floatingInput">Mô tả</label>
                                     </div>
-                                    
+
+                             
+                                    <div class="image-preview" id="imagePreview"></div>
+
                                     <div class="input-group mb-3">
                                         <input type="file" class="form-control" id="inputGroupFile02" name="image"
-                                            multiple accept="image/*" onchange="checkFileCount(this)">
+                                            multiple accept="image/*" onchange="handleFileSelect(this)">
                                         <label class="input-group-text" for="inputGroupFile02">Upload</label>
                                     </div>
+
+                                    <script>
+                                        function handleFileSelect(input) {
+                                            const maxFiles = 5;
+                                            const imagePreview = document.getElementById("imagePreview");
+                                            const paragraph = document.querySelector("p");
+
+                                            // Xóa nội dung cũ
+                                            imagePreview.innerHTML = "";
+
+                                            if (input.files && input.files.length > maxFiles) {
+                                                alert(`Vui lòng chọn tối đa ${maxFiles} ảnh.`);
+                                                // Đặt giá trị input về rỗng để loại bỏ các tệp vừa chọn
+                                                input.value = "";
+                                            } else {
+                                                // Hiển thị nội dung của thẻ p
+                                                paragraph.style.display = "block";
+
+                                                for (let i = 0; i < input.files.length && i < maxFiles; i++) {
+                                                    const file = input.files[i];
+                                                    const reader = new FileReader();
+
+                                                    reader.onload = function (e) {
+                                                        const img = document.createElement("img");
+                                                        img.src = e.target.result;
+                                                        img.classList.add("preview-image");
+                                                        imagePreview.appendChild(img);
+                                                    };
+
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            }
+                                        }
+                                    </script>
 
                                     <div class="form-floating mb-2">
                                         <input type="text" class="form-control" id="floatingInput"
@@ -166,7 +204,6 @@
                                         <a href="/product/sortDown"><i class="fa-solid fa-caret-down"></i></i></a>
                                         <a href="/product/sortUp"><i class="fa-solid fa-caret-up"></i></a>
                                     </span>
-
                                 </th>
                                 <th>Ảnh</th>
                                 <th>Mô tả</th>

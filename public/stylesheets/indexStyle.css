@@ -128,3 +128,19 @@ footer {
 .btn-checkbox:checked.black + .checkbox-label {
     color: black; /* Màu chữ khi checkbox được chọn và màu nền đen */
 }
+
+/* thêm sản phẩm 
+ */
+
+
+ .preview-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.preview-image {
+    max-width: 120px;
+    max-height: 120px;
+    margin: 5px;
+    margin-bottom: 10px;
+}
