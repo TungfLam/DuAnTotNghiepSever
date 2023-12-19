@@ -222,6 +222,7 @@ const vnpay_return = async (req, res, next) => {
 
                 return {
                     product_id: cart.product_id,
+                    _id: cart._id,
                     quantity: cart.quantity,
                     status: cart.status,
                     createdAt: cart.createdAt,

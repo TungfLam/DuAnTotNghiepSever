@@ -140,6 +140,7 @@
                   <option value="6" <%=query.status=='6' ? 'selected' : '' %>>Vận chuyển thất bại</option>
                   <option value="7" <%=query.status=='7' ? 'selected' : '' %>>Hoàn thành</option>
                   <option value="8" <%=query.status=='8' ? 'selected' : '' %>>Người mua không nhận hàng</option>
+                  <option value="9" <%=query.status=='9' ? 'selected' : '' %>>Hủy</option>
                 </select>
               </div>
               <!-- status đã thanh toán == 3 5 6 7 8 -->
@@ -183,8 +184,8 @@
                 <th>Cart - Tên sản phẩm và số lượng</th>
                 <th>Payments</th>
                 <th>Date - Đơn hàng</th>
-                <th>User</th>
-                <th>Status</th>
+                <th>User - Người dùng</th>
+                <th>Status - trạng thái</th>
                 <th>Total Amount</th>
                 <th></th>
               </tr>
@@ -193,25 +194,25 @@
               <% bills.forEach(function(bill) { %>
 
                 <tr>
+                  <!-- mã đơn -->
                   <td>
                     <i class="far fa-calendar-alt"></i>
                     <span style="color: rgb(0, 0, 0); font-weight: bold;">
                       <%= bill._id %>
                     </span>
                   </td>
+                  <!-- sản phẩm -->
                   <td>
                     Sản phẩm:
                     <span style="color: rgb(0, 0, 0); font-weight: bold;">
-                      <%= bill.cart_id.length %>
+                      <%= bill.cart_data.length %>
                     </span><br>
 
                     <span style="color: rgb(1, 46, 106); font-weight: bold;">
 
-                      <% bill.cart_id.forEach(function(cart) { %>
+                      <% bill.cart_data.forEach(function(cart) { %>
                         <% if (cart._id) { %>
-
-
-                          <%= cart.product_id.product_id.name %>
+                          <%= cart.product_data.name %>
                             <span style="color: rgb(255, 1, 1); font-weight: bold;">
 
                               x<%= cart.quantity %>
@@ -232,6 +233,7 @@
                     <br>
 
                   </td>
+                  <!-- hình thức thanh toán -->
                   <td>
                     <% if (bill.payments===1) { %>
                       <span
@@ -245,6 +247,7 @@
                         </span>
                         <% } %>
                   </td>
+                  <!-- ngày đơn hàng -->
                   <td>
                     <i class="far fa-calendar-plus"></i>
                     <span style="color: rgb(0, 0, 0); font-weight: bold;">
@@ -256,31 +259,32 @@
                     </span>
                   </td>
 
+                  <!-- người dùng -->
 
                   <td>
                     <i class="fas fa-address-card"></i>
                     username :
                     <span style="color: rgb(2, 120, 120); font-weight: bold;">
-                      <%= bill.user_id.username %>
+                      <%= bill.user_data.username %>
                     </span>
                     <br>
                     Địa chỉ :
                     <span style="color: rgb(0, 0, 0); font-weight: bold;">
-                      <%= bill.user_id.address %>
+                      <%= bill.user_data.address %>
                     </span>
                     <br>
                     Role :
-                    <% if (bill.user_id.role=='Admin' ) { %>
+                    <% if (bill.user_data.role=='Admin' ) { %>
                       <span style="color: red; font-weight: bold;">
-                        <%= bill.user_id.role %>
+                        <%= bill.user_data.role %>
                       </span>
-                      <% } else if (bill.user_id.role=='User' ) { %>
+                      <% } else if (bill.user_data.role=='User' ) { %>
                         <span style="color: green; font-weight: bold;">
-                          <%= bill.user_id.role %>
+                          <%= bill.user_data.role %>
                         </span>
-                        <% } else if (bill.user_id.role=='Staff' ) { %>
+                        <% } else if (bill.user_data.role=='Staff' ) { %>
                           <span style="color: blue; font-weight: bold;">
-                            <%= bill.user_id.role %>
+                            <%= bill.user_data.role %>
                           </span>
                           <% } %>
                             <br>
@@ -292,6 +296,7 @@
 
 
                   </td>
+                  <!-- trạng thái -->
                   <td>
                     <div class="container"
                       style="width: 100%; display: flex; flex-direction: column; align-items: center;">
@@ -309,11 +314,13 @@
                           <option value="6" <%=bill.status=='6' ? 'selected' : '' %>>Vận chuyển thất bại</option>
                           <option value="7" <%=bill.status=='7' ? 'selected' : '' %>>Hoàn thành</option>
                           <option value="8" <%=bill.status=='8' ? 'selected' : '' %>>Người mua không nhận hàng</option>
+                          <option value="9" <%=bill.status=='9' ? 'selected' : '' %>>Hủy</option>
                         </select>
                         <button class="btn btn-secondary" type="submit" style="width: 100%;">Update</button>
                       </form>
                     </div>
                   </td>
+                  <!-- giá tiền  -->
 
 
                   <td>
@@ -321,6 +328,7 @@
                       <%= bill.total_amount.toLocaleString('vi-VN') %> VNĐ
                     </span>
                   </td>
+                  <!-- deital  -->
 
                   <td>
                     <a href="/bill/detail/<%= bill._id %>" class="btn btn-success btn-md" style="padding: 10px 20px; ">
