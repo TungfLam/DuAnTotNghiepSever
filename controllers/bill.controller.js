@@ -120,9 +120,7 @@ exports.loc = async (req, res, next) => {
             bills.forEach(bill => {
                 var date = new Date(bill.createdAt);
                 date.setHours(date.getHours() + 7);
-                console.log("igogiogiogiogioogiogigogiog--" + date);
                 bill.createdAt = date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) + ' - ' + date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                console.log("igogiogiogiogioogiogigogiog++" + bill.createdAt);
             });
 
             if (!bills) {
