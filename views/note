@@ -3,7 +3,7 @@ user.edit.ejs
 ...
 ?
 //123
-// "vnp_ReturnUrl""http//localhost:6868/order/vnpay_return"
+// "vnp_ReturnUrl""http://localhost:6868/order/vnpay_return"
 // //"vnp_ReturnUrl": "https://adadas.onrender.com/order/vnpay_return"
 
 
