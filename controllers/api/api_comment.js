@@ -4,15 +4,36 @@ const mUser = require('../../models/user.model');
 
 exports.getCommentByProduct = async (req , res , next) => {
     let product_id = req.params.ProductId;
-    let listComment = await mProduct.commentModel.find({product_id : product_id});
+    try {
+        var count = req.query.count;
+        var star = req.query.star;
+        star = Number(star);
+    } catch (error) {
+        console.log("value null");
+    }
+
+
+    if(star == 0 || String(star) == 'NaN'){
+        star = {$exists : true}
+    }
+
+
+    let listComment = await mProduct.commentModel.find({product_detail_id : product_id , rating : star}).limit(count)
+        .populate("user_id" , ['full_name' ,'avata'])
+        .populate({
+            path: 'product_detail_id',
+            populate : [
+                { path: 'size_id' , populate : [{path : 'name'}]},
+                { path: 'color_id',  populate : [{path : 'name'}] }
+            ]
+    });
     res.status(200).json(listComment);
 }
 
 
-
-
 exports.newComment = async (req , res , next) => {
-    let message = "";
+    let msg = "";
+    let err = true;
 
     if(req.method == 'POST'){
         let product_id = req.body.ProductId;
@@ -24,15 +45,15 @@ exports.newComment = async (req , res , next) => {
         let objUserChek = await mUser.userModel.findById(user_id);
 
         if(!objProductChek){
-            message = "Product null";
+            msg = "Product null";
         }else if(!objUserChek){
-            message = "User null";
+            msg = "User null";
         }else if(isNaN(sRating)){
-            message = "Rating is not a number";
+            msg = "Rating is not a number";
         }else {
             let rating = Number(sRating);
             if(rating <= 0 || rating >= 6){
-                message = "Rating illegal => (1|2|3|4|5)"
+                msg = "Rating illegal => (1|2|3|4|5)"
             }else{
                 let newComment = new mProduct.commentModel();
                 let currentDate = new Date();
@@ -49,12 +70,12 @@ exports.newComment = async (req , res , next) => {
 
                 try {
                     await newComment.save();
-                    message = "Comment added";
+                    msg = "Comment added";
                     err = false;
                     reStar(product_id);
                 } catch (error) {
                     console.log("error : " + error);
-                    message = "Add comment failed"
+                    msg = "Add comment failed"
                 }
             }
         }
@@ -62,14 +83,15 @@ exports.newComment = async (req , res , next) => {
 
     res.status(200).json(
         { 
-            message : message
+            msg : msg,
+            err : err
         }   
     );
 }
 
 
 exports.updateComment = async (req , res , next) => {
-    let message = "";   
+    let msg = "";   
     let err = true;
 
     if(req.method == 'PUT'){
@@ -80,24 +102,24 @@ exports.updateComment = async (req , res , next) => {
         let objComment = await mProduct.commentModel.findById(comment_id);
 
         if(!objComment){
-            message = "Comment null";
+            msg = "Comment null";
         }else if(isNaN(sRating)){
-            message = "Rating is not a number";
+            msg = "Rating is not a number";
         }else {
             let rating = Number(sRating);
             if(rating <= 0 || rating >= 6){
-                message = "Rating illegal => (1 -> 10)"
+                msg = "Rating illegal => (1 -> 10)"
             }else{
                 objComment.comment = comment;
                 objComment.rating = rating;
 
                 try {
                     await mProduct.commentModel.findByIdAndUpdate(comment_id , objComment);
-                    message = "Comment update";
+                    msg = "Comment update";
                     err = false;
                 } catch (error) {
                     console.log("error : " + error);
-                    message = "Update comment failed"
+                    msg = "Update comment failed"
                 }
             }
         }
@@ -106,7 +128,7 @@ exports.updateComment = async (req , res , next) => {
     res.status(200).json(
         { 
             err : err,
-            message : message
+            msg : msg
         }   
     );
 }

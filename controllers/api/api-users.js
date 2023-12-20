@@ -68,6 +68,7 @@ exports.userLogin = async (req, res, next) => {
         avata : objUser != null ? objUser.avata : "",
         phone : objUser != null ? objUser.phone_number : "",
         email : objUser != null ? objUser.email : "",
+        fullname : objUser != null ? objUser.full_name : "",
     });
 }
 
@@ -108,6 +109,7 @@ exports.userLoginPhone = async (req , res , next) => {
         avata : objUser != null ? objUser.avata : "",
         phone : objUser != null ? objUser.phone_number : "",
         email : objUser != null ? objUser.email : "",
+        fullname : objUser != null ? objUser.full_name : "",
     });
 }
 

@@ -19,7 +19,7 @@ let productModel = db.mongoose.model('productModel', productSchema);
 
 const commentSchema = new db.mongoose.Schema(
     {
-        product_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'productModel' },
+        product_detail_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'product_size_color_Model' },
         user_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel' },
         comment: { type: String, require: true },
         rating: { type: Number, require: true },
