@@ -114,7 +114,7 @@ exports.listCart = async (req, res) => {
                 path: 'product_id',
                 populate: {
                     path: 'product_id size_id color_id',
-                    select: 'name image price'
+                    select: 'name image price discount' 
                 }
             })
             .populate('user_id')

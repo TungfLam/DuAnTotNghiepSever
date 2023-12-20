@@ -56,9 +56,7 @@
                     </form>
                 </div>
 
-                <style>
 
-                </style>
                 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
@@ -109,17 +107,18 @@
                                         <label for="floatingInput">Mô tả</label>
                                     </div>
 
-                             
+
                                     <div class="image-preview" id="imagePreview"></div>
 
                                     <div class="input-group mb-3">
                                         <input type="file" class="form-control" id="inputGroupFile02" name="image"
-                                            multiple accept="image/*" onchange="handleFileSelect(this)">
+                                            multiple accept="image/*" onchange="handleFileSelect(this)" required>
                                         <label class="input-group-text" for="inputGroupFile02">Upload</label>
                                     </div>
 
                                     <script>
                                         function handleFileSelect(input) {
+                                        
                                             const maxFiles = 5;
                                             const imagePreview = document.getElementById("imagePreview");
                                             const paragraph = document.querySelector("p");
@@ -152,11 +151,64 @@
                                         }
                                     </script>
 
-                                    <div class="form-floating mb-2">
-                                        <input type="text" class="form-control" id="floatingInput"
-                                            placeholder="Fullname" required name="price" oninput="validatePrice(this)">
-                                        <label for="floatingInput">Giá</label>
+                                    <div class="form-check mb-2 d-flex justify-content-end ">
+                                        <input type="checkbox" class="form-check-input me-2" id="discountCheckbox"
+                                            onchange="toggleDiscountInput()">
+                                        <label class="form-check-label mr-3" for="discountCheckbox">Giảm giá</label>
                                     </div>
+
+                                    <div class="form-floating mb-2">
+                                        <input type="text" class="form-control" id="inputPrice"
+                                            placeholder="Fullname" required name="price" oninput="validatePrice(this)">
+                                        <label for="inputPrice">Giá</label>
+                                    </div>
+                                    <div>
+                                        <div class="form-floating mb-2" id="discountInputContainer"
+                                            style="display: none;">
+                                            <input type="number" class="form-control" id="discountInput"
+                                                placeholder="Số tiền giảm giá" name="discount"
+                                                onchange="validateDiscount()">
+                                            <label for="discountInput">Số tiền giảm giá</label>
+                                        </div>
+                                    </div>
+
+                                    <script>
+                                        function toggleDiscountInput() {
+                                            var discountInputContainer = document.getElementById('discountInputContainer');
+                                            var discountInput = document.getElementById('discountInput');
+                                            var floatingInput = document.getElementById('inputPrice');
+
+                                            var discountCheckbox = document.getElementById('discountCheckbox');
+
+                                            if (discountCheckbox.checked) {
+
+                                                discountInputContainer.style.display = 'block';
+
+                                            } else {
+
+                                                discountInputContainer.style.display = 'none';
+                                                discountInput.value = '';
+                                            }
+
+                                            validateDiscount();
+                                        }
+
+                                        function validateDiscount() {
+                                            var discountInput = document.getElementById('discountInput');
+                                            var floatingInput = document.getElementById('inputPrice');
+
+                                            var discountValue = parseFloat(discountInput.value) || 0;
+                                            var priceValue = parseFloat(floatingInput.value) || 0;
+                                            console.log("discountValue", discountValue);
+                                            console.log("priceValue", priceValue);
+
+                                            if (discountValue >= priceValue  ) {
+                                                alert("Số tiền giảm giá không được lớn hơn hoặc bằng giá gốc.");
+                                                discountInput.value = ''; // Reset giảm giá nếu không hợp lệ
+                                            }
+                                        }
+                                    </script>
+
                                 </div>
 
                                 <div class="modal-footer">
@@ -268,9 +320,25 @@
 
                                             </td>
                                             <td class="" style="width: 170px;">
-                                                <i class="fa-regular fa-money-bill-1"></i>
-                                                <%= (row?.price ).toLocaleString('vi-VN', { style: 'currency' ,
-                                                    currency: 'VND' }) %>
+                                                <% if (row?.discount==undefined || row?.discount==null||row?.discount==0 ) { %>
+                                                    <div class="">
+                                                        <i class="fa-regular fa-money-bill-1"></i>
+                                                        <%= (row?.price ).toLocaleString('vi-VN', { style: 'currency' ,
+                                                            currency: 'VND' }) %>
+                                                    </div>
+                                                    <% } else { %>
+                                                        <div class="discount">
+                                                            <i class="fa-regular fa-money-bill-1"></i>
+                                                            <%= (row?.price ).toLocaleString('vi-VN', {
+                                                                style: 'currency' , currency: 'VND' }) %>
+                                                        </div>
+
+                                                        <div class="">
+                                                            <i class="fa-regular fa-money-bill-1"></i>
+                                                            <%= row?.discount ? row?.discount.toLocaleString('vi-VN', {
+                                                                style: 'currency' , currency: 'VND' }) :"" %>
+                                                        </div>
+                                                        <% } %>
                                             </td>
 
                                             <td class="" style="width: 100px;">

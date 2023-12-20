@@ -13,14 +13,14 @@ const { DateTime } = require('luxon');
 let heading = 'Danh sách sản phẩm'
 let title = 'Sản phẩm'
 let ExcelJS = require('exceljs')
-let message ;
+let message;
 
 
 const getlistproduct = async (req, res) => {
 
     const itemsPerPage = 10;
     const aler = req.query.aler;
-    console.log("aler",aler);
+    console.log("aler", aler);
     const page = parseInt(req.params.page) || 1;
     const startCount = (page - 1) * itemsPerPage + 1;
     const skip = (page - 1) * itemsPerPage;
@@ -42,13 +42,13 @@ const getlistproduct = async (req, res) => {
         heading: heading,
         displayMessage: displayMessage,
         selectedCategoryId: 'all',
-        message:aler
+        message: aler
     });
 };
 
 const addproduct = async (req, res) => {
 
-    const { name, description, price, category } = req.body;
+    const { name, description, price, category, discount } = req.body;
     const image = []
     const fileData = req.files
     fileData.forEach(item => {
@@ -62,8 +62,7 @@ const addproduct = async (req, res) => {
             createdAt: Date.now(),
             image: image,
             price: price,
-            heading: 'Thêm sản phẩm',
-            title: title,
+            discount: discount
         });
 
         try {
@@ -184,7 +183,7 @@ const deleteproduct = async (req, res) => {
 
         await model.productModel.findByIdAndDelete(id);
         await model_product_size_color.product_size_color_Model.deleteMany({ product_id: id });
-        
+
         res.redirect(`/product/listproduct/1?aler=Xóa thành công`)
     } catch (error) {
         msg = 'Lỗi Ghi CSDL: ' + error.message;
@@ -211,43 +210,44 @@ const updateproduct = async (req, res) => {
                             console.log("Update Product xóa ảnh khỏi cloud không thành công !!");
                         } else {
                             console.log("Update Product xóa ảnh khỏi cloud  thành công !!");
-    
+
                         }
                     }
                 })
                 //// thêm ảnh vào cloud 
                 var image = [];
-                
+
                 const fileData = req.files
                 fileData.forEach(item => {
                     image.push(item.path)
                 });
-    
+
                 itemedit.name = req.body.name
                 itemedit.description = req.body.description
                 if (image.length !== 0) {
                     itemedit.image = image;
-                    console.log('image', image);
+                 
                 }
                 itemedit.price = req.body.price
+                itemedit.discount = req.body.discount
                 itemedit.updatedAt = DateTime.now()
                 itemedit.category_id = req.body.category
-    
+
                 await model.productModel.findByIdAndUpdate(id, itemedit);
                 res.redirect('/product/listproduct/1?aler=Cập nhật thành công sản phẩm');
             } catch (error) {
                 res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
             }
-        }else{
+        } else {
             res.render('product/updateproduct',
-            {
-                title: title,
-                itemedit: itemedit,
-                heading: 'Cập nhật sán phẩm',
-                listCategory: listCategory
-            })
+                {
+                    title: title,
+                    itemedit: itemedit,
+                    heading: 'Cập nhật sán phẩm',
+                    listCategory: listCategory
+                })
         }
-        
+
     } catch (error) {
         res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
     }
