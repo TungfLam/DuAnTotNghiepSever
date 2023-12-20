@@ -103,10 +103,23 @@
                   value="<%= query['from-date'] %>">
               </div>
               <div class="col-md-2">
+                <label for="status">Chọn ngày</label>
+
+                <select id="date-select" onchange="setDate(this.value)" class="form-control">
+                  <option value="">none...</option>
+                  <option value="0">Hôm nay</option>
+                  <option value="1">1 ngày trước</option>
+                  <option value="7">7 ngày trước</option>
+                  <option value="30">30 ngày trước</option>
+                  <option value="90">90 ngày trước</option>
+                </select>
+              </div>
+
+              <div class="col-md-2">
                 <label for="to-date">Đến ngày</label>
                 <input type="date" id="to-date" name="to-date" class="form-control" value="<%= query['to-date'] %>">
               </div>
-              <div class="col-md-4">
+              <div class="col-md-2">
                 <label for="order-id">Mã đơn hàng</label>
                 <input placeholder="ID đơn hàng" type="text" id="id_" name="id_" class="form-control"
                   value="<%= query.id_ %>">
@@ -388,6 +401,17 @@
               // Đặt lại giá trị của các trường input và select
               $('input[type="text"], input[type="number"], input[type="date"], select').val('');
             });
+
+            function setDate(days) {
+              var date = new Date();
+              date.setDate(date.getDate() - days);
+              document.getElementById('from-date').value = date.toISOString().split('T')[0];
+
+              var today = new Date();
+              document.getElementById('to-date').value = today.toISOString().split('T')[0];
+            }
+
+
           </script>
 
 

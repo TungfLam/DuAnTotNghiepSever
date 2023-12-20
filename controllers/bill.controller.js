@@ -21,9 +21,11 @@ exports.loc = async (req, res, next) => {
             const limit = 10;
             const skip = (page - 1) * limit;
 
+            let { 'from-date': fromDate, 'to-date': toDate } = req.query;
 
             //==============
             let dieu_kien_loc = {};
+
             if (req.query['payments']) {
                 dieu_kien_loc.payments = req.query['payments'];
             }
@@ -31,20 +33,35 @@ exports.loc = async (req, res, next) => {
             if (req.query['status']) {
                 dieu_kien_loc.status = req.query['status'];
             }
-            //== loc ma don
-            if (req.query['from-date'] && req.query['to-date']) {
-                dieu_kien_loc.date = {
-                    $gte: new Date(req.query['from-date']),
-                    $lte: new Date(req.query['to-date'])
+            //== loc ngay don
+
+            if (fromDate && toDate && moment(fromDate, 'YYYY-MM-DD', true).isValid() && moment(toDate, 'YYYY-MM-DD', true).isValid()) {
+                // Chuyển đổi chuỗi ngày thành đối tượng Date
+                fromDate = moment(fromDate, 'YYYY-MM-DD').toDate();
+                toDate = moment(toDate, 'YYYY-MM-DD').toDate();
+
+                // Tăng ngày kết thúc lên 1 để bao gồm cả ngày kết thúc trong khoảng tìm kiếm
+                toDate.setDate(toDate.getDate() + 1);
+
+                // Thêm điều kiện lọc theo ngày
+                dieu_kien_loc.createdAt = {
+                    $gte: fromDate,
+                    $lt: toDate
                 };
             }
+
             //== loc ma don hang
-            if (req.query['id_']) {
+
+            if (req.query['id_'] && mongoose.Types.ObjectId.isValid(req.query['id_'])) {
                 dieu_kien_loc._id = req.query['id_'];
+            } else {
+                console.log("lỗi id rồi kìa đm");
             }
             //== loc ma nguoi dung
-            if (req.query['user-id']) {
+            if (req.query['user-id'] && mongoose.Types.ObjectId.isValid(req.query['user-id'])) {
                 dieu_kien_loc.user_id = req.query['user-id'];
+            } else {
+                console.log("lỗi id rồi kìa đm");
             }
             //===
             //=== lọc theo giá
@@ -75,7 +92,6 @@ exports.loc = async (req, res, next) => {
                     }
                 })
                 .sort({ createdAt: -1 });
-
 
             // Tính tổng số trang
             const totalBills = await billMD.billModel.countDocuments(dieu_kien_loc);
