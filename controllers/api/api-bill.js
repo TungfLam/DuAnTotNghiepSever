@@ -16,6 +16,7 @@ exports.listBill = async (req, res, next) => {
             objReturn.status = 0;
             objReturn.msg = 'Không có dữ liệu phù hợp';
         }
+
     } catch (error) {
         objReturn.status = 0;
         objReturn.msg = error.message;
@@ -31,6 +32,7 @@ exports.listBillByUserId = async (req, res, next) => {
     try {
         list = await md.billModel.find({ user_id: userId })
             .populate("user_id")
+
             .populate({
                 path: 'cart_id',
                 populate: {
