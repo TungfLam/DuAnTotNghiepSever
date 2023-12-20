@@ -65,9 +65,21 @@
                 <p class="fs-1">
                     <%= ListProduct.name %>
                 </p>
-                <p class="fw-bolder fs-3">
-                    <%= (ListProduct.price).toLocaleString('vi-VN', { style: 'currency' , currency: 'VND' }) %>
-                </p>
+
+              
+
+                <% if (ListProduct?.discount ==undefined ||ListProduct?.discount ==null ||ListProduct?.discount ==0  ) { %>
+                    <p class="fw-bolder fs-2" >
+                        <%= (ListProduct?.price).toLocaleString('vi-VN', { style: 'currency' , currency: 'VND' }) %>
+                    </p>
+                    <% } else { %>        
+                        <p class="fw-bolder " style=" text-decoration: line-through;">
+                            <%= (ListProduct?.price).toLocaleString('vi-VN', { style: 'currency' , currency: 'VND' }) %>
+                        </p>
+                        <p class="fw-bolder fs-2">
+                            <%= (ListProduct?.discount).toLocaleString('vi-VN', { style: 'currency' , currency: 'VND' }) %>
+                        </p>
+                        <% } %>
 
 
                 <p class="">Mô tả :</p>

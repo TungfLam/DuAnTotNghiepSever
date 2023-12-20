@@ -10,9 +10,10 @@ const getListAll_deltail = async (req, res) => {
         let id_product = req.params.id_product;
         const productListSize = await model_product_size_color.product_size_color_Model.find({ product_id: id_product })
             .sort({ createdAt: -1 })
-            .populate('product_id', "name price description")
+            .populate('product_id', "name price discount description")
             .populate('size_id', "name")
             .populate('color_id', "name");
+        const deeplink = "https://adadas.onrender.com/"+id_product
 
         // Sắp xếp kích cỡ theo thứ tự "S M L XL XXL"
         productListSize.sort((a, b) => {
@@ -20,7 +21,7 @@ const getListAll_deltail = async (req, res) => {
             return sizeOrder[a.size_id.name] - sizeOrder[b.size_id.name];
         });
 
-        res.status(200).json({ productListSize: productListSize });
+        res.status(200).json({ productListSize: productListSize,deeplink:deeplink });
     } catch (error) {
         res.status(500).json({ message: 'Lỗi truy vấn CSDL: ' + error.message });
     }

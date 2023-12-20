@@ -24,7 +24,9 @@ const commentSchema = new db.mongoose.Schema(
         comment: { type: String, require: true },
         rating: { type: Number, require: true },
         date: { type: String, require: true },
-        images : {type : Array , require : false}
+        images : {type : Array , require : false},
+        discount: { type: Number, require: false },
+        
     },
     {
         collection: 'Comment'

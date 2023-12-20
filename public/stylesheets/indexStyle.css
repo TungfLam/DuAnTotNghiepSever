@@ -144,3 +144,10 @@ footer {
     margin: 5px;
     margin-bottom: 10px;
 }
+.discount {
+     /* Màu chữ là màu xanh lá cây, bạn có thể điều chỉnh màu sắc theo mong muốn */
+    font-size: 18px; /* Kích thước chữ */
+    font-weight: bold; /* Độ đậm của chữ */
+    text-decoration: line-through; /* Thêm đường gạch ngang */
+    /* Các thuộc tính CSS khác mà bạn muốn thêm vào */
+  }

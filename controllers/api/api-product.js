@@ -93,11 +93,8 @@ exports.sortDown = async (req, res) => {
 };
 
 exports.searchProduct = async (req, res) => {
-    console.log("Vào đây");
-
     try {
         const searchValues = req.query.searchValues.toLowerCase();
-        console.log("searchValues:", searchValues);
 
         if (searchValues) {
             const regex = new RegExp(searchValues, 'i');
