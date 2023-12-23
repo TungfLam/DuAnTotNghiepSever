@@ -55,7 +55,7 @@ const create_payment_url = async (req, res, next) => {
     let idCart = req.body.idCart;
     let amount = req.body.amount;
     try {
-        
+
         const finUser = await mdUser.userModel.findById(idUser);
         if (!idCart || !Array.isArray(idCart) || !finUser) {
             return res.status(400).json({ message: 'Dữ liệu không hợp lệ.' });
@@ -195,11 +195,8 @@ const vnpay_return = async (req, res, next) => {
                 // create a new object with only the fields you need
                 const productDataToSave = {
                     //=== deital
-                    product_id: productdetailData._id,
-                    size_id: productdetailData.name,
-                    color_id: productdetailData.description,
-                    quantity: productdetailData.image,
-                    createdAt: productdetailData.category_id,
+                    product_id: productData._id,
+
                     //=== deital
                     //=== product
 

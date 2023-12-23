@@ -3,13 +3,11 @@ var router = express.Router();
 var indexContrl = require('../controllers/index.controller');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Thống kê',heading:'DASHBOARD' });
-});
+router.get('/', indexContrl.bashboard);
 
 router.get('/login', indexContrl.login);
 router.post('/login', indexContrl.login);
 
-router.get('/logout' , indexContrl.logout);
+router.get('/logout', indexContrl.logout);
 
 module.exports = router;
