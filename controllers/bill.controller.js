@@ -14,7 +14,6 @@ exports.loc = async (req, res, next) => {
 
     if (req.method == 'GET') {
         try {
-
             // phân trang
             // Thêm mã này để xử lý phân trang
             const page = parseInt(req.query.page) || 1;
@@ -55,13 +54,11 @@ exports.loc = async (req, res, next) => {
             if (req.query['id_'] && mongoose.Types.ObjectId.isValid(req.query['id_'])) {
                 dieu_kien_loc._id = req.query['id_'];
             } else {
-                console.log("lỗi id rồi kìa đm");
             }
             //== loc ma nguoi dung
             if (req.query['user-id'] && mongoose.Types.ObjectId.isValid(req.query['user-id'])) {
                 dieu_kien_loc.user_id = req.query['user-id'];
             } else {
-                console.log("lỗi id rồi kìa đm");
             }
             //===
             //=== lọc theo giá
