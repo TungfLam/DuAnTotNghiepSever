@@ -5,13 +5,14 @@ var userSchema = new db.mongoose.Schema(
         username: { type: String, required: false },
         password: { type: String, required: false },
         email: { type: String, required: false },
-        address : {type : String , require : false},
+        address: { type: String, require: false },
         role: { type: String, required: true },
         full_name: { type: String, required: false },
         phone_number: { type: String, required: true },
-        status : {type : Boolean , require : true},
-        token : {type : String , require : false},
-        deviceId : {type : String , require : false},
+        status: { type: Boolean, require: true },
+        token: { type: String, require: false },
+        deviceId: { type: String, require: false },
+        created_at: { type: Date, require: false },
     },
     { collection: 'users' }
 );
