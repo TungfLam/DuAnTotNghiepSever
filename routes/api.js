@@ -25,6 +25,7 @@ router.post('/usersloginphone' , api_users.userLoginPhone);
 router.post('/cheklogin/:idUser' , api_users.checkLogin);
 router.post('/logout/:idUser' , api_users.logout);
 router.put('/setoken/:idUser' , api_users.setToken);
+router.put('/change-password/:idUser', api_users.changePassword);
 
 router.post('/users',upload.single("image"), api_users.addUser);
 router.put('/users/:idu', api_users.updateUser);
@@ -55,7 +56,8 @@ router.get('/products', api_product.searchProduct);
 
 //comment 
 router.get('/comment/:ProductId', api_comment.getCommentByProduct);
-router.post('/comment', api_comment.newComment);
+router.post('/comment-by-id', api_comment.getCommentById);
+router.post('/comment',upload.array('images', 3), api_comment.newComment);
 router.put('/comment/:CommentId', api_comment.updateComment);
 
 
@@ -94,6 +96,8 @@ router.get('/bill/pagination', api_bill.pagination);
 router.post('/addbill', api_bill.addBill);
 router.put('/bill/:id', api_bill.updateBill);
 router.delete('/bill/:id', api_bill.deleteBill);
+
+router.get('/bill-by-id/:idBill' , api_bill.getBillById);
 
 //====
 

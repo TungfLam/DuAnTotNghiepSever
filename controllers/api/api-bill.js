@@ -158,3 +158,24 @@ exports.deleteBill = async (req, res, next) => {
         return res.status(500).json({ message: 'Server Error', error: err.toString() });
     }
 }
+
+
+exports.getBillById = async (req , res ,next) => {
+    let err = true;
+
+    try {
+        var idBill = req.params.idBill;
+        var objBill = await md.billModel.findById(idBill);
+
+        if(objBill){
+            err = false;
+        }
+    } catch (error) {
+        console.log("không lấy được bill");
+    }    
+
+    res.status(200).json({
+        err : err,
+        objBill : objBill
+    });
+}

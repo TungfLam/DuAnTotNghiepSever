@@ -1,3 +1,4 @@
+const { nextTick } = require('process');
 var md = require('../../models/user.model');
 var fs = require('fs');
 var objReturn = {
@@ -203,6 +204,100 @@ exports.checkLogin = async (req , res , next) => {
         msg : msg,
         err : err
     });
+}
+
+exports.changePassword = async (rep , res , next) => {
+    let msg = "";
+    let err = true;
+
+    try {
+        var idUser = rep.params.idUser;
+        var password = rep.body.password;
+        var newPassword = rep.body.newPassowrd;
+        var objUser = await md.userModel.findById(idUser);
+    } catch (error) {
+        console.log("User không tồn tại");
+    }
+
+    if(objUser){
+        if(objUser.password == ""){
+            msg = "Tải khoàn chưa có mật khẩu"
+        }else{
+            if(objUser.password == password){
+                objUser.password = newPassword;
+                try {
+                    await md.userModel.findByIdAndUpdate(idUser , objUser);
+                    msg = "Thay đổi mật khẩu thành công"
+                    err = false;
+                } catch (error) {
+                    msg = "Không thành công, vui lòng thử lại sau";
+                    console.log("change passwor : " + error);
+                }
+            }else{
+                msg = "Mật khẩu không chính xác";
+            }
+        }
+    }else{
+        msg = "Tài khoàn không tồn tại";
+    }
+
+    res.status(200).json({
+        msg : msg,
+        err : err
+    })
+}
+
+exports.addMethodLogin2 = async (req , res , next) => {
+    let msg = "";
+    let err = true;
+
+    try {
+        var idUser = rep.params.idUser;
+        var username = req.body.username;
+        var password = req.body.password;
+        var objUser = await md.userModel.findById(idUser);
+
+        var objUser2;
+        if(username.split('@').length >= 2){
+            objUser2 = await md.userModel.findOne({email : username});
+            objUser.email = username;
+        }else{
+            objUser2 = await md.userModel.findOne({username : username});
+            objUser.username = username;
+        }
+        
+    } catch (error) {
+        console.log(error);
+    }
+
+    if(objUser){
+        if(objUser.password != ""){
+            msg = "Mật khẩu đã được tạo"
+        }else{
+            if(objUser2){
+                msg = "Username/email đã được sử dụng";
+            }else{
+                objUser.password = password;
+
+                try {
+                    await md.userModel.findByIdAndUpdate(idUser , objUser);
+                    msg = "Thêm thành công";
+                    err = false;
+                } catch (error) {
+                    msg = "Thêm thất bại, vui lòng thử lại sau"
+                }
+            }
+        }
+    }else{
+        msg = "Tài khoàn không tồn tại";
+    }
+
+    res.status(200).json(
+        {
+            msg : msg,
+            err : err
+        }
+    )
 }
 
 exports.logout = async (req , res , next) => {

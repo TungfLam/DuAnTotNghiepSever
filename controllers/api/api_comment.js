@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const mProduct = require('../../models/product.model');
+const mProductDetail = require('../../models/product_size_color.model');
 const mUser = require('../../models/user.model');
+var fs = require('fs');
 
 exports.getCommentByProduct = async (req , res , next) => {
     let product_id = req.params.ProductId;
@@ -30,18 +32,41 @@ exports.getCommentByProduct = async (req , res , next) => {
     res.status(200).json(listComment);
 }
 
+exports.getCommentById = async (req , res ,next) => {
+    let err = true;
+
+    try {
+        let product_detail_id = req.body.ProductDetailId;
+        let user_id = req.body.UserId
+        
+        var objComment = await mProduct.commentModel.findOne({product_detail_id : product_detail_id , user_id : user_id});
+
+        if(objComment){
+            err = false;
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    res.status(200).json({
+        err : err,
+        objComment : objComment
+    })
+}
+
 
 exports.newComment = async (req , res , next) => {
     let msg = "";
     let err = true;
 
     if(req.method == 'POST'){
-        let product_id = req.body.ProductId;
+        let product_detail_id = req.body.ProductId;
         let user_id = req.body.UserId;
         let comment = req.body.Comment;
         let sRating = req.body.rating;
 
-        let objProductChek = await mProduct.productModel.findById(product_id);
+        let objProductChek = await mProductDetail.product_size_color_Model.findById(product_detail_id);
         let objUserChek = await mUser.userModel.findById(user_id);
 
         if(!objProductChek){
@@ -61,8 +86,20 @@ exports.newComment = async (req , res , next) => {
                     + (currentDate.getMonth() + 1) + "-"
                     + currentDate.getDate() + " "
                     + currentDate.getHours() + ":" + currentDate.getMinutes();
+
+                if(req.files){
+                    console.log(req.files);
+                    req.files.forEach(item =>{
+                        try {
+                            fs.renameSync(item.path , './public/images/' + newComment._id + "_" + item.originalname);
+                            newComment.images.push('/images/' + newComment._id + "_" + item.originalname);
+                        } catch (error) {
+                            console.log("Lỗi up ảnh : " + error);
+                        }
+                    })
+                }
                 
-                newComment.product_id = product_id;
+                newComment.product_detail_id = product_detail_id;
                 newComment.user_id = user_id;
                 newComment.comment = comment;
                 newComment.rating = rating;
@@ -72,7 +109,7 @@ exports.newComment = async (req , res , next) => {
                     await newComment.save();
                     msg = "Comment added";
                     err = false;
-                    reStar(product_id);
+                    reStar(product_detail_id);
                 } catch (error) {
                     console.log("error : " + error);
                     msg = "Add comment failed"
@@ -133,29 +170,40 @@ exports.updateComment = async (req , res , next) => {
     );
 }
 
-async function reStar(product_id){
+async function reStar(product_detail_id){
+
     try {
         const result = await mProduct.commentModel.aggregate([
             {   
-                $match : {"product_id" : new mongoose.Types.ObjectId(product_id)}
+                $match : {"product_detail_id" : new mongoose.Types.ObjectId(product_detail_id)}
             },
             {
-                $group : {_id : null, total : {$sum : "$rating"}}
+                $group : {
+                    _id : null, 
+                    total : {$sum : "$rating"}
+                }
             }
         ]);
 
-        const countRating = await mProduct.commentModel.find({product_id : product_id}).count();
-        
-        let rating = parseInt(result[0].total / countRating) ;
-        if(parseFloat(result[0].total / countRating) > parseInt(result[0].total / countRating) + 0.5){
-            rating += 1;
+        if(result.length == 0){
+            return;
         }
 
-        let objProduct = await mProduct.productModel.findById(product_id);
-        objProduct.rating = rating;
+        const countRating = await mProduct.commentModel.find({product_detail_id : product_detail_id}).count();
+        
+        let ratingcount = parseInt(result[0].total / countRating) ;
+        if(parseFloat(result[0].total / countRating) > parseInt(result[0].total / countRating) + 0.5){
+            ratingcount += 1;
+        }
+
+        let objProductDetail = await mProductDetail.product_size_color_Model.findById(product_detail_id);
+
+        let objProduct = await mProduct.productModel.findById(objProductDetail.product_id);
+
+        objProduct.rating = ratingcount;
 
         try {
-            await mProduct.productModel.findByIdAndUpdate(product_id , objProduct);
+            await mProduct.productModel.findByIdAndUpdate(objProductDetail.product_id , objProduct);
         } catch (error) {
             console.log("error : " + error);
         }
