@@ -15,6 +15,8 @@ var api_favorite = require('../controllers/api/api_favorite')
 var api_product = require('../controllers/api/api-product')
 var api_bill = require('../controllers/api/api-bill')
 var api_cart = require('../controllers/api/api-cart')
+var api_banner = require('../controllers/api/api_banner')
+var api_discount = require('../controllers/api/api_discount')
 
 // api user
 
@@ -112,6 +114,12 @@ router.get('/getListCart/:idUser', api_cart.listCart);
 router.delete('/deletecart/:id', api_cart.deleteCart);
 
 //====
+
+
+router.get('/banner', api_banner.getAllBanner );
+
+
+router.get('/discount', api_discount.getAllDiscount );
 
 
 module.exports = router;

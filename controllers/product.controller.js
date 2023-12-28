@@ -194,66 +194,71 @@ const deleteproduct = async (req, res) => {
 
 const updateproduct = async (req, res) => {
     let id = req.params.id;
-    let title = 'Update Product'
+    let title = 'Update Product';
 
     try {
         let itemedit = await model.productModel.findById(id);
-        let listCategory = await modelCategories.categoryModel.find()
+        let listCategory = await modelCategories.categoryModel.find();
 
         if (req.method === 'POST') {
             try {
-                // xóa ảnh cũ khỏi cloud 
-                itemedit.image.map(url => {
-                    const publicId = getPublicIdFromUrl(url)
-                    cloudinary.uploader.destroy(publicId), (error, result) => {
-                        if (error) {
-                            console.log("Update Product xóa ảnh khỏi cloud không thành công !!");
-                        } else {
-                            console.log("Update Product xóa ảnh khỏi cloud  thành công !!");
-
-                        }
-                    }
-                })
-                //// thêm ảnh vào cloud 
                 var image = [];
-
-                const fileData = req.files
-                fileData.forEach(item => {
-                    image.push(item.path)
-                });
-
-                itemedit.name = req.body.name
-                itemedit.description = req.body.description
-                if (image.length !== 0) {
+                const fileData = req.files;
+                console.log(fileData.length > 0);
+                if (fileData && fileData.length > 0) {
+                    var image = [];
+                    fileData.forEach(item => {
+                        image.push(item.path);
+                        console.log('Thêm ảnh vào mảng để đẩy lên MongoDB:', item.path);
+                    });
+                
+                    // Xóa ảnh cũ khỏi Cloudinary
+                    itemedit.image.forEach(url => {
+                        const publicId = getPublicIdFromUrl(url);
+                
+                        cloudinary.uploader.destroy(publicId, (error, result) => {
+                            if (error) {
+                                console.log("Xóa ảnh khỏi Cloud không thành công!");
+                            } else {
+                                console.log("Xóa ảnh khỏi Cloud thành công!" ,publicId);
+                            }
+                        });
+                    });
+                
+                    // Cập nhật ảnh mới
                     itemedit.image = image;
-                 
+                } else {
+                    //
+                    console.log(' Người dùng không chọn ảnh, không làm gì cả kkkk');
                 }
-                itemedit.price = req.body.price
-                itemedit.discount = req.body.discount
-                itemedit.updatedAt = DateTime.now()
-                itemedit.category_id = req.body.category
+
+                itemedit.name = req.body.name;
+                itemedit.description = req.body.description;
+                itemedit.price = req.body.price;
+                itemedit.discount = req.body.discount;
+                itemedit.updatedAt = DateTime.now();
+                itemedit.category_id = req.body.category;
 
                 await model.productModel.findByIdAndUpdate(id, itemedit);
                 res.redirect('/product/listproduct/1?aler=Cập nhật thành công sản phẩm');
             } catch (error) {
+                console.error('Lỗi khi xử lý POST:', error);
                 res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
             }
         } else {
-            res.render('product/updateproduct',
-                {
-                    title: title,
-                    itemedit: itemedit,
-                    heading: 'Cập nhật sán phẩm',
-                    listCategory: listCategory
-                })
+            res.render('product/updateproduct', {
+                title: title,
+                itemedit: itemedit,
+                heading: 'Cập nhật sản phẩm',
+                listCategory: listCategory
+            });
         }
-
     } catch (error) {
+        console.error('Lỗi khi xử lý GET:', error);
         res.status(500).json({ message: 'Lỗi ghi CSDL: ' + error.message });
     }
+};
 
-
-}
 
 
 
