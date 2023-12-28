@@ -435,7 +435,6 @@ exports.bashboard = async (req, res, next) => {
             }
         ]);
 
-        console.log("Top 6 users info:", topUsersInfo);
 
 
 
@@ -488,44 +487,45 @@ exports.bashboard = async (req, res, next) => {
         //=====
 
 
-        //=========
-        console.log("========================");
+        // //=========
+        // console.log("========================");
 
-        console.log("Tổng số người mua hàng trong ngày hôm nay:", totalBuyers_day);
-        console.log("Tổng số người mua hàng trong ngày hôm qua:", totalBuyers_yesterday);
-        console.log("Tổng tiền trong ngày hôm nay:", totalAmount_day);
-        console.log("ngày bắt đầu việt nam", startOfTodayVietnam);
-        console.log("ngày kết thúc việt nam", endOfTodayVietnam);
-        console.log("========================");
-        console.log("Tổng tiền trong ngày hôm qua:", totalAmount_yesterday);
-        console.log("ngày bắt đầu việt nam hôm qua", startOfYesterdayVietnam);
-        console.log("ngày kết thúc việt nam hôm qua", endOfYesterdayVietnam);
-        console.log("========================");
-        console.log("hơn người dùng ngày hôm qua", totalBuyers_yesterday - totalBuyers_day);
-        console.log("hơn doanh thu ngày hôm qua", totalAmount_day - totalAmount_yesterday);
-        console.log("========================");
-        console.log("Số người dùng có role là User", totalUsersWithRoleUser);
-        console.log("Tổng số cart", totalCart);
-        console.log("Tổng số quantity có trong kho", totalQuantity);
-        // chart  
-        console.log("7 ngày trước ", m7daysAgoVietnam);
-        console.log("9 ngày trước ", m9daysAgoVietnam);
-        console.log("1 năm trước ", m1YearAgoVietnam);
-        console.log("Số lượng người dùng được tạo trong 7 ngày gần nhất:", userCreationCountAggregate);
+        // console.log("Tổng số người mua hàng trong ngày hôm nay:", totalBuyers_day);
+        // console.log("Tổng số người mua hàng trong ngày hôm qua:", totalBuyers_yesterday);
+        // console.log("Tổng tiền trong ngày hôm nay:", totalAmount_day);
+        // console.log("ngày bắt đầu việt nam", startOfTodayVietnam);
+        // console.log("ngày kết thúc việt nam", endOfTodayVietnam);
+        // console.log("========================");
+        // console.log("Tổng tiền trong ngày hôm qua:", totalAmount_yesterday);
+        // console.log("ngày bắt đầu việt nam hôm qua", startOfYesterdayVietnam);
+        // console.log("ngày kết thúc việt nam hôm qua", endOfYesterdayVietnam);
+        // console.log("========================");
+        // console.log("hơn người dùng ngày hôm qua", totalBuyers_yesterday - totalBuyers_day);
+        // console.log("hơn doanh thu ngày hôm qua", totalAmount_day - totalAmount_yesterday);
+        // console.log("========================");
+        // console.log("Số người dùng có role là User", totalUsersWithRoleUser);
+        // console.log("Tổng số cart", totalCart);
+        // console.log("Tổng số quantity có trong kho", totalQuantity);
+        // // chart  
+        // console.log("7 ngày trước ", m7daysAgoVietnam);
+        // console.log("9 ngày trước ", m9daysAgoVietnam);
+        // console.log("1 năm trước ", m1YearAgoVietnam);
+        // console.log("Số lượng người dùng được tạo trong 7 ngày gần nhất:", userCreationCountAggregate);
         // console.log("Số lượng người dùng được tạo trong 7 ngày gần nhất:", TotalUserDataGeneratedFor7Days);
-        console.log("Số lượng doanh thu của 10 ngày gần nhất:", totalAmountAggregate10day);
+        // console.log("Số lượng doanh thu của 10 ngày gần nhất:", totalAmountAggregate10day);
         // console.log("Số lượng doanh thu của 10 ngày gần nhất:", data10dayAmountBill);
-        console.log("Số lượng doanh thu của 12 tháng gần nhất:", totalAmountAggregate12Month);
+        // console.log("Số lượng doanh thu của 12 tháng gần nhất:", totalAmountAggregate12Month);
         // console.log("Số lượng doanh thu của 12 tháng gần nhất:", data12monthAmountBill);
-        console.log("sản phẩm bán chạy nhất:", mostSoldProductNameResult);
-        console.log("topUsersInfo:", topUsersInfo);
+        // console.log("sản phẩm bán chạy nhất:", mostSoldProductNameResult);
+        // console.log("topUsersInfo:", topUsersInfo);
 
-        // tong quan
+        // // tong quan
         // console.log("Thông tin của người dùng được tạo gần nhất:", latestUser);
         // console.log("Thông tin của đơn hàng được tạo gần nhất:", latestBill);
-        console.log("Thông tin của giỏ hàng được tạo gần nhất name user:", mProductNameCart);
-        console.log("Thông tin của giỏ hàng được tạo gần nhất name product:", mUserNameCart);
-        console.log("Thông tin của giỏ hàng được tạo gần nhất createdAt cart:", mCreatedAtCart);
+        // console.log("Thông tin của giỏ hàng được tạo gần nhất name user:", mProductNameCart);
+        // console.log("Thông tin của giỏ hàng được tạo gần nhất name product:", mUserNameCart);
+        // console.log("Thông tin của giỏ hàng được tạo gần nhất createdAt cart:", mCreatedAtCart);
+        // console.log("Top 6 users info:", topUsersInfo);
 
 
 
@@ -561,6 +561,12 @@ exports.bashboard = async (req, res, next) => {
         next(error);
     }
 }
+
+
+
+
+
+
 
 
 
