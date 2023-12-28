@@ -70,6 +70,7 @@ exports.userLogin = async (req, res, next) => {
         phone: objUser != null ? objUser.phone_number : "",
         email: objUser != null ? objUser.email : "",
         fullname: objUser != null ? objUser.full_name : "",
+        address: objUser != null ? objUser.address : "",
     });
 }
 
@@ -111,6 +112,7 @@ exports.userLoginPhone = async (req, res, next) => {
         phone: objUser != null ? objUser.phone_number : "",
         email: objUser != null ? objUser.email : "",
         fullname: objUser != null ? objUser.full_name : "",
+        address: objUser != null ? objUser.address : "",
     });
 }
 
@@ -494,9 +496,11 @@ exports.deleteUser = async (req, res, next) => {
 exports.getAddressByIdUser = async (req, res, next) => {
     let idUser = req.params.idUser;
     let arrAddres = [];
+    console.log(idUser);
 
     if (idUser != null) {
-        arrAddres = await md.addressModel.find({ user_id: idUser });
+        arrAddres = await md.addressModel.find({user_id : idUser});
+        console.log(arrAddres.length);
     } else {
         console.log("idUser null");
     }
@@ -551,6 +555,44 @@ exports.addAddress = async (req, res, next) => {
         }
     } else {
         msg = "err method : vui lòng dùng method POST"
+    }
+
+    res.status(200).json({
+        msg: msg,
+        err: err
+    });
+}
+
+exports.setAddress = async (req , res , next) => {
+    let msg = "";
+    let err = true;
+
+    try {
+        var idUser = req.body.idUser;
+        var idAddress = req.body.idAddress;
+        var objUser = await md.userModel.findById(idUser);
+        var objAddress = await md.addressModel.findById(idAddress);
+    } catch (error) {
+        console.log(error);
+    }
+
+    if(objUser){
+        if(objAddress){
+            objUser.address = objAddress._id;
+
+            try {
+                await md.userModel.findByIdAndUpdate(idUser , objUser);
+                err = false;
+                msg = "Set thành công"
+            } catch (error) {
+                msg = "Lỗi server vui lòng thử lại sau";
+                console.log(error);
+            }
+        }else{
+            msg = "Địa chỉ không tồn tại";
+        }
+    }else{
+        msg = "Người dùng không tồn tại";
     }
 
     res.status(200).json({

@@ -34,6 +34,7 @@ router.delete('/users/:idu', api_users.deleteUser);
 //address
 router.get('/address/:idUser' , api_users.getAddressByIdUser); 
 router.post('/address' , api_users.addAddress);
+router.post('/setaddress', api_users.setAddress);
 router.put('/address/:idAddress' , api_users.updateAddres);
 router.delete('/address' , api_users.deleteAddress);
 

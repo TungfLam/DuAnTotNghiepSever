@@ -5,7 +5,7 @@ var userSchema = new db.mongoose.Schema(
         username: { type: String, required: false },
         password: { type: String, required: false },
         email: { type: String, required: false },
-        address: { type: String, require: false },
+        address: { type: db.mongoose.Schema.Types.ObjectId, ref : 'addressModel' },
         role: { type: String, required: true },
         full_name: { type: String, required: false },
         phone_number: { type: String, required: true },
@@ -18,7 +18,7 @@ var userSchema = new db.mongoose.Schema(
 );
 const addressChema = new db.mongoose.Schema(
     {
-        user_id: { type: String, required: true },
+        user_id: { type: db.mongoose.Schema.Types.ObjectId, ref : 'userModel' },
         address: { type: String, required: true },
         specific_addres: { type: String, required: true },
     },
