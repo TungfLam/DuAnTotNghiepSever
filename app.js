@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
 var cors = require('cors')
-
+const crypto = require('crypto');
 
 
 var indexRouter = require('./routes/index');
@@ -41,8 +41,10 @@ app.use(function (req, res, next) {
 
 app.use(cors())
 
+const secret = crypto.randomBytes(64).toString('hex');
+
 app.use(session({
-  secret: 'duantotnghie761294856124560',
+  secret: secret,
   resave: true,
   saveUninitialized: true
 }));
