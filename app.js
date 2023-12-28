@@ -15,6 +15,8 @@ var categoryRouter = require('./routes/category')
 var sizeRouter = require('./routes/size')
 var billRouter = require('./routes/bill')
 var colorRouter = require('./routes/color')
+var bannerRouter = require('./routes/banner')
+var discountRouter = require('./routes/discount')
 
 var apiRouter = require('./routes/api');
 var product_size_color_router = require('./routes/product_size_color');
@@ -57,7 +59,8 @@ app.use('/color', colorRouter);
 app.use('/size', sizeRouter);
 app.use('/bill', billRouter);
 app.use('/notification', notificationRouter);
-
+app.use('/banner', bannerRouter);
+app.use('/discount', discountRouter);
 app.use('/order', orderRouter);
 
 

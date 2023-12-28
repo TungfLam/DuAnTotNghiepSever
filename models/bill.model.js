@@ -12,6 +12,7 @@ const bill_SChema = new db.mongoose.Schema(
         // date: { type: String, required: false }
         createdAt: { type: Date, required: false },
         updatedAt: { type: Date, required: false },
+
     },
     {
         collection: 'bill'
