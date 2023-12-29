@@ -215,7 +215,7 @@ exports.changePassword = async (rep , res , next) => {
     try {
         var idUser = rep.params.idUser;
         var password = rep.body.password;
-        var newPassword = rep.body.newPassowrd;
+        var newPassword = rep.body.newPassword;
         var objUser = await md.userModel.findById(idUser);
     } catch (error) {
         console.log("User không tồn tại");
