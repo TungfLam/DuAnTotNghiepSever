@@ -1,7 +1,7 @@
 let mdProduct_ = require('../models/product.model')
 let mduser = require('../models/user.model')
 let mddiscount = require("../models/discount.model")
-const moment = require('moment-timezone');
+const moment = require('moment');
 
 const getAllDiscount = async (req, res) => {
     const aler = req.query.aler;
@@ -32,8 +32,8 @@ const addDiscount = async (req, res) => {
             });
         } 
         console.log('Đây là mảng users', users);
-        const startDayVN = moment(start_day).tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD HH:mm');
-        const endDayVN = moment(end_day).tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD HH:mm');
+        const startDayVN = moment(start_day).format('YYYY-MM-DD HH:mm');
+        const endDayVN = moment(end_day).format('YYYY-MM-DD HH:mm');
 
         const discount = new mddiscount.discountModel({
             description,

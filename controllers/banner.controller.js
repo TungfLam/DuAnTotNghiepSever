@@ -5,8 +5,9 @@ var cloudinary = require('cloudinary').v2;
 const getAllBanner = async (req, res) => {
     const aler = req.query.aler;
     const listtBanner = await mdBanner.bannerModel.find().populate('product_id')
-
+console.log("listtBanner",listtBanner);
     const listProduct = await mdProduct_.productModel.find();
+    
     res.render('banner/list', {
         title: "ADADAS",
         heading: "Danh sách Banner",
@@ -22,17 +23,10 @@ const addBanner = async (req, res) => {
         const {description, id_product} = req.body;
         const imagePath = req.file.path;
 
-        // Tìm sản phẩm theo id_product
-        const product = await mdProduct_.productModel.findById(id_product);
-
-        if (!product) {
-            return res.status(400).json({message: 'Sản phẩm không tồn tại.'});
-        }
-
         // Tạo một bản ghi banner mới
         const newBanner = new mdBanner.bannerModel({
             image_banner: imagePath,
-            product_id: product._id,
+            product_id: id_product,
             description: description,
             createdAt: Date.now(),
         });

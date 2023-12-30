@@ -238,6 +238,7 @@ const vnpay_return = async (req, res, next) => {
             const newBillData = {
                 user_id: idUser,
                 cart_id: idCart,
+                
                 user_data: userDataToSave, // add user data
                 cart_data: cartDataToSave, // add cart data
                 payments: 2,
