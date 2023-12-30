@@ -4,8 +4,8 @@ const discount_SChema = new db.mongoose.Schema(
     {
         user_id: [{ type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel', require: false }],
         code_discount: { type: String, required: true },
-        start_day: { type: Date, required: true },
-        end_day: { type: Date, required: true },
+        start_day: { type: String, required: true },
+        end_day: { type: String, required: true },
         price: { type: Number, required: true },
         description: { type: String, required: true },
         usageCount: { type: Number, required: true },

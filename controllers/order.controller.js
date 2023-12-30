@@ -13,7 +13,9 @@ let mdSize = require('../models/sizes.model')
 let mdColor = require('../models/color.model')
 let mdcategory = require('../models/category.model')
 let { DateTime } = require('luxon');
-
+//// khi đặt hàng thêm discount thì giảm giá 
+//// đặt hàng nhiều lần 
+/// khi hiển thị danh sách discount thì tìm kiếm bill xem user đấy đã dùng discount đấy mấy lần và xóa user id khỏi mảng 
 function sortObject(obj) {
     let sorted = {};
     let str = [];
@@ -34,6 +36,7 @@ function sortObject(obj) {
 let globalIdCart;
 let globalIdUser;
 let globalAmount;
+let globalDiscount;
 
 const create_payment_url = async (req, res, next) => {
     var ipAddr =
@@ -54,10 +57,11 @@ const create_payment_url = async (req, res, next) => {
     let idUser = req.params.idUser;
     let idCart = req.body.idCart;
     let amount = req.body.amount;
+    let discount = req.body.idDiscount;
     try {
 
         const finUser = await mdUser.userModel.findById(idUser);
-        if (!idCart || !Array.isArray(idCart) || !finUser) {
+        if (!idCart || !Array.isArray(idCart) || !finUser ) {
             return res.status(400).json({ message: 'Dữ liệu không hợp lệ.' });
         }
         for (const itemCart of idCart) {
@@ -74,6 +78,7 @@ const create_payment_url = async (req, res, next) => {
     globalIdCart = idCart;
     globalAmount = amount
     globalIdUser = idUser;
+    globalDiscount = discount
     var orderInfo = '**Nap tien cho thue bao 0123456789. So tien 100,000 VND**'    // Thông tin mô tả nội dung thanh toá
     var orderType = req.body.orderType;  ////Mã danh mục hàng hóa. Mỗi hàng hóa sẽ thuộc một nhóm danh mục do VNPAY quy định. Xem thêm bảng Danh mục hàng hóa
 
@@ -227,9 +232,6 @@ const vnpay_return = async (req, res, next) => {
                     product_data: productDataToSave
                 };
             }));
-
-
-
             var date = moment(Date.now()).utc().toDate();
 
             // tạo mới bill 
@@ -239,7 +241,7 @@ const vnpay_return = async (req, res, next) => {
                 user_data: userDataToSave, // add user data
                 cart_data: cartDataToSave, // add cart data
                 payments: 2,
-                total_amount: amount,
+                // total_amount:  ,
                 status: dat_hang_thanh_cong,
                 createdAt: date
             };
