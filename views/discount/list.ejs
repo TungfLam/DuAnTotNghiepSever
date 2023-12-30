@@ -175,20 +175,10 @@
                                             <%= i+1 %>
                                         </td>
                                         <td>
-                              
-                                                Bắt đầu: <%= new Intl.DateTimeFormat('vi-VN', { hour: 'numeric' ,
-                                                    minute: 'numeric' , }).format(new Date(row.start_day)) %>
-                                                    -
-                                                    <%= new Intl.DateTimeFormat('vi-VN', { day: 'numeric' ,
-                                                        month: 'numeric' , year: 'numeric' , }).format(new
-                                                        Date(row.start_day)) %>
-                                                        <br>
-                                                        Kết thúc: <%= new Intl.DateTimeFormat('vi-VN', { hour: 'numeric'
-                                                            , minute: 'numeric' , }).format(new Date(row.end_day)) %>
-                                                            -
-                                                            <%= new Intl.DateTimeFormat('vi-VN', { day: 'numeric' ,
-                                                                month: 'numeric' , year: 'numeric' , }).format(new
-                                                                Date(row.end_day)) %>
+                                 
+                                            Bắt đầu:     <%= row.start_day %> <br>
+                                           Kết thúc:     <%= row.end_day %>
+                                                
                                         </td>
                                         <td>
                                             <%= row?.code_discount %>
@@ -202,16 +192,8 @@
                                          
                                         </td>
                                         <td>
-                                            <%
-                                            const userCount = row?.user_id?.length;
-                                            const displayText = (row?.user_id && userCount === 0) ? "Tất cả" : userCount;
-                                            const showDetailLink = userCount > 0;
-                                        %>
-                                        
-                                        <%= displayText    %>
-                                        <% if (showDetailLink) { %>
-                                            <a href="#">  Xem chi tiết</a>
-                                        <% } %>
+
+                                        <%= row?.user_id.length ===  lengthUser  ? 'Tất cả' :row?.user_id.length   %>
                                         
                                         </td>
 
@@ -259,7 +241,6 @@
                                                 </div>
                                                 <!-- model sửa -->
                                                 <div>
-
                                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                         data-bs-target="#staticBackdropppp<%= row._id %>">
                                                         <i class="fa-regular fa-pen-to-square"></i> Chưa sửa được 
@@ -286,10 +267,10 @@
                                                                                     từ</label>
                                                                                 <div class="input-group date">
                                                                                     <input name="start_day"
-                                                                                        value="<%= row.start_day.toISOString().slice(0, 16) %>"
-                                                                                        type="datetime-local"
-                                                                                        class="form-control"
-                                                                                        id="start_day">
+                                                                                    value="<%= row.start_day %>"
+                                                                                    type="datetime-local"
+                                                                                    class="form-control"
+                                                                                    id="start_day">
                                                                                 </div>
                                                                             </div>
 
@@ -301,7 +282,7 @@
                                                                                 <div class="input-group date">
                                                                                     <input name="end_day"
                                                                                         type="datetime-local"
-                                                                                        value="<%= row.start_day.toISOString().slice(0, 16) %>"
+                                                                                        value="<%= row.start_day %>"
                                                                                         class="form-control"
                                                                                         id="end_day">
                                                                                 </div>

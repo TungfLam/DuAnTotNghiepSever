@@ -3,7 +3,7 @@ const mdbanner = require('../../models/banner.model');
 const getAllBanner = async (req, res) => {
     try {
         const listBanners = await mdbanner.bannerModel.find()
-        .populate('product_id', 'name')
+        .populate('product_id')
         .sort({ createdAt: -1});
 
         return res.status(200).json({ message: 'Success', listBanners: listBanners });

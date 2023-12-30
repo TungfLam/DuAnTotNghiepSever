@@ -1,8 +1,10 @@
 const mddiscount = require('../../models/discount.model');
 
 const getAllDiscount = async (req, res) => {
+    const idUser = req.params.idUser;
+    console.log(idUser);
     try {
-        const listdiscount = await mddiscount.discountModel.find().populate('user_id',"username")
+        const listdiscount = await mddiscount.discountModel.find({user_id:idUser}).populate('user_id',"username")
         .sort({ createdAt: -1});
 
         return res.status(200).json({ message: 'Success', listdiscount: listdiscount });

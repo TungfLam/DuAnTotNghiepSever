@@ -93,9 +93,9 @@
                                         <label for="floatingInput">Tên sản phẩm</label>
                                     </div>
                                     <div class="form-floating mb-2">
-                                        <select name="category" class="form-select  " id="filterGroup1">
+                                        <select name="category" class="form-select form-control" id="filterGroup1">
                                             <% listCategory.forEach(category=> { %>
-                                                <option value="<%= category._id %>" %>>
+                                                <option value="<%= category._id %>">
                                                     <%= category.name %>
                                                 </option>
                                                 <% }); %>
@@ -118,7 +118,7 @@
 
                                     <script>
                                         function handleFileSelect(input) {
-                                        
+
                                             const maxFiles = 5;
                                             const imagePreview = document.getElementById("imagePreview");
                                             const paragraph = document.querySelector("p");
@@ -158,8 +158,8 @@
                                     </div>
 
                                     <div class="form-floating mb-2">
-                                        <input type="text" class="form-control" id="inputPrice"
-                                            placeholder="Fullname" required name="price" oninput="validatePrice(this)">
+                                        <input type="text" class="form-control" id="inputPrice" placeholder="Fullname"
+                                            required name="price" oninput="validatePrice(this)">
                                         <label for="inputPrice">Giá</label>
                                     </div>
                                     <div>
@@ -202,7 +202,7 @@
                                             console.log("discountValue", discountValue);
                                             console.log("priceValue", priceValue);
 
-                                            if (discountValue >= priceValue  ) {
+                                            if (discountValue >= priceValue) {
                                                 alert("Số tiền giảm giá không được lớn hơn hoặc bằng giá gốc.");
                                                 discountInput.value = ''; // Reset giảm giá nếu không hợp lệ
                                             }
@@ -320,7 +320,8 @@
 
                                             </td>
                                             <td class="" style="width: 170px;">
-                                                <% if (row?.discount==undefined || row?.discount==null||row?.discount==0 ) { %>
+                                                <% if (row?.discount==undefined || row?.discount==null||row?.discount==0
+                                                    ) { %>
                                                     <div class="">
                                                         <i class="fa-regular fa-money-bill-1"></i>
                                                         <%= (row?.price ).toLocaleString('vi-VN', { style: 'currency' ,
