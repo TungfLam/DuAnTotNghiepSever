@@ -40,8 +40,8 @@
                                    accept="image/*" required>
                             <label class="input-group-text" for="inputGroupFile02">Upload</label>
                         </div>
-                        <select name="id_product" class="form-select" aria-label="Default select example">
-                            <option selected> Vui lòng chọn sản phẩm</option>
+                        <select name="id_product" class="form-select" aria-label="Default select example" multiple>
+                      
                             <% for (const product of listProduct) { %>
                                 <option value="<%= product._id %>">
                                     <%= product.name %>
@@ -94,8 +94,15 @@
                         <%= i + 1 %>
                     </td>
                     <td style="width: 550px;">
-                        <%= row?.product_id?.name %>
-                    </td>
+                        <% if (row?.product_id && row.product_id.length > 0) { %>
+                          <% row.product_id.forEach(product => { %>
+                            <%= product.name %><br>
+                          <% }); %>
+                        <% } else { %>
+                          Không có sản phẩm
+                        <% } %>
+                      </td>
+                      
                     <td style="width: 550px;">
                         <%= row?.description %>
                     </td>
@@ -179,19 +186,15 @@
                                                         <label class="input-group-text"
                                                                for="inputGroupFile02">Upload</label>
                                                     </div>
-                                                    <select name="id_product" class="form-select"
-                                                            aria-label="Default select example">
-                                                        <option disabled> Vui lòng chọn sản phẩm</option>
+                                                    <select name="id_product" class="form-select" aria-label="Default select example" multiple>
                                                         <% for (const product of listProduct) { %>
-                                                            <option value="<%= product._id %>"
-                                                            <% if (product?._id.toString() === row?.product_id?._id.toString()) { %>
-                                                                    selected
-                                                                    <% } %>
-                                                            >
+                                                            <% let isSelected = row.product_id && row.product_id.some(item => item._id.toString() === product._id.toString()); %>
+                                                            <option value="<%= product._id %>" <%= isSelected ? 'selected' : '' %>>
                                                                 <%= product.name %>
                                                             </option>
                                                         <% } %>
                                                     </select>
+                                                    
 
                                                 </div>
                                                 <div class="modal-footer">
