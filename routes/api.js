@@ -35,10 +35,11 @@ router.delete('/users/:idu', api_users.deleteUser);
 
 //address
 router.get('/address/:idUser' , api_users.getAddressByIdUser); 
+router.get('/get-address/:idAddress' , api_users.getAddressById);
 router.post('/address' , api_users.addAddress);
 router.post('/setaddress', api_users.setAddress);
 router.put('/address/:idAddress' , api_users.updateAddres);
-router.delete('/address' , api_users.deleteAddress);
+router.delete('/address/:idAddress' , api_users.deleteAddress);
 
 //notification
 router.get('/notification/:idUser' , api_notification.getNotification);

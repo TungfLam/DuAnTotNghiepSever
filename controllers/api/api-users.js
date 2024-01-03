@@ -190,7 +190,7 @@ exports.checkLogin = async (req, res, next) => {
                     msg = "Đã đăng nhập";
                     err = false;
                 } else {
-                    msg = "Tài khoản đã đăng nhập ở lơi khác"
+                    msg = "Tài khoản đã đăng nhập ở nơi khác"
                 }
             } else {
                 msg = "Tài khoản đã bị khóa";
@@ -496,16 +496,30 @@ exports.deleteUser = async (req, res, next) => {
 exports.getAddressByIdUser = async (req, res, next) => {
     let idUser = req.params.idUser;
     let arrAddres = [];
-    console.log(idUser);
 
     if (idUser != null) {
         arrAddres = await md.addressModel.find({user_id : idUser});
-        console.log(arrAddres.length);
     } else {
         console.log("idUser null");
     }
 
     res.status(200).json(arrAddres);
+}
+
+exports.getAddressById = async (req , res , next) => {
+    let err = true;
+
+    try{
+        let idAddress = req.params.idAddress;
+        var objAddress = await md.addressModel.findById(idAddress);
+        err = false;
+    }catch(e){
+        console.log(e);
+    }
+    res.status(200).json({
+        err : err,
+        objAddress : objAddress
+    });
 }
 
 exports.addAddress = async (req, res, next) => {
@@ -608,7 +622,7 @@ exports.updateAddres = async (req, res, next) => {
     if (req.method == 'PUT') {
         let idAddress = req.params.idAddress;
         let address = req.body.address;
-        let specificAddres = req.body.specificAddres;
+        let specificAddres = req.body.specificAddress;
 
         let objAddress;
         let objUser;
@@ -664,9 +678,17 @@ exports.deleteAddress = async (req, res, next) => {
                 msg = "Bạn phải có tối thiểu một địa chỉ";
             } else {
                 try {
+                    let objUser = await md.userModel.findById(objAddress.user_id);
+                    
+                    if(objUser){
+                        let addresss = await md.addressModel.find({user_id : objUser._id});
+                        objUser.address = addresss[0]._id;
+                    }
+
                     await md.addressModel.findByIdAndDelete(idAddress);
                     msg = "Xóa địa chỉ thành công";
                     err = false;
+                    
                 } catch (error) {
                     msg = "Xóa địa chỉ thất bại";
                 }
