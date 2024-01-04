@@ -19,8 +19,10 @@ exports.getCommentByProduct = async (req , res , next) => {
         star = {$exists : true}
     }
 
-
-    let listComment = await mProduct.commentModel.find({product_detail_id : product_id , rating : star}).limit(count)
+    try {
+        var listComment = [];
+      
+        listComment = await mProduct.commentModel.find({product_id : product_id , rating : star}).limit(count)
         .populate("user_id" , ['full_name' ,'avata'])
         .populate({
             path: 'product_detail_id',
@@ -28,7 +30,14 @@ exports.getCommentByProduct = async (req , res , next) => {
                 { path: 'size_id' , populate : [{path : 'name'}]},
                 { path: 'color_id',  populate : [{path : 'name'}] }
             ]
-    });
+        });
+        console.log(listComment.length);
+        
+
+    } catch (error) {
+        console.log(error);
+    }
+    
     res.status(200).json(listComment);
 }
 
@@ -61,7 +70,8 @@ exports.newComment = async (req , res , next) => {
     let err = true;
 
     if(req.method == 'POST'){
-        let product_detail_id = req.body.ProductId;
+        let product_detail_id = req.body.ProductDetailId;
+        let product_id = req.body.ProductId;
         let user_id = req.body.UserId;
         let comment = req.body.Comment;
         let sRating = req.body.rating;
@@ -100,6 +110,7 @@ exports.newComment = async (req , res , next) => {
                 }
                 
                 newComment.product_detail_id = product_detail_id;
+                newComment.product_id = product_id;
                 newComment.user_id = user_id;
                 newComment.comment = comment;
                 newComment.rating = rating;
@@ -109,7 +120,7 @@ exports.newComment = async (req , res , next) => {
                     await newComment.save();
                     msg = "Comment added";
                     err = false;
-                    reStar(product_detail_id);
+                    reStar(product_id);
                 } catch (error) {
                     console.log("error : " + error);
                     msg = "Add comment failed"
@@ -170,12 +181,12 @@ exports.updateComment = async (req , res , next) => {
     );
 }
 
-async function reStar(product_detail_id){
+async function reStar(product_id){
 
     try {
         const result = await mProduct.commentModel.aggregate([
             {   
-                $match : {"product_detail_id" : new mongoose.Types.ObjectId(product_detail_id)}
+                $match : {"product_id" : new mongoose.Types.ObjectId(product_id)}
             },
             {
                 $group : {
@@ -189,21 +200,19 @@ async function reStar(product_detail_id){
             return;
         }
 
-        const countRating = await mProduct.commentModel.find({product_detail_id : product_detail_id}).count();
+        const countRating = await mProduct.commentModel.find({product_id : product_id}).count();
         
-        let ratingcount = parseInt(result[0].total / countRating) ;
+        let ratingcount = parseInt(result[0].total / countRating);
         if(parseFloat(result[0].total / countRating) > parseInt(result[0].total / countRating) + 0.5){
             ratingcount += 1;
         }
 
-        let objProductDetail = await mProductDetail.product_size_color_Model.findById(product_detail_id);
-
-        let objProduct = await mProduct.productModel.findById(objProductDetail.product_id);
+        let objProduct = await mProduct.productModel.findById(product_id);
 
         objProduct.rating = ratingcount;
 
         try {
-            await mProduct.productModel.findByIdAndUpdate(objProductDetail.product_id , objProduct);
+            await mProduct.productModel.findByIdAndUpdate(product_id, objProduct);
         } catch (error) {
             console.log("error : " + error);
         }

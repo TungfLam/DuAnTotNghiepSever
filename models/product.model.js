@@ -19,13 +19,13 @@ let productModel = db.mongoose.model('productModel', productSchema);
 const commentSchema = new db.mongoose.Schema(
     {
         product_detail_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'product_size_color_Model' },
+        product_id : {type : db.mongoose.Schema.Types.ObjectId, ref : 'productModel'},
         user_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel' },
         comment: { type: String, require: true },
         rating: { type: Number, require: true },    
         date: { type: String, require: true },
         images : {type : Array , require : false},
         discount: { type: Number, require: false },
-        
     },
     {
         collection: 'Comment'
