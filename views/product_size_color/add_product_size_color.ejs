@@ -82,7 +82,7 @@
                                 const sizeID = selectedSize.value;
                                 window.location.href = `/product_size_color/add_product_size_color/?productID=${selectedProductId}&sizeID=${sizeID}`;
                             } else if (selectedProductId) {
-                       
+
                                 window.location.href = `/product_size_color/add_product_size_color/?productID=${selectedProductId}`;
                             } else if (selectedSize) {
 
@@ -91,80 +91,80 @@
                             }
                         }
                     </script>
-                     <div style="display: flex; flex-direction: row;">
+                    <div style="display: flex; flex-direction: row;">
                         <% if (findImage) { %>
-                            <% findImage.forEach(image => { %>
+                            <% findImage.forEach(image=> { %>
                                 <div style="margin-left: 27px;">
                                     <img src="<%= image %>" alt="Hình ảnh" style="width: 150px; height: 150px;">
                                 </div>
-                            <% }); %>
-                        <% } %>
+                                <% }); %>
+                                    <% } %>
                     </div>
-                    
-                    
-                        
-                            <form method="POST" class="m-4" onsubmit="return validateForm()">
-                                <div class="input-group input-group-lg mb-3">
-                                    <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Tên
-                                        sản
-                                        phẩm</span>
-                                    <select name="name" class="form-control form-select"
-                                        aria-label="Sizing example input Default select example"
-                                        aria-describedby="inputGroup-sizing-lg" onchange="queryIdProduct()">
-                                        <option value="" selected>
-                                            Vui lòng chọn sản phẩm
-                                        </option>
 
-                                        <% product.forEach((product)=> { %>
-                                            <option value="<%= product._id %>" <%=product._id==selectedProductId
-                                                ? 'selected' : '' %>>
-                                                <%=product.name%>
-                                            </option>
 
-                                            <% }); %>
 
-                                    </select>
-                                </div>
-                               
+                    <form method="POST" class="m-4" onsubmit="return validateForm()">
+                        <div class="input-group input-group-lg mb-3">
+                            <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Tên
+                                sản
+                                phẩm</span>
+                            <select name="name" class="form-control form-select"
+                                aria-label="Sizing example input Default select example"
+                                aria-describedby="inputGroup-sizing-lg" onchange="queryIdProduct()">
+                                <option value="" selected>
+                                    Vui lòng chọn sản phẩm
+                                </option>
 
-                                <div class="d-flex align-content-start flex-wrap checkbox-group">
-                                    <% size.forEach((size)=> { %>
-                                        <div class="form-check">
-                                            <input class="form-check-input" name="checksize" style="margin-left: 20px;"
-                                                type="radio" value="<%= size.id %>"
-                                                id="flexCheckDefault_<%= size.name %>" onchange="queryIdProduct()" <% if
-                                                (size.id===selectedSizeID) { %>checked<% } %>>
-                                                <label class="form-check-label" for="flexCheckDefault_<%= size.name %>">
-                                                    <%= size.name %>
-                                                </label>
-                                        </div>
-                                        <% }); %>
-                                </div>
+                                <% product.forEach((product)=> { %>
+                                    <option value="<%= product._id %>" <%=product._id==selectedProductId ? 'selected'
+                                        : '' %>>
+                                        <%=product.name%>
+                                    </option>
 
-                                <div class="d-flex align-content-start flex-wrap checkbox-group">
-                                    <% color.forEach((color)=> { %>
-                                        <input type="checkbox" name="checkcolor" id="Checkbox<%= color.name %>"
-                                            class="btn-checkbox <%= color.name %>" value="<%= color.id %>">
-                                        <label for="Checkbox<%= color.name %>" class="checkbox-label"
-                                            style="background-color: <%= color.colorcode += 99 %>;">
-                                            <%= color.name %>
+                                    <% }); %>
+
+                            </select>
+                        </div>
+
+                        <div class="d-flex align-content-start flex-wrap checkbox-group">             
+                            <% size.forEach((size)=> { %>
+                                <div class="form-check">
+                                    <input class="form-check-input" name="checksize" style="margin-left: 20px;"
+                                        type="radio" value="<%= size.id %>" id="flexCheckDefault_<%= size.name %>"
+                                        onchange="queryIdProduct()" <% if (size.id===selectedSizeID) { %>checked<% } %>>
+                                        <label class="form-check-label" for="flexCheckDefault_<%= size.name %>">
+                                            <%= size.name %>
                                         </label>
-                                        <% }); %>
                                 </div>
+                                <% }); %>
+                        </div>
 
-                                <div class="input-group input-group-lg mb-3">
-                                    <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Số
-                                        lượng</span>
-                                    <input name="quantity" type="number" class="form-control"
-                                        aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <button type="reset" class="btn btn-secondary "
-                                        style="width: 180px; margin-right: 20px; ">Hủy</button>
-                                    <button type="submit" class="btn btn-primary "
-                                        style="width: 250px; ">Submit</button>
-                                </div>
-                            </form>
+                      
+
+                        <div class="d-flex align-content-start flex-wrap checkbox-group">
+                          
+                            <% color.forEach((color)=> { %>
+                                <input type="checkbox" name="checkcolor" id="Checkbox<%= color.name %>"
+                                    class="btn-checkbox <%= color.name %>" value="<%= color.id %>">
+                                <label for="Checkbox<%= color.name %>" class="checkbox-label"
+                                    style="background-color: <%= color.colorcode += 99 %>;">
+                                    <%= color.name %>
+                                </label>
+                                <% }); %>
+                        </div>
+
+                        <div class="input-group input-group-lg mb-3">
+                            <span class="input-group-text" style="width: 170px; " id="inputGroup-sizing-lg">Số
+                                lượng</span>
+                            <input name="quantity" type="number" class="form-control" aria-label="Sizing example input"
+                                aria-describedby="inputGroup-sizing-lg">
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="reset" class="btn btn-secondary "
+                                style="width: 180px; margin-right: 20px; ">Hủy</button>
+                            <button type="submit" class="btn btn-primary " style="width: 250px; ">Submit</button>
+                        </div>
+                    </form>
                 </div>
 
                 <%- include('../inc/bottom') %>

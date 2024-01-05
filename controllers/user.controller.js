@@ -31,7 +31,7 @@ exports.list = async (req , res , next) => {
 
     res.render('user/listUser',{
         title : title,
-        heading:heading,
+        heading:'Dánh sách người dùng',
         listUser : listUser,
         search : search,
         page : page,
@@ -47,6 +47,7 @@ exports.details = async (req , res , next) => {
 
     res.render('user/detailUser' ,{
         title : "Details User",
+        heading:'Dánh sách người dùng',
         objUser : objUser
     });
 }

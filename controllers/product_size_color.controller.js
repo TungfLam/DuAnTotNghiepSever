@@ -3,6 +3,7 @@ const productModel = require('../models/product.model');
 const colorModel = require('../models/color.model')
 const sizeModel = require('../models/sizes.model')
 const categoriModel = require('../models/category.model')
+const fs = require('fs');
 let ExcelJS = require('exceljs')
 let heading = 'Danh sách kho hàng'
 let title = 'Kho hàng'
@@ -22,13 +23,14 @@ const getListAll = async (req, res) => {
 
         productListSizeColor.sort((a, b) => {
             const sizeOrder = { 'XS': 1, 'S': 2, 'M': 3, 'L': 4, 'XL': 5, 'XXL': 6 };
-            return sizeOrder[a.size_id.name] - sizeOrder[b.size_id.name];
+            return sizeOrder[a?.size_id?.name] - sizeOrder[b?.size_id?.name];
         });
 
-        const listproduct = await productModel.productModel.find()
+        const listproduct = [await productModel.productModel.find()]
 
         const countProducts = await model_product_size_color.product_size_color_Model.count();
         const countPages = Math.ceil(countProducts / limit);
+        
         res.render('product_size_color/product_size_color', {
             title: title,
             heading: heading,
@@ -42,7 +44,7 @@ const getListAll = async (req, res) => {
             selectedroductName: 'all'
         });
     } catch (error) {
-        res.status(500).json({ message: 'Lỗi truy vấn CSDL: ' + error.message });
+        res.status(500).json({ message: 'Lỗi truy vấn CSDL: ' + error });
     }
 }
 var existingProductGlobal;
@@ -341,11 +343,11 @@ const exportExcel = async (req, res) => {
             const rowData = [
                 index + 1,
                 product.createdAt.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
-                product.product_id.name,
-                product.product_id.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }),
-                product.size_id.name,
-                product.color_id.name,
-                product.quantity
+                product?.product_id?.name,
+                product?.product_id?.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }),
+                product?.size_id?.name,
+                product?.color_id?.name,
+                product?.quantity
 
             ];
             worksheet.addRow(rowData);
@@ -363,7 +365,7 @@ const exportExcel = async (req, res) => {
                 res.status(500).send('Internal Server Error');
             } else {
 
-                fs.unlinkSync(fileName);
+                fs?.unlinkSync(fileName);
             }
         });
     } catch (error) {
