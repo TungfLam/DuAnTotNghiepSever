@@ -10,9 +10,9 @@ const getAllDiscount = async (req, res) => {
         let listdiscount = await mddiscount.discountModel.find({ user_id: idUser }).populate('user_id', "username").sort({ createdAt: -1 });
         for (const item of listdiscount) {
             const finuserdiscount = await mduserdiscount.userdiscountModel.findOne({ user_id: idUser, discount_id: item._id }).populate('discount_id');
-            console.log('user_id: ', idUser);
-            console.log('item._id: ', item._id);
-            console.log('usageCount: ', item.usageCount);
+            // console.log('user_id: ', idUser);
+            // console.log('item._id: ', item._id);
+            // console.log('usageCount: ', item.usageCount);
             if (finuserdiscount && item.usageCount === finuserdiscount.usage_count) {
                 console.log('Nếu bằng thì vào đây ');
                 // Lọc idUser khỏi mảng user_id

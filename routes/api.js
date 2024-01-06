@@ -120,7 +120,7 @@ router.delete('/deletecart/:id', api_cart.deleteCart);
 router.get('/banner', api_banner.getAllBanner );
 
 
-router.get('/discount', api_discount.getAllDiscount );
+router.get('/discount/:idUser', api_discount.getAllDiscount );
 
 
 module.exports = router;
