@@ -26,7 +26,7 @@ const getListAll = async (req, res) => {
             return sizeOrder[a?.size_id?.name] - sizeOrder[b?.size_id?.name];
         });
 
-        const listproduct = [await productModel.productModel.find()]
+        const listproduct = await productModel.productModel.find()
 
         const countProducts = await model_product_size_color.product_size_color_Model.count();
         const countPages = Math.ceil(countProducts / limit);
@@ -266,7 +266,8 @@ const filterNameProduct = async (req, res) => {
         .populate('color_id', "name").sort({ createdAt: -1 });
 
     const listCategory = await categoriModel.categoryModel.find();
-    const listproduct = await productModel.productModel.find()
+    const listproduct = await productModel.productModel.find();
+  
     if (filterProductName.length === 0) {
         message = '  '
 

@@ -19,7 +19,7 @@
                         <option value="all" <%=selectedroductName==='all' ? 'selected' : '' %>>All</option>
                         <% listproduct?.forEach(product=> { %>
                             <option value="<%= product._id %>" <%=product._id==selectedroductName ? 'selected' : '' %>>
-                                <%= product && product.name ? product.name : 'N/A' %>
+                                <%= product.name %>
                             </option>
                             <% }); %>
                     </select>

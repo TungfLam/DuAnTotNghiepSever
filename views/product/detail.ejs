@@ -102,17 +102,17 @@
                         </thead>
 
 
-                        <% for (let i=0; i < productListSizeColor.length; i++) { %>
+                        <% for (let i=0; i < productListSizeColor?.length; i++) { %>
                             <% const row=productListSizeColor[i]; %>
                                 <tr>
                                     <td>
                                         <%= i +1 %>
                                     </td>
                                     <td>
-                                        <%= row.size_id.name %>
+                                        <%= row?.size_id?.name %>
                                     </td>
                                     <td>
-                                        <%= row.color_id.name %>
+                                        <%= row?.color_id?.name %>
                                     </td>
                                     <td>
 
