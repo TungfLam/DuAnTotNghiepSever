@@ -78,6 +78,8 @@ exports.newComment = async (req , res , next) => {
 
         let objProductChek = await mProductDetail.product_size_color_Model.findById(product_detail_id);
         let objUserChek = await mUser.userModel.findById(user_id);
+        let objCommentCkek = await mProduct.commentModel.findOne({user_id : user_id});
+
 
         if(!objProductChek){
             msg = "Product null";
@@ -85,6 +87,8 @@ exports.newComment = async (req , res , next) => {
             msg = "User null";
         }else if(isNaN(sRating)){
             msg = "Rating is not a number";
+        }else if(objCommentCkek){
+            msg = "Bạn đã đánh giá sản phẩm này rồi";
         }else {
             let rating = Number(sRating);
             if(rating <= 0 || rating >= 6){
