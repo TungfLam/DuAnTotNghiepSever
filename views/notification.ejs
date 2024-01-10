@@ -1,4 +1,88 @@
 <%- include('./inc/top') %>
+    <div class=" d-flex">
+        <div class="row p-3" style=" background-color: white;
+             border-radius: 13px; 
+              box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
+               margin: 20px; 
+               width: 40%;
+              height: 550px;
+                
+                 ">
+
+            <form method="post" action="">
+                <div class="text-center">
+                    <p class="fs-2 fw-bold">Thông báo</p>
+                </div>
+                <div class="mb-3">
+                    <label for="inputTitle" class="form-label">Tiêu đề:</label>
+                    <input type="text" class="form-control" id="inputTitle" placeholder="Nhập tiêu đề">
+                </div>
+                <div class="mb-3">
+                    <label for="inputContent" class="form-label">Nội dung:</label>
+                    <textarea class="form-control" id="inputContent" rows="3" placeholder="Nhập nội dung"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="inputImage" class="form-label">Link ảnh:</label>
+                    <input type="text" class="form-control" id="inputImage" placeholder="Nhập link ảnh">
+                </div>
+                <div class="d-grid gap-2">
+                    <button style="height: 60px;" type="submit" class="btn btn-primary">Gửi thông báo</button>
+                </div>
+            </form>
+        </div>
 
 
-<%- include('./inc/bottom') %>
+
+        <div class="row p-3"
+            style=" background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); margin: 20px; width: 60%;">
+            <div class="text-center">
+                <p class="fs-2 fw-bold">Người dùng</p>
+            </div>
+            <table id="example" class="table  table-hover " style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>SĐT</th>
+                        <th>Họ và tên</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+
+                <% if (listUser.length===0) { %>
+                    <tr>
+                        <td colspan="7" style="text-align: center;justify-content: center;">
+                            <p>Dữ liệu không tồn tại.</p>
+                        </td>
+                    </tr>
+                    <% } else { %>
+
+                        <% for (let i=0; i < listUser.length; i++) { %>
+                            <% const row=listUser[i]; %>
+                                <tr>
+
+                                    <td>
+                                        <%= i+1 %>
+                                    </td>
+                                    <td>
+                                        <%= row.phone_number %>
+                                    </td>
+                                    <td>
+                                        <%= row.full_name %>
+                                    </td>
+                                    <td>
+                                        <div class="form-check mb-3 custom-checkbox">
+                                            <input style="width: 1.6em;height: 1.6em;" class="form-check-input"
+                                                type="checkbox" id="sendNotification">
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                <% } %>
+                                    <% } %>
+
+
+            </table>
+        </div>
+    </div>
+
+    <%- include('./inc/bottom') %>
