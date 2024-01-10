@@ -1,5 +1,9 @@
 const { nextTick } = require('process');
 var md = require('../../models/user.model');
+const mdConversation = require('../../models/conversation.model')
+const mdMessage = require('../../models/message.model')
+let moment = require('moment')
+
 var fs = require('fs');
 var objReturn = {
     status: 1,
@@ -168,6 +172,60 @@ exports.setToken = async (req, res, next) => {
         err: err
     });
 }
+exports.setSocketId = async (req, res, next) => {
+    let msg = "";
+    let err = true;
+    let objUser;
+
+    if (req.method === 'PUT') {
+        const idUser = req.params.idUser;
+        const socketId = req.body.socketId;
+
+        try {
+            objUser = await md.userModel.findById(idUser);
+        } catch (error) {
+            console.log("Tài khoản không tồn tại");
+        }
+
+        if (objUser) {
+            objUser.socketId = socketId;
+
+            try {
+                await md.userModel.findByIdAndUpdate(idUser, objUser);
+                msg = "Thiết lập socket ID thành công";
+                err = false;
+            } catch (error) {
+                msg = "Thiết lập socket ID thất bại";
+            }
+        } else {
+            msg = "Tài khoản không tồn tại";
+        }
+    } else {
+        msg = "Lỗi phương thức: Vui lòng sử dụng phương thức PUT";
+    }
+
+    res.status(200).json({
+        msg: msg,
+        err: err
+    });
+}
+exports.getSocketIdByUserId = async (req, res) => {
+    const idUser = req.params.idUser;
+
+    try {
+        const user = await md.userModel.findById(idUser);
+
+        if (user) {
+            const socketId = user.socketId || null;
+            res.status(200).json({ socketId: socketId });
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
 exports.checkLogin = async (req, res, next) => {
     let msg = "";
@@ -208,7 +266,7 @@ exports.checkLogin = async (req, res, next) => {
     });
 }
 
-exports.changePassword = async (rep , res , next) => {
+exports.changePassword = async (rep, res, next) => {
     let msg = "";
     let err = true;
 
@@ -221,35 +279,35 @@ exports.changePassword = async (rep , res , next) => {
         console.log("User không tồn tại");
     }
 
-    if(objUser){
-        if(objUser.password == ""){
+    if (objUser) {
+        if (objUser.password == "") {
             msg = "Tải khoàn chưa có mật khẩu"
-        }else{
-            if(objUser.password == password){
+        } else {
+            if (objUser.password == password) {
                 objUser.password = newPassword;
                 try {
-                    await md.userModel.findByIdAndUpdate(idUser , objUser);
+                    await md.userModel.findByIdAndUpdate(idUser, objUser);
                     msg = "Thay đổi mật khẩu thành công"
                     err = false;
                 } catch (error) {
                     msg = "Không thành công, vui lòng thử lại sau";
                     console.log("change passwor : " + error);
                 }
-            }else{
+            } else {
                 msg = "Mật khẩu không chính xác";
             }
         }
-    }else{
+    } else {
         msg = "Tài khoàn không tồn tại";
     }
 
     res.status(200).json({
-        msg : msg,
-        err : err
+        msg: msg,
+        err: err
     })
 }
 
-exports.addMethodLogin2 = async (req , res , next) => {
+exports.addMethodLogin2 = async (req, res, next) => {
     let msg = "";
     let err = true;
 
@@ -260,29 +318,29 @@ exports.addMethodLogin2 = async (req , res , next) => {
         var objUser = await md.userModel.findById(idUser);
 
         var objUser2;
-        if(username.split('@').length >= 2){
-            objUser2 = await md.userModel.findOne({email : username});
+        if (username.split('@').length >= 2) {
+            objUser2 = await md.userModel.findOne({ email: username });
             objUser.email = username;
-        }else{
-            objUser2 = await md.userModel.findOne({username : username});
+        } else {
+            objUser2 = await md.userModel.findOne({ username: username });
             objUser.username = username;
         }
-        
+
     } catch (error) {
         console.log(error);
     }
 
-    if(objUser){
-        if(objUser.password != ""){
+    if (objUser) {
+        if (objUser.password != "") {
             msg = "Mật khẩu đã được tạo"
-        }else{
-            if(objUser2){
+        } else {
+            if (objUser2) {
                 msg = "Username/email đã được sử dụng";
-            }else{
+            } else {
                 objUser.password = password;
 
                 try {
-                    await md.userModel.findByIdAndUpdate(idUser , objUser);
+                    await md.userModel.findByIdAndUpdate(idUser, objUser);
                     msg = "Thêm thành công";
                     err = false;
                 } catch (error) {
@@ -290,19 +348,19 @@ exports.addMethodLogin2 = async (req , res , next) => {
                 }
             }
         }
-    }else{
+    } else {
         msg = "Tài khoàn không tồn tại";
     }
 
     res.status(200).json(
         {
-            msg : msg,
-            err : err
+            msg: msg,
+            err: err
         }
     )
 }
 
-exports.logout = async (req , res , next) => {
+exports.logout = async (req, res, next) => {
     let msg = "";
     let err = true;
     let objUser;
@@ -344,8 +402,10 @@ exports.addUser = async (req, res, next) => {
     let msg = "";
     let err = true;
     let objUser = new md.userModel();
+    let idadmin = "65849105a6299a9efc3909db";
 
     if (req.method == 'POST') {
+        let username = req.body.username;
         let phone = req.body.Phone;
         let fullname = req.body.Fullname;
         let email = req.body.Email;
@@ -353,6 +413,7 @@ exports.addUser = async (req, res, next) => {
         let token = req.body.Token;
         let deviceId = req.body.DeviceId;
 
+        objUser.username = username;
         objUser.full_name = fullname;
         objUser.phone_number = phone;
         objUser.role = "User";
@@ -364,7 +425,9 @@ exports.addUser = async (req, res, next) => {
         objUser.password = password;
 
         // Thêm trường created_at với giá trị là ngày hiện tại
-        objUser.created_at = new Date();
+
+        var date = moment(Date.now()).utc().toDate();
+        objUser.created_at = date;
 
         if (req.file) {
             try {
@@ -373,6 +436,8 @@ exports.addUser = async (req, res, next) => {
             } catch (error) {
                 console.log("Ảnh bị lỗi rồi: " + error);
             }
+        } else {
+            objUser.avata = '/avatas/6592854181e88d638499dd26_user.png';
         }
 
         try {
@@ -388,14 +453,56 @@ exports.addUser = async (req, res, next) => {
         }
 
         if (objUserPhone) {
+            console.log('có sdt' + objUserPhone);
+
             msg = "Số điện thoại đã được đăng ký";
         } else if (objUserEmail) {
+            console.log('có emil' + objUserEmail);
+
             msg = "Email đã được đăng ký";
         } else {
             try {
                 await objUser.save();
                 msg = "Tạo tài khoản thành công";
                 err = false;
+                try {
+                    const newUser = await md.userModel.findOne({ phone_number: phone });
+                    // console.log("nguoi dung moi", newUser);
+                    if (newUser) {
+                        // Tạo cuộc trò chuyện mới
+                        const newConversation = new mdConversation.ConversationModel({
+                            members: [newUser._id, idadmin],  // Thêm _id của người dùng và admin
+                            createdAt: date
+
+                        });
+
+
+                        // Lưu cuộc trò chuyện vào cơ sở dữ liệu
+                        await newConversation.save();
+
+                        // console.log("Cuộc trò chuyện mới đã được tạo:", newConversation);
+                        try {
+                            const newMessage = new mdMessage.MessageModel({
+                                conversationId: newConversation._id,
+                                sender: idadmin,
+                                text: "xin chào đã đến với adadss, ứng dụng mua sắm online ❤️",
+                                createdAt: date
+
+
+                            });
+                            await newMessage.save();
+                            // console.log("Tin nhắn chào đã được tạo:", newMessage);
+
+
+                        } catch (error) {
+
+                        }
+                    } else {
+                        console.log("Không thể tìm thấy người dùng mới");
+                    }
+                } catch (error) {
+
+                }
             } catch (error) {
                 msg = "Tạo tài khoản thất bại";
                 console.log(error);
@@ -498,7 +605,10 @@ exports.getAddressByIdUser = async (req, res, next) => {
     let arrAddres = [];
 
     if (idUser != null) {
+
+
         arrAddres = await md.addressModel.find({user_id : idUser});
+
     } else {
         console.log("idUser null");
     }
@@ -577,7 +687,7 @@ exports.addAddress = async (req, res, next) => {
     });
 }
 
-exports.setAddress = async (req , res , next) => {
+exports.setAddress = async (req, res, next) => {
     let msg = "";
     let err = true;
 
@@ -590,22 +700,22 @@ exports.setAddress = async (req , res , next) => {
         console.log(error);
     }
 
-    if(objUser){
-        if(objAddress){
+    if (objUser) {
+        if (objAddress) {
             objUser.address = objAddress._id;
 
             try {
-                await md.userModel.findByIdAndUpdate(idUser , objUser);
+                await md.userModel.findByIdAndUpdate(idUser, objUser);
                 err = false;
                 msg = "Set thành công"
             } catch (error) {
                 msg = "Lỗi server vui lòng thử lại sau";
                 console.log(error);
             }
-        }else{
+        } else {
             msg = "Địa chỉ không tồn tại";
         }
-    }else{
+    } else {
         msg = "Người dùng không tồn tại";
     }
 

@@ -586,7 +586,11 @@ exports.login = async (req, res, next) => {
                     if (objUser.status) {
                         console.log("User " + objUser.username);
                         req.session.userLogin = objUser;
-                        res.redirect('/users');
+                        res.locals.user = req.session.userLogin;
+                        console.log("lưu trong locals" + res.locals.user);
+
+
+                        res.redirect('/');
                     } else {
                         msg = "Tài khoản của bạn đã bị khóa";
                         typeErr = true;

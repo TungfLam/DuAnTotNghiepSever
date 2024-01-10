@@ -38,8 +38,24 @@ router.get('/address/:idUser' , api_users.getAddressByIdUser);
 router.get('/get-address/:idAddress' , api_users.getAddressById);
 router.post('/address' , api_users.addAddress);
 router.post('/setaddress', api_users.setAddress);
+
+
+
+
+
+
+// set SKID
+
+router.put('/user/:idUser', api_users.setSocketId);
+router.get('/userSocketId/:idUser', api_users.getSocketIdByUserId);
+
+
+  
 router.put('/address/:idAddress' , api_users.updateAddres);
 router.delete('/address/:idAddress' , api_users.deleteAddress);
+
+
+
 
 //notification
 router.get('/notification/:idUser' , api_notification.getNotification);
@@ -120,7 +136,21 @@ router.delete('/deletecart/:id', api_cart.deleteCart);
 router.get('/banner', api_banner.getAllBanner );
 
 
+
+
+
+
+
+// nhan tin realtime
+router.post('/conversation', api_conversationController.createConversation);
+router.get('/conversation/:userId', api_conversationController.getConversationsByUser);
+router.get('/conversation/r/:conversationId/:userId', api_conversationController.getConversationsById);
+
+router.post('/message', upload.single('text'), api_messageController.createMessage);
+router.get('/message/:conversationId', api_messageController.getMessagesByConversation);
+
 router.get('/discount/:idUser', api_discount.getAllDiscount );
+
 
 
 module.exports = router;

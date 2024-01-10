@@ -1,6 +1,7 @@
 var ConversationModel = require('../../models/conversation.model');
 var socketIo = require('socket.io');
 var http = require('http');
+let moment = require('moment')
 
 var app = require('express')();
 var server = http.createServer(app);
@@ -11,31 +12,17 @@ var objReturn = {
     msg: 'OK'
 }
 
-// io.on('connection', (socket) => {
-//     console.log('Một người dùng đã kết nối');
 
-//     socket.on('disconnect', () => {
-//         console.log('Người dùng đã ngắt kết nối');
-//     });
-
-//     socket.on('create_conversation', async (conversationData) => {
-//         try {
-//             const conversation = new ConversationModel.ConversationModel(conversationData);
-//             await conversation.save();
-
-//             // Phát thông tin cuộc trò chuyện đến tất cả người dùng khác trong cuộc trò chuyện
-//             io.to(conversationData.members).emit('new_conversation', conversation);
-//         } catch (error) {
-//             console.error(error);
-//         }
-//     });
-// });
 
 exports.createConversation = async (req, res) => {
     const { members } = req.body;
+    var date = moment(Date.now()).utc().toDate();
 
     try {
-        const conversation = new ConversationModel.ConversationModel({ members });
+        const conversation = new ConversationModel.ConversationModel({
+            createdAt: date,
+            members
+        });
 
         await conversation.save();
 
@@ -54,7 +41,7 @@ exports.getConversationsByUser = async (req, res) => {
     try {
         list = await ConversationModel.ConversationModel.find({
             members: { $in: [userId] }
-        });
+        }).sort({ createdAt: -1 });
 
         if (list.length > 0) {
             objReturn.msg = 'có dữ liệu phù hợp';
@@ -68,6 +55,34 @@ exports.getConversationsByUser = async (req, res) => {
     } catch (error) {
         objReturn.status = 0;
         objReturn.msg = error.message;
+    }
+
+    res.json(objReturn);
+};
+exports.getConversationsById = async (req, res) => {
+    const { conversationId, userId } = req.params;
+    let objReturn = {};
+
+    try {
+        const conversation = await ConversationModel.ConversationModel.findById(
+            conversationId
+        );
+
+        if (!conversation) {
+            objReturn.status = 0;
+            objReturn.msg = 'Không tìm thấy cuộc trò chuyện';
+            objReturn.data = null;
+        } else {
+            const members = conversation.members.filter(member => String(member) !== userId);
+
+            objReturn.msg = 'Có dữ liệu phù hợp';
+            objReturn.data = { members };
+            objReturn.status = 1;
+        }
+    } catch (error) {
+        objReturn.status = 0;
+        objReturn.msg = error.message;
+        objReturn.data = null;
     }
 
     res.json(objReturn);

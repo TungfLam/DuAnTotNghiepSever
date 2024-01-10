@@ -1,8 +1,18 @@
-exports.checkLogin = (req , res , next) =>{
+exports.requiresLogin = (req, res, next) => {
 
-    if(req.session.userLogin){
+    if (req.session.userLogin) {
+        res.locals.user = req.session.userLogin;
         next();
-    }else{
+    } else {
         res.redirect('/login');
     }
+}
+exports.noLoginRequired = (req, res, next) => {
+    if (!req.session.userLogin) {
+        next();
+
+    } else {
+        return res.redirect('/')
+    }
+
 }
