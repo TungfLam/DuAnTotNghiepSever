@@ -417,6 +417,7 @@ exports.addUser = async (req, res, next) => {
         objUser.full_name = fullname;
         objUser.phone_number = phone;
         objUser.role = "User";
+        objUser.socketId = "9105a6299a9";
         objUser.status = true;
         objUser.token = token;
         objUser.deviceId = deviceId;
@@ -607,7 +608,7 @@ exports.getAddressByIdUser = async (req, res, next) => {
     if (idUser != null) {
 
 
-        arrAddres = await md.addressModel.find({user_id : idUser});
+        arrAddres = await md.addressModel.find({ user_id: idUser });
 
     } else {
         console.log("idUser null");
@@ -616,19 +617,19 @@ exports.getAddressByIdUser = async (req, res, next) => {
     res.status(200).json(arrAddres);
 }
 
-exports.getAddressById = async (req , res , next) => {
+exports.getAddressById = async (req, res, next) => {
     let err = true;
 
-    try{
+    try {
         let idAddress = req.params.idAddress;
         var objAddress = await md.addressModel.findById(idAddress);
         err = false;
-    }catch(e){
+    } catch (e) {
         console.log(e);
     }
     res.status(200).json({
-        err : err,
-        objAddress : objAddress
+        err: err,
+        objAddress: objAddress
     });
 }
 
@@ -789,16 +790,16 @@ exports.deleteAddress = async (req, res, next) => {
             } else {
                 try {
                     let objUser = await md.userModel.findById(objAddress.user_id);
-                    
-                    if(objUser){
-                        let addresss = await md.addressModel.find({user_id : objUser._id});
+
+                    if (objUser) {
+                        let addresss = await md.addressModel.find({ user_id: objUser._id });
                         objUser.address = addresss[0]._id;
                     }
 
                     await md.addressModel.findByIdAndDelete(idAddress);
                     msg = "Xóa địa chỉ thành công";
                     err = false;
-                    
+
                 } catch (error) {
                     msg = "Xóa địa chỉ thất bại";
                 }
