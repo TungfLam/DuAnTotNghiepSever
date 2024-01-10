@@ -48,6 +48,39 @@
             background-color: #d9ebff;
             color: #0b0b0b;
         }
+
+        #conversationList {
+            max-height: 600px;
+            /* Đặt chiều cao tối đa của thẻ ul */
+            overflow-y: auto;
+            /* Tự động thêm thanh cuộn khi cần */
+        }
+
+        /* Kích thước và kiểu dáng cho thẻ li bên trong */
+        #conversationList li {
+            padding: 10px;
+        }
+
+        /* Cố định kích thước của các phần tử con trong thẻ li */
+        .conversation-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar-container img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .user-info {
+            padding: 0;
+        }
+
+        .user-info p {
+            margin: 0;
+        }
     </style>
 
     <meta id="idsender" content="<%= idsender %>">
@@ -62,12 +95,12 @@
                     <li data-conversation-id="<%= conversation._id %>" class="list-group-item">
                         <% conversation.members.forEach(member=> { %>
                             <% if (member._id.toString() !==idsender) { %>
-                                <div class="conversation-info" style="display: flex;">
+                                <div class="conversation-info">
                                     <div class="avatar-container">
-                                        <img src="<%= member.avata %>" alt="Avatar" class="img-thumbnail rounded-circle"
-                                            style="width: 50px; height: 50px;">
+                                        <img src="<%= member.avata %>" alt="Avatar"
+                                            class="img-thumbnail rounded-circle">
                                     </div>
-                                    <div class="user-info" style="padding: 0px;">
+                                    <div class="user-info">
                                         <p>
                                             <%= member.full_name %>
                                         </p>
