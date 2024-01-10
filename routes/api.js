@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const multer = require('multer');
-const upload = multer({ dest: './tmp' });
+const upload = multer({dest : './tmp'});
 
 const api_comment = require('../controllers/api/api_comment');
 const api_users = require('../controllers/api/api-users')
@@ -17,36 +17,48 @@ var api_bill = require('../controllers/api/api-bill')
 var api_cart = require('../controllers/api/api-cart')
 var api_banner = require('../controllers/api/api_banner')
 var api_discount = require('../controllers/api/api_discount')
-var api_messageController = require('../controllers/api/api_message')
-var api_conversationController = require('../controllers/api/api_conversation')
 
 // api user
 
 router.get('/users', api_users.listUser);
 router.get('/users/pagination', api_users.pagination);
 router.post('/userslogin', api_users.userLogin);
-router.post('/usersloginphone', api_users.userLoginPhone);
-router.post('/cheklogin/:idUser', api_users.checkLogin);
-router.post('/logout/:idUser', api_users.logout);
-router.put('/setoken/:idUser', api_users.setToken);
+router.post('/usersloginphone' , api_users.userLoginPhone);
+router.post('/cheklogin/:idUser' , api_users.checkLogin);
+router.post('/logout/:idUser' , api_users.logout);
+router.put('/setoken/:idUser' , api_users.setToken);
 router.put('/change-password/:idUser', api_users.changePassword);
 
-router.post('/users', upload.single("image"), api_users.addUser);
+router.post('/users',upload.single("image"), api_users.addUser);
 router.put('/users/:idu', api_users.updateUser);
 router.delete('/users/:idu', api_users.deleteUser);
 
 //address
-router.get('/address/:idUser', api_users.getAddressByIdUser);
-router.post('/address', api_users.addAddress);
+router.get('/address/:idUser' , api_users.getAddressByIdUser); 
+router.get('/get-address/:idAddress' , api_users.getAddressById);
+router.post('/address' , api_users.addAddress);
 router.post('/setaddress', api_users.setAddress);
-router.put('/address/:idAddress', api_users.updateAddres);
-router.delete('/address', api_users.deleteAddress);
+
+
+
+
+
+
 // set SKID
+
 router.put('/user/:idUser', api_users.setSocketId);
 router.get('/userSocketId/:idUser', api_users.getSocketIdByUserId);
 
+
+  
+router.put('/address/:idAddress' , api_users.updateAddres);
+router.delete('/address/:idAddress' , api_users.deleteAddress);
+
+
+
+
 //notification
-router.get('/notification/:idUser', api_notification.getNotification);
+router.get('/notification/:idUser' , api_notification.getNotification);
 
 
 //===
@@ -65,7 +77,7 @@ router.get('/products', api_product.searchProduct);
 //comment 
 router.get('/comment/:ProductId', api_comment.getCommentByProduct);
 router.post('/comment-by-id', api_comment.getCommentById);
-router.post('/comment', upload.array('images', 3), api_comment.newComment);
+router.post('/comment',upload.array('images', 3), api_comment.newComment);
 router.put('/comment/:CommentId', api_comment.updateComment);
 
 
@@ -105,7 +117,7 @@ router.post('/addbill', api_bill.addBill);
 router.put('/bill/:id', api_bill.updateBill);
 router.delete('/bill/:id', api_bill.deleteBill);
 
-router.get('/bill-by-id/:idBill', api_bill.getBillById);
+router.get('/bill-by-id/:idBill' , api_bill.getBillById);
 
 //====
 
@@ -121,10 +133,11 @@ router.delete('/deletecart/:id', api_cart.deleteCart);
 //====
 
 
-router.get('/banner', api_banner.getAllBanner);
+router.get('/banner', api_banner.getAllBanner );
 
 
-router.get('/discount/:idUser', api_discount.getAllDiscount);
+
+
 
 
 
@@ -135,6 +148,9 @@ router.get('/conversation/r/:conversationId/:userId', api_conversationController
 
 router.post('/message', upload.single('text'), api_messageController.createMessage);
 router.get('/message/:conversationId', api_messageController.getMessagesByConversation);
+
+router.get('/discount/:idUser', api_discount.getAllDiscount );
+
 
 
 module.exports = router;

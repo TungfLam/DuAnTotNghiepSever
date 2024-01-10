@@ -4,6 +4,8 @@ const bill_SChema = new db.mongoose.Schema(
     {
         user_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel' },
         cart_id: [{ type: db.mongoose.Schema.Types.ObjectId, ref: 'cartModel' }],
+        discount_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'discountModel' },
+        discount_data: { type: Object, required: false },
         user_data: { type: Object, required: false },
         cart_data: { type: Object, required: false },
         payments: { type: Number, require: true },

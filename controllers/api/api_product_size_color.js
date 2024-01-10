@@ -18,7 +18,7 @@ const getListAll_deltail = async (req, res) => {
         // Sắp xếp kích cỡ theo thứ tự "S M L XL XXL"
         productListSize.sort((a, b) => {
             const sizeOrder = { 'S': 0, 'M': 1, 'L': 2, 'XL': 3, 'XXL': 4 };
-            return sizeOrder[a.size_id.name] - sizeOrder[b.size_id.name];
+            return sizeOrder[a.size_id?.name] - sizeOrder[b.size_id?.name];
         });
 
         res.status(200).json({ productListSize: productListSize,deeplink:deeplink });

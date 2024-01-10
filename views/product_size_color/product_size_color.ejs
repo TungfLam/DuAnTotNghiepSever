@@ -79,7 +79,7 @@
                         </tr>
                         <% } else { %>
                             <% let groupedProducts={}; %>
-                                <% productListSizeColor.forEach(row=> { %>
+                                <% productListSizeColor?.forEach(row=> { %>
 
                                     <% if (!groupedProducts[row?.product_id?.name]) { %>
 
@@ -108,10 +108,10 @@
                                                                                     <%= variant?.color_id?.name %>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <% if (variant.quantity===0) { %>
+                                                                                    <% if (variant?.quantity===0) { %>
                                                                                         Hết hàng
                                                                                         <% } else { %>
-                                                                                            <%= variant.quantity %>
+                                                                                            <%= variant?.quantity %>
                                                                                                 <% } %>
                                                                                 </td>
 

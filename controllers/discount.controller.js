@@ -1,14 +1,14 @@
 let mdProduct_ = require('../models/product.model')
 let mduser = require('../models/user.model')
 let mddiscount = require("../models/discount.model")
-const moment = require('moment-timezone');
+const moment = require('moment');
 
 const getAllDiscount = async (req, res) => {
     const aler = req.query.aler;
     const listUser = await mduser.userModel.find();
     let litsDiscount = await mddiscount.discountModel.find().sort({ createdAt: -1 });
     const lengthUser = listUser.length;
-    console.log('litsDiscountlitsDiscount', litsDiscount);
+    // console.log('litsDiscountlitsDiscount', litsDiscount);
     res.render('discount/list', {
         title: "ADADAS",
         heading: "Danh sách Voucher",
@@ -30,10 +30,10 @@ const addDiscount = async (req, res) => {
                 console.log('đẩy vào mảng');
                 users.push(itemUser._id);
             });
-        } 
+        }
         console.log('Đây là mảng users', users);
-        const startDayVN = moment(start_day).tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD HH:mm');
-        const endDayVN = moment(end_day).tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD HH:mm');
+        const startDayVN = moment(start_day).format('YYYY-MM-DD HH:mm');
+        const endDayVN = moment(end_day).format('YYYY-MM-DD HH:mm');
 
         const discount = new mddiscount.discountModel({
             description,
@@ -71,26 +71,68 @@ const deleteDiscount = async (req, res) => {
     }
 };
 
+const deleteExpiredDiscounts = async () => {
+    try {
+        // Lấy tất cả các discount đã hết hạn
+        const expiredDiscounts = await mddiscount.discountModel.find({
+            end_day: { $lt: new Date() } // Lọc các bản ghi có end_day nhỏ hơn thời điểm hiện tại
+        });
 
-module.exports = { getAllDiscount, addDiscount, deleteDiscount };
+        // Chuyển đổi định dạng ngày cho mỗi bản ghi để đảm bảo so sánh đúng
+        const currentDate = new Date();
+
+        const filteredExpiredDiscounts = expiredDiscounts.filter(discount => {
+            const discountEndDate = new Date(discount.end_day);
+            return discountEndDate < currentDate;
+        });
+
+        console.log('Bản ghi đã hết hạn sau khi lọc:', filteredExpiredDiscounts);
+
+        // Xác nhận bản ghi đã hết hạn và xóa chúng
+        for (const expiredDiscount of filteredExpiredDiscounts) {
+            const deletedResult = await mddiscount.discountModel.deleteOne({ _id: expiredDiscount._id });
+            console.log('Đã xóa bản ghi đã hết hạn:', deletedResult);
+        }
+
+    } catch (error) {
+        console.error('Lỗi khi xóa discount đã hết hạn:', error);
+    }
+};
+
+setInterval(deleteExpiredDiscounts, 5 * 60 * 1000);
 
 
-// const deleteExpiredDiscounts = async () => {
-//     try {
-//         // Lấy tất cả các discount đã hết hạn
-//         const expiredDiscounts = await mddiscount.discountModel.find({
-//             end_day: { $lt: new Date() } // Lọc các bản ghi có end_day nhỏ hơn thời điểm hiện tại
-//         });
-//         console.log(' // Xóa các bản ghi đã hết hạn');
-//         await mddiscount.discountModel.deleteMany({
-//             end_day: { $lt: new Date() }
-//         });
 
-//         console.log('Đã xóa các discount đã hết hạn:', expiredDiscounts);
-//     } catch (error) {
-//         console.error('Lỗi khi xóa discount đã hết hạn:', error);
-//     }
-// };
-// setInterval(deleteExpiredDiscounts, 5 * 60 * 1000);
 
-module.exports = { getAllDiscount, addDiscount, deleteDiscount }
+const editDiscount = async (req, res) => {
+    try {
+        if (req.method === 'POST') {
+            const idDiscount = req.params.id;
+            console.log(' req.body', req.body);
+            // Lấy dữ liệu hiện tại của mã giảm giá từ cơ sở dữ liệu
+            const existingDiscount = await mddiscount.discountModel.findById(idDiscount);
+            // console.log('existingDiscount', existingDiscount);
+            if (!existingDiscount) {
+                return res.status(404).json({ error: 'Mã giảm giá không tồn tại' });
+            }
+
+            // Cập nhật các trường cần thiết từ req.body
+            existingDiscount.code_discount = req.body.code_discount || existingDiscount.code_discount;
+            existingDiscount.start_day = req.body.start_day || existingDiscount.start_day;
+            existingDiscount.end_day = req.body.end_day || existingDiscount.end_day;
+            existingDiscount.user_id = req.body.user || existingDiscount.user_id;
+            existingDiscount.price = req.body.price || existingDiscount.price;
+            existingDiscount.description = req.body.description || existingDiscount.description;
+            existingDiscount.usageCount = req.body.usageCount || existingDiscount.usageCount;
+
+            await existingDiscount.save();
+            res.redirect(`/discount/?aler=Cập nhật thành công`);
+        }
+    } catch (error) {
+        console.error('Lỗi trong editDiscount:', error);
+        return res.status(500).json({ error: 'Đã xảy ra lỗi server' });
+    }
+}
+
+
+module.exports = { getAllDiscount, addDiscount, deleteDiscount, editDiscount }

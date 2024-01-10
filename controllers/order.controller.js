@@ -12,6 +12,8 @@ let mdProduct_ = require('../models/product.model')
 let mdSize = require('../models/sizes.model')
 let mdColor = require('../models/color.model')
 let mdcategory = require('../models/category.model')
+let mdDiscount = require('../models/discount.model')
+let mdUserDiscount = require('../models/userdiscount.model')
 let { DateTime } = require('luxon');
 //// khi đặt hàng thêm discount thì giảm giá 
 //// đặt hàng nhiều lần 
@@ -37,7 +39,7 @@ let globalIdCart;
 let globalIdUser;
 let globalAmount;
 let globalDiscount;
-
+let globalDataDiscount;
 const create_payment_url = async (req, res, next) => {
     var ipAddr =
         req.headers['x-forwarded-for'] ||
@@ -57,11 +59,19 @@ const create_payment_url = async (req, res, next) => {
     let idUser = req.params.idUser;
     let idCart = req.body.idCart;
     let amount = req.body.amount;
-    let discount = req.body.idDiscount;
+    let idDiscount = req.body.idDiscount;
+    console.log('idDiscount', idDiscount);
     try {
-
+        if (idDiscount) {
+            const finDiscount = await mdDiscount.discountModel.findById(idDiscount)
+            globalDataDiscount = finDiscount
+            // console.log('finDiscount', finDiscount);
+            if (!finDiscount) {
+                return res.status(400).json({ message: 'Không tìm thấy thông tin ưu đãi.' });
+            }
+        }
         const finUser = await mdUser.userModel.findById(idUser);
-        if (!idCart || !Array.isArray(idCart) || !finUser ) {
+        if (!idCart || !Array.isArray(idCart) || !finUser) {
             return res.status(400).json({ message: 'Dữ liệu không hợp lệ.' });
         }
         for (const itemCart of idCart) {
@@ -78,14 +88,18 @@ const create_payment_url = async (req, res, next) => {
     globalIdCart = idCart;
     globalAmount = amount
     globalIdUser = idUser;
-    globalDiscount = discount
+    globalDiscount = idDiscount
+    console.log('globalIdUser', globalIdUser);
+
     var orderInfo = '**Nap tien cho thue bao 0123456789. So tien 100,000 VND**'    // Thông tin mô tả nội dung thanh toá
     var orderType = req.body.orderType;  ////Mã danh mục hàng hóa. Mỗi hàng hóa sẽ thuộc một nhóm danh mục do VNPAY quy định. Xem thêm bảng Danh mục hàng hóa
 
     let locale = req.body.language;
-    if (locale === null || locale === '') {
+    if (locale === null || locale === '' || locale === undefined) {
         locale = 'vn';
     }
+    console.log('locale: ' + locale);
+
     var currCode = 'VND';
     var vnp_Params = {};
     vnp_Params['vnp_Version'] = '2.1.0';
@@ -152,6 +166,7 @@ const vnpay_return = async (req, res, next) => {
             const idUser = globalIdUser;
             const idCart = globalIdCart;
             const amount = globalAmount;
+
 
             for (const itemCart of idCart) {
                 const finCart = await mdCart.cartModel.findById(itemCart)
@@ -234,27 +249,60 @@ const vnpay_return = async (req, res, next) => {
             }));
             var date = moment(Date.now()).utc().toDate();
 
+
+            // 655d7897afc3bd165ef29ea5  Hồ trình
             // tạo mới bill 
             const newBillData = {
                 user_id: idUser,
                 cart_id: idCart,
+                discount_id: globalDiscount || null,
+                discount_data: globalDataDiscount || null,
                 user_data: userDataToSave, // add user data
                 cart_data: cartDataToSave, // add cart data
                 payments: 2,
-                // total_amount:  ,
+                total_amount: amount,
                 status: dat_hang_thanh_cong,
                 createdAt: date
             };
+
             const newBill = new mdBill.billModel(newBillData);
             newBill.save()
+            console.log('globalDiscountasdasdawsdasd', globalDiscount);
+            if (globalDiscount !== undefined && globalDiscount !== null && globalDiscount !== "") {
+                const discountuser = await mdUserDiscount.userdiscountModel.findOne({
+                    user_id: idUser,
+                    discount_id: globalDiscount
+                })
+                if (discountuser) {
+                    console.log('// vaof discountuserdiscountuserdiscountuser hop nay');
+                    discountuser.usage_count += 1;
+                    await discountuser.save();
+                    console.log("discountuser ====>", discountuser);
+                } else {
+                    console.log('// vaof truwongf hop nay');
+                    const newUserVoucher = new mdUserDiscount.userdiscountModel({
+                        user_id: idUser,
+                        discount_id: globalDiscount,
+                        usage_count: 1
+                    });
+                    console.log('newUserVoucher=====>', newUserVoucher);
+
+                    await newUserVoucher.save();
+                }
+
+            }
+
+      
         } catch (error) {
-            res.render('order/success', { code: 'Đã xảy ra lỗi khi xử lý đơn hàng' })
+            // res.render('order/success', { code: 'Đã xảy ra lỗi khi xử lý đơn hàng',error: error })
+                  return res.status(404).json({ error: "Đã xảy ra lỗi " + error.message });
         }
         res.render('order/success', {
             code: vnp_Params['vnp_ResponseCode']
         })
     } else {
-        res.render('order/success', { code: 'Đã xảy ra lỗi khi xử lý đơn hàng' })
+        // res.render('order/success', { code: 'Đã xảy ra lỗi khi xử lý đơn hàng',error: error })
+              return res.status(404).json({ error: "Đã xảy ra lỗi " + error.message });
     }
 }
 
