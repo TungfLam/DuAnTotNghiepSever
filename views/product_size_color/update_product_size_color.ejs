@@ -52,7 +52,7 @@
                             aria-label="Sizing example input Default select example"
                             aria-describedby="inputGroup-sizing-lg" name="productName" >
                             <% size?.forEach((size)=> { %>
-                                <% let selected='' ; if (String(product_size_color.size_id.name)==String(size.name)) {
+                                <% let selected='' ; if (String(product_size_color?.size_id?.name)==String(size.name)) {
                                     selected='selected' ; } %>
                                     <option <%=selected %> value="<%=size._id%>"><%=size.name %>
                                     </option>
@@ -68,7 +68,7 @@
                                 aria-describedby="inputGroup-sizing-lg" name="productName">
                                 <% color.forEach((color)=> { %>
                                     <% let selected='' ; if
-                                        (String(product_size_color.color_id.name)===String(color.name)) {
+                                        (String(product_size_color?.color_id?.name)===String(color.name)) {
                                         selected='selected' ; } %>
                                         <option <%=selected %> value="<%=color._id%>"><%=color.name %>
                                         </option>

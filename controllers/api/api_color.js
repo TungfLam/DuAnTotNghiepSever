@@ -8,11 +8,7 @@ const listColors = async (req,res)=>{
     return res.status(200).json({ message: 'Succset',listColor:listColor });
    
 }
-
-
-
-
-
+    
 const addColor = async (req,res)=>{
     const { name } = req.body;
     if (req.method === 'POST') {

@@ -1,13 +1,25 @@
 var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
+const path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
 var cors = require('cors')
 const crypto = require('crypto');
+const setupSocket = require('./socket');
+const http = require('http');
+const socketIO = require('socket.io');
 
 
+const app = express();
+const server = http.createServer(app);
+// const io = socketIO(server);
+
+setupSocket(server);
+
+
+
+//=
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var productRouter = require('./routes/product')
@@ -17,13 +29,15 @@ var billRouter = require('./routes/bill')
 var colorRouter = require('./routes/color')
 var bannerRouter = require('./routes/banner')
 var discountRouter = require('./routes/discount')
+var chatRouter = require('./routes/chatbox')
 
 var apiRouter = require('./routes/api');
 var product_size_color_router = require('./routes/product_size_color');
 const notificationRouter = require('./routes/notification');
 const orderRouter = require('./routes/order')
 
-var app = express();
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -64,7 +78,7 @@ app.use('/notification', notificationRouter);
 app.use('/banner', bannerRouter);
 app.use('/discount', discountRouter);
 app.use('/order', orderRouter);
-
+app.use('/chatbox', chatRouter);
 
 
 // catch 404 and forward to error handler
