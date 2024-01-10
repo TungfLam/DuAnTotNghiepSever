@@ -3,6 +3,7 @@ const mProduct = require('../../models/product.model');
 const mProductDetail = require('../../models/product_size_color.model');
 const mUser = require('../../models/user.model');
 var fs = require('fs');
+const { DateTime } = require('luxon');
 
 exports.getCommentByProduct = async (req , res , next) => {
     let product_id = req.params.ProductId;
@@ -69,6 +70,8 @@ exports.newComment = async (req , res , next) => {
     let msg = "";
     let err = true;
 
+    // DateTime.now().setZone('Asia/Ho_Chi_Minh')
+
     if(req.method == 'POST'){
         let product_detail_id = req.body.ProductDetailId;
         let product_id = req.body.ProductId;
@@ -95,11 +98,11 @@ exports.newComment = async (req , res , next) => {
                 msg = "Rating illegal => (1|2|3|4|5)"
             }else{
                 let newComment = new mProduct.commentModel();
-                let currentDate = new Date();
-                let sDate = currentDate.getFullYear() + "-" 
-                    + (currentDate.getMonth() + 1) + "-"
-                    + currentDate.getDate() + " "
-                    + currentDate.getHours() + ":" + currentDate.getMinutes();
+                // let currentDate = new Date();
+                // let sDate = currentDate.getFullYear() + "-" 
+                //     + (currentDate.getMonth() + 1) + "-"
+                //     + currentDate.getDate() + " "
+                //     + currentDate.getHours() + ":" + currentDate.getMinutes();
 
                 if(req.files){
                     console.log(req.files);
@@ -118,7 +121,7 @@ exports.newComment = async (req , res , next) => {
                 newComment.user_id = user_id;
                 newComment.comment = comment;
                 newComment.rating = rating;
-                newComment.date = sDate;
+                newComment.date = await DateTime.now().setZone('Asia/Ho_Chi_Minh');
 
                 try {
                     await newComment.save();
