@@ -70,8 +70,6 @@ exports.newComment = async (req , res , next) => {
     let msg = "";
     let err = true;
 
-    // DateTime.now().setZone('Asia/Ho_Chi_Minh')
-
     if(req.method == 'POST'){
         let product_detail_id = req.body.ProductDetailId;
         let product_id = req.body.ProductId;

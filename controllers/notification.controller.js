@@ -37,30 +37,31 @@ exports.notification = async (req, res, next) => {
 exports.pustNotification = async (req , res , next) => {
     let title = req.body.title;
     let content = req.body.content;
-    let image = req.body.textImage;
-    let listTonken = req.body.listToken;
-
-    if(listTonken){
-
-        console.log(listTonken);
-        for(let item in listTonken){
-
-        }
-        const message = {
-            tokens : listTonken,
-            notification : {
-                title : title,
-                body : content,
-            },
-        }
     
-        admin.messaging().sendMulticast(message)
-            .then((response) => {
-                console.log("thang cong");
-            })
-            .catch((error) => {
-                console.error('Error sending message:', error);
-            });
+    try {
+        var image = req.body.textImage;
+        var listTonken = req.body.listToken;
+
+        if(listTonken){
+            const message = {
+                tokens : listTonken,
+                notification : {
+                    title : title,
+                    body : content,
+                },
+            }
+        
+            admin.messaging().sendMulticast(message)
+                .then((response) => {
+                    console.log("thang cong");
+                })
+                .catch((error) => {
+                    console.error('Error sending message:', error);
+                });
+        }
+        
+    } catch (error) {
+        console.log("các trường trống");
     }
     
     res.status(200).json({
