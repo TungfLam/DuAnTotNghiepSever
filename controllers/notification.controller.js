@@ -6,32 +6,64 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
   });
 
-exports.pustNotification = async (req, res, next) => {
+exports.notification = async (req, res, next) => {
+    let dieu_kien_loc = {
+        $and : [
+            {phone_number : { $exists : true , $ne : null , $ne : ""}},
+            {token : {$exists : true , $ne : null, $ne : ""}}
+        ]
+    };
+    let search = req.query.search;
 
-    const listUser = await mdUser.userModel.find();
-
-    const message = {
-        token : "cA-FhTGxTi6mcjylbhVQ75:APA91bFEfSN8J8_JkZRwPXeNc7IzH4qa-hqluY0_J1ah8w8n3JWueyRLW46kMZaw93OoER9tmzuNYu-3jzFIbGINz91DjESAOziKZNCKp6muivT_S4kPff8QCULptjOvAC6RibzhtKO8",
-        notification : {
-            title : "duy ok",
-            body : "test notificatiokjakldsjfklasjdfkljaskldfjkla\nádjfjdjfhhjkjjakljfjkajsdfjjd \nạdsfjkahdfjkajksdhfjkhajdfhjdfdfafdafdadfadfn",
-        },
+    if(String(search) !== "undefined" && String(search) != ""){ 
+        if(isNaN(search)){
+            dieu_kien_loc.$and.push({full_name : {$regex : search}});
+        }else{
+            dieu_kien_loc.$and.push({phone_number : {$regex : search}});
+        }
     }
 
-    admin.messaging().send(message)
-        .then((response) => {
-            console.log("thang cong");
-        })
-        .catch((error) => {
-            console.error('Error sending message:', error);
-        })
-
+    const listUser = await mdUser.userModel.find(dieu_kien_loc).filteredSelect().exec();
 
     res.render('notification', {
         title: 'Thông báo',
         heading: 'Thông báo',
-        listUser:listUser
-   
+        listUser:listUser,
+        search : search,
       });
 
 } 
+
+exports.pustNotification = async (req , res , next) => {
+    let title = req.body.title;
+    let content = req.body.content;
+    let image = req.body.textImage;
+    let listTonken = req.body.listToken;
+
+    if(listTonken){
+
+        console.log(listTonken);
+        for(let item in listTonken){
+
+        }
+        const message = {
+            tokens : listTonken,
+            notification : {
+                title : title,
+                body : content,
+            },
+        }
+    
+        admin.messaging().sendMulticast(message)
+            .then((response) => {
+                console.log("thang cong");
+            })
+            .catch((error) => {
+                console.error('Error sending message:', error);
+            });
+    }
+    
+    res.status(200).json({
+        msg: "gui thong bao"
+    });
+}

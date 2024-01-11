@@ -17,6 +17,11 @@ var userSchema = new db.mongoose.Schema(
     },
     { collection: 'users' }
 );
+
+userSchema.query.filteredSelect = function () {
+    return this.select({ _id: 0, avata: 0, username: 0, password: 0, email: 0, address: 0, deviceId: 0, created_at: 0, __v: 0, socketId : 0});
+};
+
 const addressChema = new db.mongoose.Schema(
     {
         user_id: { type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel' },
