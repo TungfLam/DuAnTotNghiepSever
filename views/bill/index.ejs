@@ -211,7 +211,8 @@
                   <td>
                     <i class="far fa-calendar-alt"></i>
                     <span style="color: rgb(0, 0, 0); font-weight: bold;">
-                      <%= bill._id %>
+                      <%= typeof bill._id !=='undefined' && bill._id ? bill._id : 'Chưa có' %>
+
                     </span>
                   </td>
                   <!-- sản phẩm -->
@@ -283,7 +284,11 @@
                     <br>
                     Địa chỉ :
                     <span style="color: rgb(0, 0, 0); font-weight: bold;">
-                      <%= bill.user_data.address %>
+                      <%= bill.user_data.address ? bill.user_data.address.specific_addres : '' %>
+                        <%= bill.user_data.address ? bill.user_data.address.address : 'Địa chỉ chưa có' %>
+
+
+
                     </span>
                     <br>
                     Role :
