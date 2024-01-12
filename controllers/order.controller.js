@@ -194,9 +194,6 @@ const vnpay_return = async (req, res, next) => {
                 full_name: userData.full_name,
                 email: userData.email
             };
-            console.log('================');
-            console.log(userData);
-            console.log('================');
             //================
             const cartData = await mdCart.cartModel.find({ '_id': { $in: idCart } });
             const cartDataToSave = await Promise.all(cartData.map(async (cart) => {
