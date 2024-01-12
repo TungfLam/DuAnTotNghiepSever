@@ -194,6 +194,9 @@ const vnpay_return = async (req, res, next) => {
                 full_name: userData.full_name,
                 email: userData.email
             };
+            console.log('================');
+            console.log(userData);
+            console.log('================');
             //================
             const cartData = await mdCart.cartModel.find({ '_id': { $in: idCart } });
             const cartDataToSave = await Promise.all(cartData.map(async (cart) => {
@@ -292,17 +295,17 @@ const vnpay_return = async (req, res, next) => {
 
             }
 
-      
+
         } catch (error) {
             // res.render('order/success', { code: 'Đã xảy ra lỗi khi xử lý đơn hàng',error: error })
-                  return res.status(404).json({ error: "Đã xảy ra lỗi " + error.message });
+            return res.status(404).json({ error: "Đã xảy ra lỗi " + error.message });
         }
         res.render('order/success', {
             code: vnp_Params['vnp_ResponseCode']
         })
     } else {
         // res.render('order/success', { code: 'Đã xảy ra lỗi khi xử lý đơn hàng',error: error })
-              return res.status(404).json({ error: "Đã xảy ra lỗi " + error.message });
+        return res.status(404).json({ error: "Đã xảy ra lỗi " + error.message });
     }
 }
 
