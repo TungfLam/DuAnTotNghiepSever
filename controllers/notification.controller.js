@@ -7,6 +7,12 @@ admin.initializeApp({
   });
 
 exports.notification = async (req, res, next) => {
+
+    const domain = req.get('host');
+    const protocol = req.protocol;
+    const baseUrl = protocol + "://" + domain;
+    console.log(baseUrl);
+
     let dieu_kien_loc = {
         $and : [
             {phone_number : { $exists : true , $ne : null , $ne : ""}},
@@ -30,6 +36,7 @@ exports.notification = async (req, res, next) => {
         heading: 'Thông báo',
         listUser:listUser,
         search : search,
+        baseUrl : baseUrl
       });
 
 }
