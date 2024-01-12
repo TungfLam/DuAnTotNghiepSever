@@ -1,6 +1,9 @@
 <%- include('./inc/top') %>
     <script>
         function clickPushNotification(){
+
+            console.log("<%= baseUrl %>/notification");
+            
             const textTitle = document.getElementById('inputTitle').value;
             const textContent = document.getElementById('inputContent').value;
             const textImage = document.getElementById('inputImage').value;
