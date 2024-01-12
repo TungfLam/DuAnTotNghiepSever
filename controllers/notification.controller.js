@@ -32,7 +32,7 @@ exports.notification = async (req, res, next) => {
         search : search,
       });
 
-} 
+}
 
 exports.pustNotification = async (req , res , next) => {
     let title = req.body.title;
