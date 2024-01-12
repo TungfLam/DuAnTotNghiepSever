@@ -11,7 +11,7 @@ exports.notification = async (req, res, next) => {
     const domain = req.get('host');
     const protocol = req.protocol;
     const baseUrl = protocol + "://" + domain;
-    console.log(baseUrl);
+
 
     let dieu_kien_loc = {
         $and : [
@@ -44,6 +44,13 @@ exports.notification = async (req, res, next) => {
 exports.pustNotification = async (req , res , next) => {
     let title = req.body.title;
     let content = req.body.content;
+
+    try {
+        var url = req.body.url;
+        console.log(url);
+    } catch (error) {
+        
+    }
     
     try {
         var image = req.body.textImage;

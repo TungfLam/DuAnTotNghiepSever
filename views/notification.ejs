@@ -2,8 +2,9 @@
     <script>
         function clickPushNotification(){
 
-            console.log("<%= baseUrl %>/notification");
-            
+            console.log("url : " + "<%= baseUrl %>/notification");
+            let url = "url : " + "<%= baseUrl %>/notification";
+
             const textTitle = document.getElementById('inputTitle').value;
             const textContent = document.getElementById('inputContent').value;
             const textImage = document.getElementById('inputImage').value;
@@ -12,13 +13,14 @@
                 method: 'POST',
                 headers: 
                 {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json; charset=UTF-8',
                 },
                 body : JSON.stringify({
                     listToken : listTokenUser,
                     title : textTitle,
                     content : textContent,
                     textImage : textImage,
+                    url : url
                 })
             }).then(response => response.json())
             .then(data => {
