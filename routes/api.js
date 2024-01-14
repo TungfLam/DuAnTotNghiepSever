@@ -41,10 +41,6 @@ router.post('/address', api_users.addAddress);
 router.post('/setaddress', api_users.setAddress);
 
 
-
-
-
-
 // set SKID
 
 router.put('/user/:idUser', api_users.setSocketId);
@@ -60,6 +56,7 @@ router.delete('/address/:idAddress', api_users.deleteAddress);
 
 //notification
 router.get('/notification/:idUser', api_notification.getNotification);
+router.get('/notification-read/:idNotification' , api_notification.readNotification)
 
 
 //===
@@ -67,6 +64,7 @@ router.get('/notification/:idUser', api_notification.getNotification);
 
 router.get('/products/:category/:skip', api_product.getProducts);
 router.get('/products/:skip', api_product.getAllProduct);
+router.get('/product-by-id/:idProduct', api_product.getProductsById);
 
 router.post('/products', upload.array('image'), api_product.createProduct);
 router.put('/products/:id', upload.array('image'), api_product.updateProduct);

@@ -111,3 +111,21 @@ exports.searchProduct = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }
+
+exports.getProductsById = async (req , res , next) => {
+    let idProduct = req.params.idProduct;
+    let err = true;
+
+    try {
+        var objProduct = await md.productModel.findById(idProduct);
+        err = false;
+
+    } catch (error) {
+        console.log("err : " + error);
+    }
+
+    res.status(200).json({
+        err : err,
+        objProduct : objProduct
+    });
+}

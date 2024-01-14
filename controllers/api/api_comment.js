@@ -119,7 +119,7 @@ exports.newComment = async (req , res , next) => {
                 newComment.user_id = user_id;
                 newComment.comment = comment;
                 newComment.rating = rating;
-                newComment.date = await DateTime.now().setZone('Asia/Ho_Chi_Minh');
+                newComment.date = DateTime.now().setZone('Asia/Ho_Chi_Minh');
 
                 try {
                     await newComment.save();
