@@ -292,17 +292,17 @@ const vnpay_return = async (req, res, next) => {
 
             }
 
-      
+
         } catch (error) {
             // res.render('order/success', { code: 'Đã xảy ra lỗi khi xử lý đơn hàng',error: error })
-                  return res.status(404).json({ error: "Đã xảy ra lỗi " + error.message });
+            return res.status(404).json({ error: "Đã xảy ra lỗi " + error.message });
         }
         res.render('order/success', {
             code: vnp_Params['vnp_ResponseCode']
         })
     } else {
         // res.render('order/success', { code: 'Đã xảy ra lỗi khi xử lý đơn hàng',error: error })
-              return res.status(404).json({ error: "Đã xảy ra lỗi " + error.message });
+        return res.status(404).json({ error: "Đã xảy ra lỗi " + error.message });
     }
 }
 

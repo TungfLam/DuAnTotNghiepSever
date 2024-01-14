@@ -112,7 +112,7 @@ router.get('/bill', api_bill.listBill);
 router.get('/bill/:userId', api_bill.listBillByUserId);
 router.get('/bill/pagination', api_bill.pagination);
 
-router.post('/addbill', api_bill.addBill);
+router.post('/addbill/:idUser', api_bill.addBill);
 router.put('/bill/:id', api_bill.updateBill);
 router.delete('/bill/:id', api_bill.deleteBill);
 
