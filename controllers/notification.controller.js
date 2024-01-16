@@ -58,10 +58,6 @@ exports.pustNotification = async (req , res , next) => {
         let arrToken = [];
 
         arrToken = listTonken.split(",");
-        
-        console.log(arrToken);
-
-        console.log(req.file);
 
         if(payload == '0'){
             status = '0';
@@ -109,7 +105,7 @@ exports.pustNotification = async (req , res , next) => {
                         objNotification.content = content;
                         objNotification.date = DateTime.now().setZone('Asia/Ho_Chi_Minh');
                         objNotification.status = true;
-                        objNotification.image = 'i';
+                        objNotification.image = '';
                         if(req.file){
                             objNotification.image = '/images/' + req.file.originalname;
                         }

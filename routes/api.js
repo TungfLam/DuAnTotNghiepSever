@@ -22,6 +22,7 @@ var api_conversationController = require('../controllers/api/api_conversation')
 // api user
 
 router.get('/users', api_users.listUser);
+router.get('/userproflie/:idUser' , api_users.getUserById);
 router.get('/users/pagination', api_users.pagination);
 router.post('/userslogin', api_users.userLogin);
 router.post('/usersloginphone', api_users.userLoginPhone);
@@ -77,11 +78,10 @@ router.get('/products', api_product.searchProduct);
 router.get('/comment/:ProductId', api_comment.getCommentByProduct);
 router.post('/comment-by-id', api_comment.getCommentById);
 router.post('/comment', upload.array('images', 3), api_comment.newComment);
-router.put('/comment/:CommentId', api_comment.updateComment);
+router.put('/comment/:CommentId', upload.array('images', 3), api_comment.updateComment);
 
 
 //===
-
 
 
 // color

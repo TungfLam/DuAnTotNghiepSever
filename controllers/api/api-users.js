@@ -29,6 +29,24 @@ exports.listUser = async (req, res, next) => {
 
     res.json(objReturn);
 }
+
+exports.getUserById = async (req , res ,next) => {
+    let err = true;
+
+    try {
+        let idUser = req.params.idUser;
+        var objUser = await md.userModel.findById(idUser).getProfile().exec();
+        err = false;
+    } catch (error) {
+        console.log("error : " + error);
+    }
+
+    res.status(200).json({
+        err: err,
+       objUser : objUser
+    });
+}
+
 exports.userLogin = async (req, res, next) => {
     let msg = "";
     let err = true;
@@ -47,8 +65,11 @@ exports.userLogin = async (req, res, next) => {
         }
 
         if (objUser) {
+            var objAddress = await md.addressModel.findById(objUser.address);
+
             if (objUser.status) {
                 if (objUser.password == password) {
+
                     msg = "Đăng nhập thành công"
                     err = false;
                 } else {
@@ -75,6 +96,8 @@ exports.userLogin = async (req, res, next) => {
         email: objUser != null ? objUser.email : "",
         fullname: objUser != null ? objUser.full_name : "",
         address: objUser != null ? objUser.address : "",
+        address_city : objAddress != null ? objAddress.address : "",
+        specific_addres : objAddress != null ? objAddress.specific_addres : ""
     });
 }
 
@@ -92,6 +115,7 @@ exports.userLoginPhone = async (req, res, next) => {
         }
 
         if (objUser) {
+            var objAddress = await md.addressModel.findById(objUser.address);
             if (objUser.status) {
                 msg = "Đăng nhập thành công";
                 err = false;
@@ -117,6 +141,8 @@ exports.userLoginPhone = async (req, res, next) => {
         email: objUser != null ? objUser.email : "",
         fullname: objUser != null ? objUser.full_name : "",
         address: objUser != null ? objUser.address : "",
+        address_city : objAddress != null ? objAddress.address : "",
+        specific_addres : objAddress != null ? objAddress.specific_addres : ""
     });
 }
 
@@ -568,24 +594,21 @@ async function catchError(err, req, res, next) {
 
 
 exports.updateUser = async (req, res, next) => {
+    let msg = "";
+    let err = true;
 
-    const user = await md.userModel.findById(req.params.idu);
-    if (!user) {
-        res.status(404).send('User not found');
-        return;
+    try {
+        let idUser = req.params.idUser;
+    
+    } catch (error) {
+        console.log(error);
     }
-    // Kiểm tra xem dữ liệu có hợp lệ hay không
-    const { username, password } = req.body;
-    if (!username || !password) {
-        res.status(400).send('Invalid data');
-        console.log('Dữ liệu không đúng');
 
-        return;
-    }
-    // Gọi API update user
-    const updatedUser = await md.userModel.findByIdAndUpdate(req.params.idu, req.body, { new: true });
-    console.log(updatedUser);
-    res.json(objReturn);
+    res.status(200).json({
+        msg: msg,
+        err: err,
+    });
+  
 }
 exports.deleteUser = async (req, res, next) => {
 
