@@ -127,7 +127,7 @@ exports.addBill = async (req, res, next) => {
 
 
     try {
-        const dat_hang_thanh_cong = 3;
+        const dat_hang_thanh_cong = 1;
         const da_dat_hang = 'Đã đặt hàng'
         const idUser = req.params.idUser;
         const idCart = req.body.idCart;

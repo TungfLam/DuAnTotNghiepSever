@@ -3,7 +3,6 @@ const mdUser = require('../../models/user.model');
 
 exports.getNotification = async (req , res ,next) =>{
     let idUser = req.params.idUser;
-    let arrNotification = [];
 
     try {
         var objuser = await mdUser.userModel.findById(idUser);
@@ -11,13 +10,33 @@ exports.getNotification = async (req , res ,next) =>{
         console.log("User không tồn tại")
     }
 
-    console.log(idUser);
     if(objuser){
-        arrNotification = await mdNotification.notificationModel.find({id_user : idUser});
+        var arrNotification = await mdNotification.notificationModel.find({id_user : idUser});
+
+        arrNotification.sort(function(a , b){
+            return b.date - a.date;        
+        });
 
     }else{
         console.log("null");
     }
 
     res.status(200).json(arrNotification);
+}
+
+exports.readNotification = async (req , res , next) => {
+    try {
+        var idNotification = req.params.idNotification;
+        let objNotification = await mdNotification.notificationModel.findById(idNotification);
+
+        objNotification.status = false;
+
+        await mdNotification.notificationModel.findByIdAndUpdate(idNotification , objNotification);
+
+    } catch (error) {
+       console.log(error);
+       res.status(500).json();
+    }
+
+    res.status(200).json();
 }

@@ -10,10 +10,15 @@ const productSchema = new db.mongoose.Schema(
         rating: { type: Number, require: false },
         createdAt: { type: Date, required: false },
         updatedAt: { type: Date, required: false },
-
     },
     { collection: 'product' }
 );
+
+
+productSchema.query.getIdAndName = function () {
+    return this.select({description : 0, __v: 0,image : 0,category_id : 0, price: 0, discount: 0, rating: 0 , createdAt: 0, updatedAt: 0});
+};
+
 let productModel = db.mongoose.model('productModel', productSchema);
 
 const commentSchema = new db.mongoose.Schema(

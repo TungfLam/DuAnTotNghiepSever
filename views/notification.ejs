@@ -1,25 +1,27 @@
 <%- include('./inc/top') %>
     <script>
         function clickPushNotification(){
+
             const textTitle = document.getElementById('inputTitle').value;
             const textContent = document.getElementById('inputContent').value;
-            const textImage = document.getElementById('inputImage').value;
+            const textIdProduct = document.getElementById('idSanPham').value;
+            const inputImage = document.getElementById('inputImage');
+            const imageFile = inputImage.files[0];
+
+            const formData = new FormData();
+            formData.append('listToken',listTokenUser);
+            formData.append('title', textTitle);
+            formData.append('content', textContent);
+            formData.append('payload', textIdProduct);
+            formData.append('status', '1');
+            formData.append('inputImage', imageFile);
 
             fetch('<%= baseUrl %>/notification' ,{
                 method: 'POST',
-                headers: 
-                {
-                    'Content-Type': 'application/json',
-                },
-                body : JSON.stringify({
-                    listToken : listTokenUser,
-                    title : textTitle,
-                    content : textContent,
-                    textImage : textImage,
-                })
+                body : formData
             }).then(response => response.json())
             .then(data => {
-                console(data);
+                console.log(data);
             })
             .catch(error => {
                 console.log(error);
@@ -27,41 +29,53 @@
         }
     </script>
 
-    <div class=" d-flex">
-        <div class="row p-3" style=" background-color: white;
+    <div class="row col-12">
+        <div class="row p-3 m-4 col-md-4 col-11" style=" background-color: white;
              border-radius: 13px; 
               box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
                margin: 20px; 
-               width: 40%;
               height: 550px;
                 ">
-
-            <form id="myForm">
                 <div class="text-center">
                     <p class="fs-2 fw-bold">Thông báo</p>
                 </div>
+
                 <div class="mb-3">
-                    <label for="inputTitle" class="inputTitle">Tiêu đề:</label>
+                    <label for="inputTitle" class="inputTitle">Hình ảnh</label>
+                    <div class="input-group boderBtn rounded-2">
+                        <input id="inputImage" name="inputImage" accept="image/*" type="file" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="inputTitle" class="inputTitle">Tiêu đề</label>
                     <input type="text" class="form-control" id="inputTitle" placeholder="Nhập tiêu đề" required>
                 </div>
                 <div class="mb-3">
-                    <label for="inputContent" class="inputContent">Nội dung:</label>
+                    <label for="inputContent" class="inputContent">Nội dung</label>
                     <textarea class="form-control" id="inputContent" rows="3" placeholder="Nhập nội dung" required></textarea>
                 </div>
+    
                 <div class="mb-3">
-                    <label for="inputImage" class="inputImage">Link ảnh:</label>
-                    <input type="text" class="form-control" id="inputImage" placeholder="Nhập link ảnh">
+                    <label for="inputContent" class="inputContent">Liên kết đến sản phẩm</label>
+                    <select id="idSanPham" name="idSanPham" class="form-control">
+                        <option value="0">Sản phẩm...</option>
+                        <% for(let i= 0 ; i < listProduct.length; i++){ %>
+                            <option value="<%= listProduct[i]._id %>"><%= listProduct[i].name %></option>
+                        <% } %>
+                    </select>
                 </div>
+
                 <div class="d-grid gap-2">
                     <button style="height: 48px;" onclick="clickPushNotification()" class="btn btn-primary">Gửi thông báo</button>
                 </div>
-            </form>
+        
         </div>
 
 
 
-        <div class="row p-3"
-            style=" background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); margin: 20px; width: 60%;">
+        <div class="row p-3 m-4 col-md-7 col-11"
+            style=" background-color: white; border-radius: 13px;  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4); margin: 20px;">
             <div class="text-center">
                 <p class="fs-2 fw-bold">Người dùng</p>
             </div>
@@ -143,12 +157,11 @@
                 if(masterCheckbox.checked){
                     if(checkboxItem.id == "") return;
                     listTokenUser.push(checkboxItem.id);
-                    console.log('id : ' + checkboxItem.id)
                 }else{
                     listTokenUser = listTokenUser.filter(item => item !== this.id);
                 }
             });
-            console.log(listTokenUser.length);
+            
         })
 
         checkboxItems.forEach(function (checkbox){
@@ -157,11 +170,9 @@
                 if(this.checked){
                     if(this.id == "") return;
                     listTokenUser.push(this.id);
-                    console.log('id : ' + this.id)
                 }else{
                     listTokenUser = listTokenUser.filter(item => item !== this.id);
                 }
-                console.log(listTokenUser.length);
             })
         })
 

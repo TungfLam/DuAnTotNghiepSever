@@ -22,6 +22,7 @@ var api_conversationController = require('../controllers/api/api_conversation')
 // api user
 
 router.get('/users', api_users.listUser);
+router.get('/userproflie/:idUser' , api_users.getUserById);
 router.get('/users/pagination', api_users.pagination);
 router.post('/userslogin', api_users.userLogin);
 router.post('/usersloginphone', api_users.userLoginPhone);
@@ -41,10 +42,6 @@ router.post('/address', api_users.addAddress);
 router.post('/setaddress', api_users.setAddress);
 
 
-
-
-
-
 // set SKID
 
 router.put('/user/:idUser', api_users.setSocketId);
@@ -60,6 +57,7 @@ router.delete('/address/:idAddress', api_users.deleteAddress);
 
 //notification
 router.get('/notification/:idUser', api_notification.getNotification);
+router.get('/notification-read/:idNotification' , api_notification.readNotification)
 
 
 //===
@@ -67,6 +65,7 @@ router.get('/notification/:idUser', api_notification.getNotification);
 
 router.get('/products/:category/:skip', api_product.getProducts);
 router.get('/products/:skip', api_product.getAllProduct);
+router.get('/product-by-id/:idProduct', api_product.getProductsById);
 
 router.post('/products', upload.array('image'), api_product.createProduct);
 router.put('/products/:id', upload.array('image'), api_product.updateProduct);
@@ -79,11 +78,10 @@ router.get('/products', api_product.searchProduct);
 router.get('/comment/:ProductId', api_comment.getCommentByProduct);
 router.post('/comment-by-id', api_comment.getCommentById);
 router.post('/comment', upload.array('images', 3), api_comment.newComment);
-router.put('/comment/:CommentId', api_comment.updateComment);
+router.put('/comment/:CommentId', upload.array('images', 3), api_comment.updateComment);
 
 
 //===
-
 
 
 // color

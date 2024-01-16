@@ -103,7 +103,6 @@ exports.newComment = async (req , res , next) => {
                 //     + currentDate.getHours() + ":" + currentDate.getMinutes();
 
                 if(req.files){
-                    console.log(req.files);
                     req.files.forEach(item =>{
                         try {
                             fs.renameSync(item.path , './public/images/' + newComment._id + "_" + item.originalname);
@@ -119,7 +118,7 @@ exports.newComment = async (req , res , next) => {
                 newComment.user_id = user_id;
                 newComment.comment = comment;
                 newComment.rating = rating;
-                newComment.date = await DateTime.now().setZone('Asia/Ho_Chi_Minh');
+                newComment.date = DateTime.now().setZone('Asia/Ho_Chi_Minh');
 
                 try {
                     await newComment.save();
@@ -148,11 +147,16 @@ exports.updateComment = async (req , res , next) => {
     let err = true;
 
     if(req.method == 'PUT'){
+
         let comment_id = req.params.CommentId;
         let comment = req.body.Comment;
         let sRating = req.body.rating;
 
         let objComment = await mProduct.commentModel.findById(comment_id);
+
+        console.log(sRating);
+        console.log(comment);
+        
 
         if(!objComment){
             msg = "Comment null";
@@ -163,6 +167,21 @@ exports.updateComment = async (req , res , next) => {
             if(rating <= 0 || rating >= 6){
                 msg = "Rating illegal => (1 -> 10)"
             }else{
+
+                console.log("suw comment : " + objComment._id);
+
+                if(req.files){
+                    console.log(req.files);
+                    req.files.forEach(item =>{
+                        try {
+                            fs.renameSync(item.path , './public/images/' + objComment._id + "_" + item.originalname);
+                            objComment.images.push('/images/' + objComment._id + "_" + item.originalname);
+                        } catch (error) {
+                            console.log("Lỗi up ảnh : " + error);
+                        }
+                    })
+                }
+
                 objComment.comment = comment;
                 objComment.rating = rating;
 

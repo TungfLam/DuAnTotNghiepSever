@@ -1,5 +1,5 @@
 const mUser = require('../models/user.model');
-var fs = require('fs');
+const fs = require('fs');
 let title = 'User'
 let heading = 'User'
 exports.list = async (req , res , next) => {
