@@ -174,7 +174,7 @@
                         <h6 class="mb-0 "> Doanh thu theo ngày </h6>
                         <p class="text-sm ">Người dùng vừa mua hàng (
                             <span class="font-weight-bolder">
-                                <%= latestBill.user_data.username %>
+                                <%= latestBill?.user_data?.username %>
 
                             </span>)
                         </p>
@@ -357,12 +357,12 @@
                                 </span>
                                 <div class="timeline-content">
                                     <h6 class="text-dark text-sm font-weight-bold mb-0">Đơn hàng mới
-                                        <span class="text-danger text-sm font-weight-bolder">#<%= latestBill._id %>
+                                        <span class="text-danger text-sm font-weight-bolder">#<%= latestBill?._id %>
                                         </span>
 
                                     </h6>
                                     <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">
-                                        <% var date=moment(latestBill.createdAt).toDate(); %>
+                                        <% var date=moment(latestBill?.createdAt).toDate(); %>
                                             <%= date.toLocaleTimeString('vi-VN', { hour: '2-digit' , minute: '2-digit'
                                                 }) %> -
                                                 <%= date.toLocaleDateString('vi-VN', { day: '2-digit' , month: '2-digit'
