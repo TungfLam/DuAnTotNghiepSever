@@ -32,7 +32,7 @@ router.put('/setoken/:idUser', api_users.setToken);
 router.put('/change-password/:idUser', api_users.changePassword);
 
 router.post('/users', upload.single("image"), api_users.addUser);
-router.put('/users/:idu', api_users.updateUser);
+router.put('/users/:idUser', api_users.updateUser);
 router.delete('/users/:idu', api_users.deleteUser);
 
 //address
@@ -133,9 +133,6 @@ router.delete('/deletecart/:id', api_cart.deleteCart);
 
 
 router.get('/banner', api_banner.getAllBanner);
-
-
-
 
 
 

@@ -79,7 +79,7 @@ exports.newComment = async (req , res , next) => {
 
         let objProductChek = await mProductDetail.product_size_color_Model.findById(product_detail_id);
         let objUserChek = await mUser.userModel.findById(user_id);
-        let objCommentCkek = await mProduct.commentModel.findOne({user_id : user_id});
+        let objCommentCkek = await mProduct.commentModel.findOne({user_id : user_id,product_detail_id : product_detail_id});
 
 
         if(!objProductChek){

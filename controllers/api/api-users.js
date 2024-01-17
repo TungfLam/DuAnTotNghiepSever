@@ -600,6 +600,20 @@ exports.updateUser = async (req, res, next) => {
     try {
         let idUser = req.params.idUser;
 
+        let full_name = req.body.fullname;
+        
+        let objUser = await md.userModel.findById(idUser);
+
+        if(objUser){
+            if(req.file){
+
+            }
+
+        
+        }else{
+            msg = "Tài khoản không tồn tại"
+        }
+
     } catch (error) {
         console.log(error);
     }
@@ -610,6 +624,7 @@ exports.updateUser = async (req, res, next) => {
     });
 
 }
+
 exports.deleteUser = async (req, res, next) => {
 
     try {
