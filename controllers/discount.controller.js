@@ -99,7 +99,7 @@ const deleteExpiredDiscounts = async () => {
     }
 };
 
-setInterval(deleteExpiredDiscounts, 5 * 60 * 1000);
+setInterval(deleteExpiredDiscounts, 1 * 60 * 1000);
 
 
 

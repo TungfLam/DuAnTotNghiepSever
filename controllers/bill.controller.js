@@ -183,6 +183,8 @@ exports.loc = async (req, res, next) => {
             let mStatus = '';
             console.log(tokenUser);
 
+            console.log(tokenUser);
+
             // Tìm bill bằng ID và cập nhật trạng thái
             await billMD.billModel.findByIdAndUpdate(billId, { status: newStatus });
 
@@ -231,10 +233,10 @@ exports.loc = async (req, res, next) => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    console.log("Thành công : " + data);
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.log("Thất bại :" + error);
                 });
 
 

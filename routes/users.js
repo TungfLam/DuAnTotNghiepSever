@@ -8,9 +8,9 @@ const upLoader = multer({ dest: './tmp' });
 
 router.get("/", checkLogin.requiresLogin, userCtrl.list);
 router.get("/add", checkLogin.requiresLogin, userCtrl.add);
-router.post("/add", checkLogin.requiresLogin, upLoader.single("img-avata"), userCtrl.add);
+router.post("/add", upLoader.single("img-avata"), userCtrl.add);
 router.get("/:id", checkLogin.requiresLogin, userCtrl.details);
-router.post("/:id", checkLogin.requiresLogin, upLoader.single("img-avata"), userCtrl.edit);
+router.post("/:id", upLoader.single("img-avata"), userCtrl.edit);
 
 router.get("/lock/:idUser", checkLogin.requiresLogin, userCtrl.lock);
 router.get("/un-lock/:idUser", checkLogin.requiresLogin, userCtrl.unLock);

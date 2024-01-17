@@ -1,14 +1,20 @@
 const mddiscount = require('../../models/discount.model');
 const mdBill = require('../../models/bill.model')
 const mduserdiscount = require('../../models/userdiscount.model')
-
+const moment = require('moment');
 const getAllDiscount = async (req, res) => {
     const idUser = req.params.idUser;
     console.log(idUser);
 
     try {
-        let listdiscount = await mddiscount.discountModel.find({ user_id: idUser }).populate('user_id', "username").sort({ createdAt: -1 });
+        const datenoww = moment(Date.now()).format('YYYY-MM-DD HH:mm');
+        let listdiscount = await mddiscount.discountModel.find({ user_id: idUser,
+            start_day: { $lte: datenoww },
+        }).populate('user_id', "username").sort({ createdAt: -1 });
         for (const item of listdiscount) {
+            console.log(item.start_day);
+
+
             const finuserdiscount = await mduserdiscount.userdiscountModel.findOne({ user_id: idUser, discount_id: item._id }).populate('discount_id');
             if (finuserdiscount && item.usageCount === finuserdiscount.usage_count) {
                 console.log('Nếu bằng thì vào đây ');

@@ -460,10 +460,10 @@ exports.bashboard = async (req, res, next) => {
                 }
             ]);
 
-        const mUserNameCart = latestCart.user_id.username;
-        const mCreatedAtCart = latestCart.createdAt;
+        const mUserNameCart = latestCart?.user_id?.username;
+        const mCreatedAtCart = latestCart?.createdAt;
 
-        const mProductNameCart = latestCart.product_id.product_id.name;
+        const mProductNameCart = latestCart?.product_id?.product_id?.name;
         // lấy thông tin đơn hàng mới nhất
         const latestBill = await mBill.billModel
             .findOne({})
@@ -592,6 +592,7 @@ exports.login = async (req, res, next) => {
 
 
                         res.redirect('/');
+                        return
                     } else {
                         msg = "Tài khoản của bạn đã bị khóa";
                         typeErr = true;

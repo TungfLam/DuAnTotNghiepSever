@@ -471,8 +471,8 @@ exports.addUser = async (req, res, next) => {
 
         try {
             var objUserPhone = await md.userModel.findOne({ phone_number: phone });
-            if (String(email) != "") {
-                var objUserEmail = await md.userModel.findOne({ email: email });
+            if (String(username) != "") {
+                var objUserEmail = await md.userModel.findOne({ username: username });
             } else {
                 var objUserEmail = false;
             }
@@ -488,7 +488,7 @@ exports.addUser = async (req, res, next) => {
         } else if (objUserEmail) {
             console.log('có emil' + objUserEmail);
 
-            msg = "Email đã được đăng ký";
+            msg = "Username đã được đăng ký";
         } else {
             try {
                 await objUser.save();

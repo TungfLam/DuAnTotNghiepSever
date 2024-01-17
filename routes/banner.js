@@ -8,10 +8,10 @@ var uploadCloud = require('../meddlewares/uploader')
 var bannerController = require('../controllers/banner.controller')
 
 router.get('/', checkLogin.requiresLogin, bannerController.getAllBanner);
-router.post('/add', checkLogin.requiresLogin, uploadCloud.single('image'), bannerController.addBanner);
+router.post('/add', uploadCloud.single('image'), bannerController.addBanner);
 router.get('/delete/:id', checkLogin.requiresLogin, bannerController.deleteBanner);
 router.get('/delete/:id', checkLogin.requiresLogin, bannerController.deleteBanner);
-router.post('/edit/:id', checkLogin.requiresLogin,uploadCloud.single('image'), bannerController.editBanner);
+router.post('/edit/:id',uploadCloud.single('image'), bannerController.editBanner);
 
 
 module.exports = router;
