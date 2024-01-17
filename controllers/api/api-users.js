@@ -438,6 +438,7 @@ exports.addUser = async (req, res, next) => {
         let password = req.body.Password;
         let token = req.body.Token;
         let deviceId = req.body.DeviceId;
+        let address = req.body.address;
 
         objUser.username = username;
         objUser.full_name = fullname;
@@ -447,6 +448,7 @@ exports.addUser = async (req, res, next) => {
         objUser.status = true;
         objUser.token = token;
         objUser.deviceId = deviceId;
+        objUser.address = address;
 
         objUser.email = email;
         objUser.password = password;
@@ -601,16 +603,16 @@ exports.updateUser = async (req, res, next) => {
         let idUser = req.params.idUser;
 
         let full_name = req.body.fullname;
-        
+
         let objUser = await md.userModel.findById(idUser);
 
-        if(objUser){
-            if(req.file){
+        if (objUser) {
+            if (req.file) {
 
             }
 
-        
-        }else{
+
+        } else {
             msg = "Tài khoản không tồn tại"
         }
 

@@ -195,13 +195,13 @@
           <table class="table table-hover table-success ">
             <thead>
               <tr>
-                <th>ID - Mã đơn</th>
-                <th>Cart - Tên sản phẩm và số lượng</th>
+                <th>Mã đơn</th>
+                <th>Tên sản phẩm và số lượng</th>
                 <th>Payments</th>
-                <th>Date - Đơn hàng</th>
-                <th>User - Người dùng</th>
-                <th>Status - trạng thái</th>
-                <th>Total Amount</th>
+                <th>Đơn hàng</th>
+                <th>Người dùng</th>
+                <th>Trạng thái</th>
+                <th>Tổng tiền</th>
                 <th></th>
               </tr>
             </thead>
@@ -279,9 +279,9 @@
 
                   <td>
                     <i class="fas fa-address-card"></i>
-                    username :
+                    Tên đầy đủ :
                     <span style="color: rgb(2, 120, 120); font-weight: bold;">
-                      <%= bill.user_data.username %>
+                      <%= bill.user_data.full_name %>
                     </span>
                     <br>
                     Địa chỉ :
@@ -293,7 +293,7 @@
 
                     </span>
                     <br>
-                    Role :
+                    Vai trò :
                     <% if (bill.user_data.role=='Admin' ) { %>
                       <span style="color: red; font-weight: bold;">
                         <%= bill.user_data.role %>
@@ -323,7 +323,8 @@
                       style="width: 100%; display: flex; flex-direction: column; align-items: center;">
                       <form action="" method="post" enctype="multipart/form-data" style="width: 100%;">
                         <input type="hidden" name="billId" value="<%= bill._id %>">
-                        <input type="hidden" name="tokenUser" value="<%= bill.user_id.token %>">
+                        <input type="hidden" name="tokenUser" value="<%= bill.user_id ? bill.user_id.token : '' %>">
+
 
                         <label for="status" style="font-weight: bold; margin-bottom: 10px;">Trạng thái thanh
                           toán</label>

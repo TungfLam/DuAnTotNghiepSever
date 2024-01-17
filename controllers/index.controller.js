@@ -265,7 +265,7 @@ exports.bashboard = async (req, res, next) => {
         const latestUser = await mUser.userModel
             .findOne({})
             .sort({ created_at: -1 }) // Sắp xếp giảm dần theo created_at
-            .select('username created_at'); // Chọn trường username và created_at
+            .select('username created_at full_name'); // Chọn trường username và created_at
 
 
         // chart chart ================= 22222222222
@@ -430,7 +430,8 @@ exports.bashboard = async (req, res, next) => {
                     totalOrders: 1,
                     avatar: { $ifNull: ["$userData.avata", "$_id.avata"] }, // Nếu không có avatar trong userData, sử dụng avatar từ _id
                     phone_number: "$userData.phone_number",
-                    username: "$userData.username"
+                    username: "$userData.username",
+                    full_name: "$userData.full_name"
                 }
             }
         ]);
