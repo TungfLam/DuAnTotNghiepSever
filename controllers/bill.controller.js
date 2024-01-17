@@ -95,7 +95,7 @@ exports.loc = async (req, res, next) => {
                     }
                 })
                 .sort({ createdAt: -1 });
-            console.log(bills);
+            // console.log(bills);
 
             // Tính tổng số trang
             const totalBills = await billMD.billModel.countDocuments(dieu_kien_loc);
@@ -177,13 +177,59 @@ exports.loc = async (req, res, next) => {
         try {
             // Lấy ID của bill từ req.body
             const billId = req.body.billId;
+            const tokenUser = req.body.tokenUser;
             // Lấy trạng thái mới từ req.body
             const newStatus = req.body.status;
+            let mStatus = '';
 
             // Tìm bill bằng ID và cập nhật trạng thái
             await billMD.billModel.findByIdAndUpdate(billId, { status: newStatus });
 
             console.log(`PUT /bill 200/${billId} with status ${newStatus}`);
+
+            if (newStatus == 1) {
+                mStatus = 'Đã đặt hàng';
+            } else if (newStatus == 2) {
+                mStatus = 'Đặt hàng thất bại';
+            } else if (newStatus == 3) {
+                mStatus = 'Đã thanh toán';
+            } else if (newStatus == 4) {
+                mStatus = 'Chưa thanh toán';
+            } else if (newStatus == 5) {
+                mStatus = 'Đang vận chuyển';
+            } else if (newStatus == 6) {
+                mStatus = 'Vận chuyển thất bại';
+            } else if (newStatus == 7) {
+                mStatus = 'Hoàn thành';
+            } else if (newStatus == 8) {
+                mStatus = 'Người mua không nhận hàng';
+            } else if (newStatus == 9) {
+                mStatus = 'Hủy';
+
+            }
+
+
+
+
+            const formData = new FormData();
+            formData.append('listToken', [tokenUser]);
+            formData.append('title', 'Thông Báo');  // text status
+            formData.append('content', `Đơn hàng mới đã được cập nhật : ${mStatus}`); // 
+            formData.append('payload', billId); // ID BILL
+            formData.append('status', '2');
+            formData.append('inputImage', '');
+
+            fetch('https://adadas.onrender.com/notification', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+
 
             res.redirect('back');
         } catch (error) {

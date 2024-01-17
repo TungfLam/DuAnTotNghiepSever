@@ -30,7 +30,7 @@ exports.listUser = async (req, res, next) => {
     res.json(objReturn);
 }
 
-exports.getUserById = async (req , res ,next) => {
+exports.getUserById = async (req, res, next) => {
     let err = true;
 
     try {
@@ -43,7 +43,7 @@ exports.getUserById = async (req , res ,next) => {
 
     res.status(200).json({
         err: err,
-       objUser : objUser
+        objUser: objUser
     });
 }
 
@@ -96,8 +96,8 @@ exports.userLogin = async (req, res, next) => {
         email: objUser != null ? objUser.email : "",
         fullname: objUser != null ? objUser.full_name : "",
         address: objUser != null ? objUser.address : "",
-        address_city : objAddress != null ? objAddress.address : "",
-        specific_addres : objAddress != null ? objAddress.specific_addres : ""
+        address_city: objAddress != null ? objAddress.address : "",
+        specific_addres: objAddress != null ? objAddress.specific_addres : ""
     });
 }
 
@@ -141,8 +141,8 @@ exports.userLoginPhone = async (req, res, next) => {
         email: objUser != null ? objUser.email : "",
         fullname: objUser != null ? objUser.full_name : "",
         address: objUser != null ? objUser.address : "",
-        address_city : objAddress != null ? objAddress.address : "",
-        specific_addres : objAddress != null ? objAddress.specific_addres : ""
+        address_city: objAddress != null ? objAddress.address : "",
+        specific_addres: objAddress != null ? objAddress.specific_addres : ""
     });
 }
 
@@ -512,7 +512,7 @@ exports.addUser = async (req, res, next) => {
                             const newMessage = new mdMessage.MessageModel({
                                 conversationId: newConversation._id,
                                 sender: idadmin,
-                                text: "xin chào đã đến với adadss, ứng dụng mua sắm online ❤️",
+                                text: "Adadss xin chào, adadss có thể giúp gì cho bạn",
                                 createdAt: date
 
 
@@ -599,7 +599,7 @@ exports.updateUser = async (req, res, next) => {
 
     try {
         let idUser = req.params.idUser;
-    
+
     } catch (error) {
         console.log(error);
     }
@@ -608,7 +608,7 @@ exports.updateUser = async (req, res, next) => {
         msg: msg,
         err: err,
     });
-  
+
 }
 exports.deleteUser = async (req, res, next) => {
 
