@@ -89,7 +89,7 @@
     <div style="display: flex; height: 80vh;">
         <!-- Danh sách cuộc trò chuyện (25%) -->
         <div style="width: 25%; border-right: 1px solid #ccc; padding: 10px;">
-            <h2>Chat Box</h2>
+            <h2>Danh Sách Khách Hàng</h2>
             <ul id="conversationList" class="list-group">
                 <% conversations.forEach(conversation=> { %>
                     <li data-conversation-id="<%= conversation._id %>" class="list-group-item">
@@ -124,14 +124,14 @@
         <div style=" width: 75%; padding: 10px; display: flex; flex-direction: column;">
             <!-- Tiêu đề -->
             <header class="bg-secondary text-white p-3 rounded-header">
-                <h2>Message <span id="mUserTarget"></span> </h2>
+                <h2>Tin Nhắn <span id="mUserTarget"></span> </h2>
             </header>
             <!-- Tin nhắn -->
             <div id="messages" style="flex-grow: 1; overflow-y: scroll;"
                 class="scrollbar scrollbar-primary rounded-messages">
                 <!-- Hiển thị tin nhắn ở đây -->
                 <div class="message">
-                    <p>Tùng Lâm đẹp trai thế ❤️</p>
+                    <p>Duy đẹp trai thế ❤️</p>
                     <span>00:30 - 06/04/2003</span>
                 </div>
 
