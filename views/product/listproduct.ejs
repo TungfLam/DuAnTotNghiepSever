@@ -322,11 +322,13 @@
                                             <td class="" style="width: 170px;">
                                                 <% if (row?.discount==undefined || row?.discount==null||row?.discount==0
                                                     ) { %>
+
                                                     <div class="">
                                                         <i class="fa-regular fa-money-bill-1"></i>
                                                         <%= (row?.price ).toLocaleString('vi-VN', { style: 'currency' ,
                                                             currency: 'VND' }) %>
                                                     </div>
+                                                    
                                                     <% } else { %>
                                                         <div class="discount">
                                                             <i class="fa-regular fa-money-bill-1"></i>
