@@ -7,7 +7,7 @@ const checkLogin = require('../meddlewares/check_login');
 var billController = require('../controllers/bill.controller')
 
 router.get('/', checkLogin.requiresLogin, billController.loc);
-router.post('/', checkLogin.requiresLogin, upload.none(), billController.loc);
+router.post('/', upload.none(), billController.loc);
 
 router.get('/detail/:id', checkLogin.requiresLogin, billController.detail);
 router.post('/detail/:id', checkLogin.requiresLogin, upload.none(), billController.detail);
