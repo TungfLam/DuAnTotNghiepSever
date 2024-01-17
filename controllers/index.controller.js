@@ -591,6 +591,7 @@ exports.login = async (req, res, next) => {
 
 
                         res.redirect('/');
+                        return
                     } else {
                         msg = "Tài khoản của bạn đã bị khóa";
                         typeErr = true;

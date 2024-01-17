@@ -8,6 +8,6 @@ const upLoader = multer({ dest: './tmp' });
 
 router.get('/', checkLogin.requiresLogin, notificationCtrl.notification);
 
-router.post('/' , checkLogin.requiresLogin,upLoader.single("inputImage"), notificationCtrl.pustNotification);
+router.post('/',upLoader.single("inputImage"), notificationCtrl.pustNotification);
 
 module.exports = router;
