@@ -181,6 +181,7 @@ exports.loc = async (req, res, next) => {
             // Lấy trạng thái mới từ req.body
             const newStatus = req.body.status;
             let mStatus = '';
+            console.log(tokenUser);
 
             // Tìm bill bằng ID và cập nhật trạng thái
             await billMD.billModel.findByIdAndUpdate(billId, { status: newStatus });
@@ -210,6 +211,11 @@ exports.loc = async (req, res, next) => {
 
 
 
+            if (tokenUser == '') {
+                res.redirect('back');
+                return
+
+            }
 
             const formData = new FormData();
             formData.append('listToken', [tokenUser]);
@@ -222,7 +228,8 @@ exports.loc = async (req, res, next) => {
             fetch('https://adadas.onrender.com/notification', {
                 method: 'POST',
                 body: formData
-            }).then(response => response.json())
+            })
+                .then(response => response.json())
                 .then(data => {
                     console.log(data);
                 })

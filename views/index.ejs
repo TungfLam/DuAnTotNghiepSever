@@ -152,7 +152,7 @@
                         <p class="text-sm ">
                             User được tạo gần nhất
                             <span class="text-info text-sm font-weight-bolder">
-                                <%= latestUser.username %>
+                                <%= latestUser.full_name %>
                             </span>
                         </p>
 
@@ -174,7 +174,7 @@
                         <h6 class="mb-0 "> Doanh thu theo ngày </h6>
                         <p class="text-sm ">Người dùng vừa mua hàng (
                             <span class="font-weight-bolder">
-                                <%= latestBill.user_data.username %>
+                                <%= latestBill.user_data.full_name %>
 
                             </span>)
                         </p>
@@ -253,7 +253,7 @@
                                                     </div>
                                                     <div class="d-flex flex-column justify-content-center">
                                                         <h6 class="mb-0 text-sm">
-                                                            <%= user.username %>
+                                                            <%= user.full_name %>
                                                         </h6>
                                                     </div>
                                                 </div>
@@ -336,7 +336,7 @@
                                     <h6 class="text-dark text-sm font-weight-bold mb-0">
                                         Người dùng
                                         <span class="text-info text-sm font-weight-bolder">
-                                            <%= latestUser.username %>
+                                            <%= latestUser.full_name %>
                                         </span>
                                         vừa được tạo
                                     </h6>
@@ -357,7 +357,13 @@
                                 </span>
                                 <div class="timeline-content">
                                     <h6 class="text-dark text-sm font-weight-bold mb-0">Đơn hàng mới
-                                        <span class="text-danger text-sm font-weight-bolder">#<%= latestBill._id %>
+
+                                        <span class="text-danger text-sm font-weight-bolder">
+                                            <a href="/bill?id_=<%= latestBill._id %>"
+                                                class="text-danger text-sm font-weight-bolder">
+                                                #<%= latestBill._id %>
+                                            </a>
+
                                         </span>
 
                                     </h6>
@@ -367,6 +373,7 @@
                                                 }) %> -
                                                 <%= date.toLocaleDateString('vi-VN', { day: '2-digit' , month: '2-digit'
                                                     , year: 'numeric' }) %>
+
                                     </p>
                                 </div>
                             </div>
@@ -692,6 +699,33 @@
         //====================  
 
 
+    </script>
+    <script>
+        function formatDate(date) {
+            if (typeof date !== "object" || !(date instanceof Date)) {
+                date = new Date(date);
+            }
+            let hours = date.getHours();
+            let minutes = date.getMinutes();
+            let day = date.getDate();
+            let month = date.getMonth() + 1;
+            let year = date.getFullYear();
+
+            if (hours < 10) {
+                hours = "0" + hours;
+            }
+            if (minutes < 10) {
+                minutes = "0" + minutes;
+            }
+            if (day < 10) {
+                day = "0" + day;
+            }
+            if (month < 10) {
+                month = "0" + month;
+            }
+
+            return `${hours}:${minutes} - ${day}/${month}/${year}`;
+        }
     </script>
 
 
