@@ -181,9 +181,6 @@ exports.loc = async (req, res, next) => {
             // Lấy trạng thái mới từ req.body
             const newStatus = req.body.status;
             let mStatus = '';
-            console.log(tokenUser);
-
-            console.log(tokenUser);
 
             // Tìm bill bằng ID và cập nhật trạng thái
             await billMD.billModel.findByIdAndUpdate(billId, { status: newStatus });
@@ -222,7 +219,7 @@ exports.loc = async (req, res, next) => {
             const formData = new FormData();
             formData.append('listToken', [tokenUser]);
             formData.append('title', 'Thông Báo');  // text status
-            formData.append('content', `Đơn hàng mới đã được cập nhật : ${mStatus}`); // 
+            formData.append('content', `Đơn hàng "${billId}" đã được cập nhật : ${mStatus}`); // 
             formData.append('payload', billId); // ID BILL
             formData.append('status', '2');
             formData.append('inputImage', '');
